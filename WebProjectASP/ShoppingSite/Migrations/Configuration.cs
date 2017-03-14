@@ -10,7 +10,6 @@ namespace ShoppingSite.Migrations
         public Configuration()
         {
             AutomaticMigrationsEnabled = true;
-            ContextKey = "ShoppingSite.Models.ApplicationDbContext";
         }
 
         protected override void Seed(ShoppingSite.Models.ApplicationDbContext context)
