@@ -50,6 +50,7 @@ namespace ShoppingSite.Models {
 		//public ApplicationDbContext(): base("DefaultConnection", throwIfV1Schema: false){}
 		public ApplicationDbContext() : base("ShoppingSiteDBContext", throwIfV1Schema: false) { }
 
+		public virtual DbSet<BrandModel> Brands { get; set; }
 		public static ApplicationDbContext Create() {
 			return new ApplicationDbContext();
 		}
