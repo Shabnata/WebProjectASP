@@ -177,6 +177,14 @@
     <Compile Include="Migrations\201703141601462_InitialMigrations.Designer.cs">
       <DependentUpon>201703141601462_InitialMigrations.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201703141612106_UserTableChange.cs" />
+    <Compile Include="Migrations\201703141612106_UserTableChange.Designer.cs">
+      <DependentUpon>201703141612106_UserTableChange.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201703151017188_shem.cs" />
+    <Compile Include="Migrations\201703151017188_shem.Designer.cs">
+      <DependentUpon>201703151017188_shem.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -255,6 +263,12 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201703141601462_InitialMigrations.resx">
       <DependentUpon>201703141601462_InitialMigrations.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703141612106_UserTableChange.resx">
+      <DependentUpon>201703141612106_UserTableChange.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703151017188_shem.resx">
+      <DependentUpon>201703151017188_shem.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

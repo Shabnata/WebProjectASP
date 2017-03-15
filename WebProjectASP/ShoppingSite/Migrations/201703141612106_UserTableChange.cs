@@ -1,0 +1,16 @@
+namespace ShoppingSite.Migrations
+{
+    using System;
+    using System.Data.Entity.Migrations;
+    
+    public partial class UserTableChange : DbMigration
+    {
+        public override void Up()
+        {
+        }
+        
+        public override void Down()
+        {
+        }
+    }
+}
