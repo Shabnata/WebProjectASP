@@ -19,20 +19,20 @@ namespace ShoppingSite.Models {
 
 		[Required]
 		[Display(Name = "First name")]
-		[RegularExpression(@"\w{2,}", ErrorMessage = "First name must be at least 2 characters long.")]
-		[Column(TypeName = "varchar")]
+		[RegularExpression("^[a-zA-Z]{2,}$", ErrorMessage = "First name must be at least 2 characters long.")]
+		[Column("FirstName", TypeName = "varchar")]
 		public string FirstName { get; set; }
 
 		[Required]
-		[Display(Name = "last name")]
-		[RegularExpression(@"\w{2,}", ErrorMessage = "Last name must be at least 2 characters long.")]
-		[Column(TypeName = "varchar")]
+		[Display(Name = "Last name")]
+		[RegularExpression("^[a-zA-Z]{2,}$", ErrorMessage = "Last name must be at least 2 characters long.")]
+		[Column("LastName", TypeName = "varchar")]
 		public string LastName { get; set; }
 
 		[Required]
 		[Display(Name = "Address")]
-		[RegularExpression(@"\w{3,}", ErrorMessage = "Address must be at least 3 characters long.")]
-		[Column(TypeName = "varchar")]
+		[RegularExpression("^[a-zA-Z]{3,}", ErrorMessage = "Address must be at least 3 characters long.")]
+		[Column("Address", TypeName = "varchar")]
 		public string Address { get; set; }
 
 		//public virtual ICollection<Order> Orders { get; set; }
