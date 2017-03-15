@@ -21,21 +21,24 @@ namespace ShoppingSite.Models {
 		[Display(Name = "First name")]
 		[RegularExpression("^[a-zA-Z]{2,}$", ErrorMessage = "First name must be at least 2 characters long.")]
 		[Column("FirstName", TypeName = "varchar")]
+		[DataType(DataType.Text)]
 		public string FirstName { get; set; }
 
 		[Required]
 		[Display(Name = "Last name")]
 		[RegularExpression("^[a-zA-Z]{2,}$", ErrorMessage = "Last name must be at least 2 characters long.")]
 		[Column("LastName", TypeName = "varchar")]
+		[DataType(DataType.Text)]
 		public string LastName { get; set; }
 
 		[Required]
 		[Display(Name = "Address")]
-		[RegularExpression("^[a-zA-Z]{3,}", ErrorMessage = "Address must be at least 3 characters long.")]
+		[RegularExpression("^[a-zA-Z]{3,}.*", ErrorMessage = "Address must be at least 3 characters long.")]
 		[Column("Address", TypeName = "varchar")]
+		[DataType(DataType.Text)]
 		public string Address { get; set; }
 
-		//public virtual ICollection<Order> Orders { get; set; }
+		public virtual ICollection<OrderModel> Orders { get; set; }
 
 		public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager) {
 			// Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
@@ -47,12 +50,21 @@ namespace ShoppingSite.Models {
 	}
 
 	public class ApplicationDbContext : IdentityDbContext<ApplicationUser> {
-		//public ApplicationDbContext(): base("DefaultConnection", throwIfV1Schema: false){}
 		public ApplicationDbContext() : base("ShoppingSiteDBContext", throwIfV1Schema: false) { }
 
+		// Users
 		public virtual DbSet<BrandModel> Brands { get; set; }
+		public virtual DbSet<CategoryModel> Categories { get; set; }
+		public virtual DbSet<SubCategoryModel> SubCategories { get; set; }
+		public virtual DbSet<OrderItemModel> OrderItems { get; set; }
+		public virtual DbSet<OrderModel> Orders { get; set; }
+		public virtual DbSet<ProductModel> Products { get; set; }
+		public virtual DbSet<ProductPictureModel> ProductPictures { get; set; }
+		public virtual DbSet<SaleModel> Sales { get; set; }
+
 		public static ApplicationDbContext Create() {
 			return new ApplicationDbContext();
 		}
+
 	}
 }

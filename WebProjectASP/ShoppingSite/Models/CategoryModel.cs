@@ -12,12 +12,14 @@ namespace ShoppingSite.Models {
 		[Key]
 		[Required]
 		[Display(Name = "Category ID", AutoGenerateField = true)]
-		[Column("CategoryID")]
+		[Column("CategoryID", TypeName ="int")]
+		[DataType(DataType.Text)]
 		public int CategoryID { get; set; }
 
 		[Required]
 		[Display(Name = "Category name")]
-		[Column("CategoryName")]
+		[Column("CategoryName",TypeName = "varchar")]
+		[DataType(DataType.Text)]
 		public string CategoryName { get; set; }
 
 		// TODO Check table structure

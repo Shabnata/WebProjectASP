@@ -12,39 +12,43 @@ namespace ShoppingSite.Models {
 		[Key]
 		[Required]
 		[Display(Name = "Brand ID", AutoGenerateField = true)]
-		[Column("BrandID")]
+		[Column("BrandID", TypeName = "int")]
+		[DataType(DataType.Text)]
 		public int BrandID { get; set; }
 
 		[Required]
 		[Display(Name = "Brand name")]
-		[Column("BrandName")]
+		[Column("BrandName", TypeName = "varchar")]
+		[DataType(DataType.Text)]
 		public string BrandName { get; set; }
 
 		[Required]
 		[Display(Name = "Brand logo")]
-		[Column("Logo")]
+		[Column("Logo", TypeName = "varchar")]
 		[DataType(DataType.ImageUrl)]
 		public string Logo { get; set; }
 
 		// TODO Add AJAX validator
 		[Required]
 		[Display(Name = "Country of origin")]
-		[Column("Country")]
+		[Column("Country", TypeName = "varchar")]
+		[DataType(DataType.Text)]
 		public string Country { get; set; }
 
 		[Required]
 		[Display(Name = "Brand description")]
 		[Column("BrandDescription", TypeName = "varchar")]
+		[DataType(DataType.MultilineText)]
 		public string Description { get; set; }
 
 		[Required]
 		[Display(Name = "Product description")]
-		[Column("FoundationYear")]
+		[Column("FoundationYear", TypeName = "date")]
 		[DataType(DataType.Date)]
-		[DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
-		public string FoundationYear { get; set; }
+		[DisplayFormat(DataFormatString = "{0:yyyy}")]
+		public DateTime FoundationYear { get; set; }
 
 		// TODO Check table structure
-		//public virtual ICollection<ProductModel> Products { get; set; }
+		public virtual ICollection<ProductModel> Products { get; set; }
 	}
 }

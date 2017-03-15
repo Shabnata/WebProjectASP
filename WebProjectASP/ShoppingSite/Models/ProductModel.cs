@@ -12,17 +12,20 @@ namespace ShoppingSite.Models {
 		[Key]
 		[Required]
 		[Display(Name = "Product ID", AutoGenerateField = true)]
-		[Column("ProductID")]
+		[Column("ProductID", TypeName = "int")]
+		[DataType(DataType.Text)]
 		public int SKU { get; set; }
 
 		[Required]
 		[Display(Name = "Product name")]
 		[Column("ProductName", TypeName = "varchar")]
+		[DataType(DataType.Text)]
 		public string ProductName { get; set; }
 
 		[Required]
 		[Display(Name = "Product description")]
 		[Column("ProductDescription", TypeName = "varchar")]
+		[DataType(DataType.MultilineText)]
 		public string Description { get; set; }
 
 		[Required]
@@ -33,25 +36,26 @@ namespace ShoppingSite.Models {
 
 		[Required]
 		[Display(Name = "Price")]
-		[Column("Price")]
+		[Column("Price", TypeName = "decimal")]
 		[DataType(DataType.Currency)]
 		public decimal Price { get; set; }
 
-		//		public string PicturePath { get; set; }
-
 		[Required]
 		[Display(Name = "Brand ID")]
-		[Column("BrandID")]
+		[Column("BrandID", TypeName = "int")]
+		[DataType(DataType.Text)]
 		public int BrandID { get; set; }
 
 		[ForeignKey("BrandID")]
 		public virtual BrandModel Brand { get; set; }
 
 		public virtual ICollection<SubCategoryModel> ProductCategories { get; set; }
-		//		public string Sales { get; set; } 
-		//		public string VendorID { get; set; }
-		//		public string Orders { get; set; }
 
+		public virtual ICollection<ProductPictureModel> ProductPictures { get; set; }
+
+		public virtual ICollection<SaleModel> Sales { get; set; }
+
+		public virtual ICollection<OrderModel> Orders { get; set; }
 
 	}
 }
