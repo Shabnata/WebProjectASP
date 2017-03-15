@@ -45,6 +45,6 @@ namespace ShoppingSite.Models {
 		public string FoundationYear { get; set; }
 
 		// TODO Check table structure
-		public virtual ICollection<ProductModel> Products { get; set; }
+		//public virtual ICollection<ProductModel> Products { get; set; }
 	}
 }
