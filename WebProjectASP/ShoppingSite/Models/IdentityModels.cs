@@ -14,7 +14,7 @@ namespace ShoppingSite.Models {
 		// Id
 		// Email
 		// PhoneNumber
-		// UserName
+		// UserName 
 		// Roles
 
 		[Required]
