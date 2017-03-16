@@ -1,0 +1,68 @@
+﻿@model IEnumerable<ShoppingSite.Models.BrandModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@* TODO Change page design *@
+<h2>Index</h2>
+
+@* TODO Add AJAX stuff to search as you type *@
+@using(Html.BeginForm("Search", "Brands", FormMethod.Post)) {
+	<input type="search" name="BrandName" placeholder="Brand name" value="@ViewBag.SearchString" required/>
+	<input type="submit" value="Search"/>
+	if(ViewBag.NotFoundError != null) {
+		<span style="background: Red;">@ViewBag.NotFoundError</span>
+		<br/>
+	}
+}
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.BrandName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Logo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Country)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FoundationYear)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.BrandName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Logo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Country)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FoundationYear)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.BrandID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.BrandID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.BrandID })
+        </td>
+    </tr>
+}
+
+</table>

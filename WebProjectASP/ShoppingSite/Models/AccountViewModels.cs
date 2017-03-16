@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 
 namespace ShoppingSite.Models {
+	/* Pending deletion
 	public class ExternalLoginConfirmationViewModel {
 		[Required]
 		[Display(Name = "Email")]
@@ -33,15 +34,18 @@ namespace ShoppingSite.Models {
 
 		public bool RememberMe { get; set; }
 	}
+	*/
 
 	public class ForgotViewModel {
 		[Required]
+		[DataType(DataType.EmailAddress)]
 		[Display(Name = "Email")]
 		public string Email { get; set; }
 	}
 
 	public class LoginViewModel {
 		[Required]
+		[DataType(DataType.EmailAddress)]
 		[Display(Name = "Email")]
 		[EmailAddress]
 		public string Email { get; set; }
@@ -58,6 +62,7 @@ namespace ShoppingSite.Models {
 	public class RegisterViewModel {
 		[Required]
 		[EmailAddress]
+		[DataType(DataType.EmailAddress)]
 		[Display(Name = "Email")]
 		public string Email { get; set; }
 
@@ -74,20 +79,21 @@ namespace ShoppingSite.Models {
 
 		[Required]
 		[Display(Name = "First name")]
-		[RegularExpression(@"\w{2,}", ErrorMessage = "First name must be at least 2 characters long.")]
+		[RegularExpression("^[a-zA-Z]{2,}$", ErrorMessage = "First name must be at least 2 characters long.")]
 		public string FirstName { get; set; }
 
 		[Required]
 		[Display(Name = "Last name")]
-		[RegularExpression(@"\w{2,}", ErrorMessage = "Last name must be at least 2 characters long.")]
+		[RegularExpression("^[a-zA-Z]{2,}$", ErrorMessage = "Last name must be at least 2 characters long.")]
 		public string LastName { get; set; }
 
 		[Required]
 		[Display(Name = "Address")]
-		[RegularExpression(@"\w{3,}", ErrorMessage = "Address must be at least 3 characters long.")]
+		[RegularExpression("^[a-zA-Z]{3,}.*", ErrorMessage = "Address must be at least 3 characters long.")]
 		public string Address { get; set; }
 
 		[Required]
+		[Phone]
 		[Display(Name = "Phone number")]
 		[DataType(DataType.PhoneNumber)]
 		public string PhoneNumber { get; set; }

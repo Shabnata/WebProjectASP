@@ -48,7 +48,6 @@ namespace ShoppingSite.Models {
 		[DisplayFormat(DataFormatString = "{0:yyyy}")]
 		public DateTime FoundationYear { get; set; }
 
-		// TODO Check table structure
 		public virtual ICollection<ProductModel> Products { get; set; }
 	}
 }

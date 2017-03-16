@@ -22,10 +22,8 @@ namespace ShoppingSite.Models {
 		[DataType(DataType.Text)]
 		public string SubCategoryName { get; set; }
 
-		// TODO Check table structure
 		public virtual ICollection<ProductModel> Products { get; set; }
 
-		// TODO Check table structure
 		public virtual ICollection<CategoryModel> ParentCategories { get; set; }
 	}
 }

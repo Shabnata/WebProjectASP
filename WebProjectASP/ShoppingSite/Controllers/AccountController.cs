@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using ShoppingSite.Models;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace ShoppingSite.Controllers {
 	[Authorize]
@@ -77,6 +78,7 @@ namespace ShoppingSite.Controllers {
 			}
 		}
 
+		/* Pending deletion
 		//
 		// GET: /Account/VerifyCode
 		[AllowAnonymous]
@@ -87,7 +89,7 @@ namespace ShoppingSite.Controllers {
 			}
 			return View(new VerifyCodeViewModel { Provider = provider, ReturnUrl = returnUrl, RememberMe = rememberMe });
 		}
-
+		
 		//
 		// POST: /Account/VerifyCode
 		[HttpPost]
@@ -114,6 +116,7 @@ namespace ShoppingSite.Controllers {
 					return View(model);
 			}
 		}
+		*/
 
 		//
 		// GET: /Account/Register
@@ -130,6 +133,11 @@ namespace ShoppingSite.Controllers {
 		public async Task<ActionResult> Register(RegisterViewModel model) {
 			if(ModelState.IsValid) {
 				var user = new ApplicationUser { UserName = model.Email, Email = model.Email, PhoneNumber = model.PhoneNumber, Address = model.Address, FirstName = model.FirstName, LastName = model.LastName };
+
+				ApplicationDbContext dbContext = new ApplicationDbContext();
+				IdentityRole customerRole = (from r in dbContext.Roles where r.Name == "Customer" select r).Single();
+				user.Roles.Add(new IdentityUserRole() { UserId = user.Id, RoleId = customerRole.Id });
+
 				var result = await UserManager.CreateAsync(user, model.Password);
 				if(result.Succeeded) {
 					await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
@@ -149,6 +157,7 @@ namespace ShoppingSite.Controllers {
 			return View(model);
 		}
 
+		/* Pending deletion
 		//
 		// GET: /Account/ConfirmEmail
 		[AllowAnonymous]
@@ -159,6 +168,7 @@ namespace ShoppingSite.Controllers {
 			var result = await UserManager.ConfirmEmailAsync(userId, code);
 			return View(result.Succeeded ? "ConfirmEmail" : "Error");
 		}
+		*/
 
 		//
 		// GET: /Account/ForgotPassword
@@ -235,6 +245,7 @@ namespace ShoppingSite.Controllers {
 			return View();
 		}
 
+		/* Pending deletion
 		//
 		// POST: /Account/ExternalLogin
 		[HttpPost]
@@ -333,6 +344,7 @@ namespace ShoppingSite.Controllers {
 			ViewBag.ReturnUrl = returnUrl;
 			return View(model);
 		}
+		*/
 
 		//
 		// POST: /Account/LogOff
@@ -343,12 +355,14 @@ namespace ShoppingSite.Controllers {
 			return RedirectToAction("Index", "Home");
 		}
 
+		/* Pending deletion
 		//
 		// GET: /Account/ExternalLoginFailure
 		[AllowAnonymous]
 		public ActionResult ExternalLoginFailure() {
 			return View();
 		}
+		*/
 
 		protected override void Dispose(bool disposing) {
 			if(disposing) {
