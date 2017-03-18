@@ -1,0 +1,33 @@
+﻿@model ShoppingSite.Models.CategoryModel
+
+@{
+	ViewBag.Title = "Category details";
+	Layout = (ViewBag.LayoutFile != null) ? ViewBag.LayoutFile : Layout;
+}
+
+<h2>Category details</h2>
+
+<div>
+	<h4>CategoryModel</h4>
+	<hr />
+	@*
+		@Html.LabelFor(model => model.CategoryName, htmlAttributes: new { @class = "control-label col-md-2" })
+		@Html.DisplayFor(model => model.CategoryName, htmlAttributes: new { @class = "control-label col-md-10" })
+	*@
+	@Html.DisplayNameFor(model => model.CategoryID) :
+	@Html.DisplayFor(model => model.CategoryID)
+	<br />
+	@Html.DisplayNameFor(model => model.CategoryName) :
+	@Html.DisplayFor(model => model.CategoryName)
+	<br />
+	@Html.DisplayNameFor(model => model.Logo) :
+	@Html.DisplayFor(model => model.Logo)
+	<img src="@Model.Logo" alt="@Model.CategoryName" />
+	<br />
+</div>
+
+@Html.ActionLink("Delete", "Delete", new { CategoryID = Model.CategoryID }) |
+@Html.ActionLink("Edit", "Edit", new { CategoryID = Model.CategoryID }) |
+@Html.ActionLink("Back to List", "Index")
+
+TODO - Add sub categories <br />

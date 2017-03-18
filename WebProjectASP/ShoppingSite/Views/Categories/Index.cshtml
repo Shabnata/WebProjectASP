@@ -1,0 +1,46 @@
+﻿@model IEnumerable<ShoppingSite.Models.CategoryModel>
+
+@{
+	ViewBag.Title = "Index";
+	// This is here so that later can be changed for specific layout for managment side of site
+	Layout = (ViewBag.LayoutFile != null) ? ViewBag.LayoutFile : Layout;
+}
+
+<h2>Categories Index</h2>
+<h3>TODO - Bootstrap this page</h3>
+
+@* TODO Add AJAX stuff to search as you type *@
+@* BeginForm(string actionName, string controllerName, FormMethod method) *@
+@using(Html.BeginForm("Search", "Categories", FormMethod.Post)) {
+	<input type="search" name="CategoryName" placeholder="@Html.DisplayNameFor(model => model.CategoryName)" value="@ViewBag.SearchString" required />
+	<input type="submit" value="Search" />
+	if(ViewBag.NotFoundError != null) {
+		<span style="background: Red;">@ViewBag.NotFoundError</span>
+		<br />
+	}
+}
+
+@Html.ActionLink("Create Category", "Create")
+
+<table class="table">
+	<tr>
+		<th>@Html.DisplayNameFor(model => model.CategoryID)</th>
+		<th>@Html.DisplayNameFor(model => model.CategoryName)</th>
+		<th>Number of SubCategories</th>
+		<th>Actions</th>
+	</tr>
+
+	@foreach(var item in Model) {
+		<tr>
+			<td>@Html.DisplayFor(modelItem => item.CategoryID)</td>
+			<td>@Html.DisplayFor(modelItem => item.CategoryName)</td>
+			<td>@item.SubCategories.Count</td>
+			<td>
+				@* Html.ActionLink(Link text, Controller Action, Action parameters) *@
+				@Html.ActionLink("Edit", "Edit", new { CategoryID = item.CategoryID }) |
+				@Html.ActionLink("Details", "Details", new { CategoryID = item.CategoryID }) |
+				@Html.ActionLink("Delete", "Delete", new { CategoryID = item.CategoryID })
+			</td>
+		</tr>
+	}
+</table>
