@@ -22,6 +22,12 @@ namespace ShoppingSite.Models {
 		[DataType(DataType.Text)]
 		public string SubCategoryName { get; set; }
 
+		[Required]
+		[Display(Name = "SubCategory logo")]
+		[Column("Logo", TypeName = "varchar")]
+		[DataType(DataType.ImageUrl)]
+		public string SubCategoryLogo { get; set; }
+
 		public virtual ICollection<ProductModel> Products { get; set; }
 
 		public virtual ICollection<CategoryModel> ParentCategories { get; set; }
