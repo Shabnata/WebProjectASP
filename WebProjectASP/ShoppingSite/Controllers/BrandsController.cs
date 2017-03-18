@@ -12,23 +12,12 @@ using ShoppingSite.Models;
 namespace ShoppingSite.Controllers {
 	[Authorize(Roles = "Administrator, Manager")]
 	public class BrandsController : Controller {
+
 		private ApplicationDbContext db = new ApplicationDbContext();
 
 		// GET: Brands
 		public async Task<ActionResult> Index() {
 			return View(await db.Brands.ToListAsync());
-		}
-
-		// GET: Brands/Details/5
-		public async Task<ActionResult> Details(int? id) {
-			if(id == null) {
-				return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-			}
-			BrandModel brandModel = await db.Brands.FindAsync(id);
-			if(brandModel == null) {
-				return HttpNotFound();
-			}
-			return View(brandModel);
 		}
 
 		// GET: Brands/Create
@@ -37,26 +26,25 @@ namespace ShoppingSite.Controllers {
 		}
 
 		// POST: Brands/Create
-		// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-		// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<ActionResult> Create([Bind(Include = "BrandID,BrandName,Logo,Country,Description,FoundationYear")] BrandModel brandModel) {
+		public async Task<ActionResult> Create([Bind(Include = "BrandID, BrandName, Logo, Country, Description, FoundationYear")] BrandModel brandModel) {
 			if(ModelState.IsValid) {
 				db.Brands.Add(brandModel);
 				await db.SaveChangesAsync();
 				return RedirectToAction("Index");
 			}
 
-			return View(brandModel);
+			return View("Error");
 		}
 
 		// GET: Brands/Edit/5
-		public async Task<ActionResult> Edit(int? id) {
-			if(id == null) {
+		[HttpGet]
+		public async Task<ActionResult> Edit(int? BrandID) {
+			if(BrandID == null) {
 				return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 			}
-			BrandModel brandModel = await db.Brands.FindAsync(id);
+			BrandModel brandModel = await db.Brands.FindAsync(BrandID);
 			if(brandModel == null) {
 				return HttpNotFound();
 			}
@@ -64,11 +52,9 @@ namespace ShoppingSite.Controllers {
 		}
 
 		// POST: Brands/Edit/5
-		// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-		// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<ActionResult> Edit([Bind(Include = "BrandID,BrandName,Logo,Country,Description,FoundationYear")] BrandModel brandModel) {
+		public async Task<ActionResult> Edit([Bind(Include = "BrandID, BrandName, Logo, Country, Description, FoundationYear")] BrandModel brandModel) {
 			if(ModelState.IsValid) {
 				db.Entry(brandModel).State = EntityState.Modified;
 				await db.SaveChangesAsync();
@@ -77,12 +63,24 @@ namespace ShoppingSite.Controllers {
 			return View(brandModel);
 		}
 
-		// GET: Brands/Delete/5
-		public async Task<ActionResult> Delete(int? id) {
-			if(id == null) {
+		// Brands/Details/5
+		public async Task<ActionResult> Details(int? BrandID) {
+			if(BrandID == null) {
 				return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 			}
-			BrandModel brandModel = await db.Brands.FindAsync(id);
+			BrandModel brandModel = await db.Brands.FindAsync(BrandID);
+			if(brandModel == null) {
+				return HttpNotFound();
+			}
+			return View(brandModel);
+		}
+
+		// GET: Brands/Delete/5
+		public async Task<ActionResult> Delete(int? BrandID) {
+			if(BrandID == null) {
+				return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+			}
+			BrandModel brandModel = await db.Brands.FindAsync(BrandID);
 			if(brandModel == null) {
 				return HttpNotFound();
 			}
@@ -92,8 +90,8 @@ namespace ShoppingSite.Controllers {
 		// POST: Brands/Delete/5
 		[HttpPost, ActionName("Delete")]
 		[ValidateAntiForgeryToken]
-		public async Task<ActionResult> DeleteConfirmed(int id) {
-			BrandModel brandModel = await db.Brands.FindAsync(id);
+		public async Task<ActionResult> DeleteConfirmed(int BrandID) {
+			BrandModel brandModel = await db.Brands.FindAsync(BrandID);
 			db.Brands.Remove(brandModel);
 			await db.SaveChangesAsync();
 			return RedirectToAction("Index");

@@ -1,58 +1,33 @@
 ﻿@model ShoppingSite.Models.BrandModel
 
 @{
-    ViewBag.Title = "Details";
+	ViewBag.Title = "Brand details";
+	Layout = (ViewBag.LayoutFile != null) ? ViewBag.LayoutFile : Layout;
 }
 
-<h2>Details</h2>
+<h2>Brand details</h2>
 
 <div>
-    <h4>BrandModel</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.BrandName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.BrandName)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Logo)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Logo)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Country)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Country)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.FoundationYear)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.FoundationYear)
-        </dd>
-
-    </dl>
+	<h4>BrandModel</h4>
+	<hr />
+	@Html.DisplayNameFor(model => model.BrandName)
+	@Html.DisplayFor(model => model.BrandName)
+	<br />
+	@Html.DisplayNameFor(model => model.Logo)
+	@Html.DisplayFor(model => model.Logo)
+	<br />
+	@Html.DisplayNameFor(model => model.Country)
+	@Html.DisplayFor(model => model.Country)
+	<br />
+	@Html.DisplayNameFor(model => model.Description)
+	@Html.DisplayFor(model => model.Description)
+	<br />
+	@Html.DisplayNameFor(model => model.FoundationYear)
+	@Html.DisplayFor(model => model.FoundationYear)
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.BrandID }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+
+@Html.ActionLink("Delete", "Delete", new { BrandID = Model.BrandID }) |
+@Html.ActionLink("Edit", "Edit", new { BrandID = Model.BrandID }) |
+@Html.ActionLink("Back to List", "Index")
+
+TODO - Add brand products <br />

@@ -1,64 +1,39 @@
 ﻿@model ShoppingSite.Models.BrandModel
 
 @{
-    ViewBag.Title = "Delete";
+	ViewBag.Title = "Delete brand";
+	Layout = (ViewBag.LayoutFile != null) ? ViewBag.LayoutFile : Layout;
 }
 
-<h2>Delete</h2>
+<h2>Delete brand</h2>
 
 <h3>Are you sure you want to delete this?</h3>
 <div>
-    <h4>BrandModel</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.BrandName)
-        </dt>
+	<h4>BrandModel</h4>
+	<hr />
+	@Html.DisplayNameFor(model => model.BrandName)
+	@Html.DisplayFor(model => model.BrandName)
+	<br />
+	@Html.DisplayNameFor(model => model.Logo)
+	@Html.DisplayFor(model => model.Logo)
+	<br />
+	@Html.DisplayNameFor(model => model.Country)
+	@Html.DisplayFor(model => model.Country)
+	<br />
+	@Html.DisplayNameFor(model => model.Description)
+	@Html.DisplayFor(model => model.Description)
+	<br />
+	@Html.DisplayNameFor(model => model.FoundationYear)
+	@Html.DisplayFor(model => model.FoundationYear)
 
-        <dd>
-            @Html.DisplayFor(model => model.BrandName)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Logo)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Logo)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Country)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Country)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.FoundationYear)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.FoundationYear)
-        </dd>
-
-    </dl>
-
-    @using (Html.BeginForm()) {
-        @Html.AntiForgeryToken()
-
-        <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
-        </div>
-    }
+	@using(Html.BeginForm()) {
+		@Html.AntiForgeryToken()
+		@Html.HiddenFor(model => model.BrandID)
+		<div class="form-actions no-color">
+			<input type="submit" value="Delete" class="btn btn-default" /> |
+			@Html.ActionLink("Back to List", "Index")
+		</div>
+	}
 </div>
+
+TODO - Add brand products <br/>

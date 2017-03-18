@@ -42,10 +42,10 @@ namespace ShoppingSite.Models {
 		public string Description { get; set; }
 
 		[Required]
-		[Display(Name = "Product description")]
+		[Display(Name = "Foundation Year")]
 		[Column("FoundationYear", TypeName = "date")]
 		[DataType(DataType.Date)]
-		[DisplayFormat(DataFormatString = "{0:yyyy}")]
+		[DisplayFormat(DataFormatString = "{0:y}")]
 		public DateTime FoundationYear { get; set; }
 
 		public virtual ICollection<ProductModel> Products { get; set; }
