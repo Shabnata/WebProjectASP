@@ -88,7 +88,7 @@ namespace ShoppingSite.Controllers {
 			return View();
 		}
 
-		/* Pending deletion
+		/* TODO Pending deletion
 		//
 		// POST: /Manage/AddPhoneNumber
 		[HttpPost]
@@ -252,7 +252,7 @@ namespace ShoppingSite.Controllers {
 			});
 		}
 
-		/* Pending deletion
+		/* TODO Pending deletion
 		//
 		// POST: /Manage/LinkLogin
 		[HttpPost]

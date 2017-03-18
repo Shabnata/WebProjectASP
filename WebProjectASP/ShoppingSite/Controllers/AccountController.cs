@@ -78,7 +78,7 @@ namespace ShoppingSite.Controllers {
 			}
 		}
 
-		/* Pending deletion
+		/* TODO Pending deletion
 		//
 		// GET: /Account/VerifyCode
 		[AllowAnonymous]
@@ -157,7 +157,7 @@ namespace ShoppingSite.Controllers {
 			return View(model);
 		}
 
-		/* Pending deletion
+		/* TODO Pending deletion
 		//
 		// GET: /Account/ConfirmEmail
 		[AllowAnonymous]
@@ -245,7 +245,7 @@ namespace ShoppingSite.Controllers {
 			return View();
 		}
 
-		/* Pending deletion
+		/* TODO Pending deletion
 		//
 		// POST: /Account/ExternalLogin
 		[HttpPost]
@@ -355,7 +355,7 @@ namespace ShoppingSite.Controllers {
 			return RedirectToAction("Index", "Home");
 		}
 
-		/* Pending deletion
+		/* TODO Pending deletion
 		//
 		// GET: /Account/ExternalLoginFailure
 		[AllowAnonymous]

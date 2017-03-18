@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 
 namespace ShoppingSite.Models {
-	/* Pending deletion
+	/* TODO Pending deletion
 	public class ExternalLoginConfirmationViewModel {
 		[Required]
 		[Display(Name = "Email")]
