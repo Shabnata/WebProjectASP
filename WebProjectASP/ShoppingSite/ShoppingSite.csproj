@@ -169,6 +169,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BrandsController.cs" />
+    <Compile Include="Controllers\CategoriesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Global.asax.cs">
@@ -190,19 +191,8 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\banners\botanical-supplements-banner.jpg" />
-    <Content Include="Content\banners\essential-oil-banner.jpg" />
-    <Content Include="Content\banners\general-health-banner.jpg" />
-    <Content Include="Content\banners\lifestyle-supplements-banner.jpg" />
-    <Content Include="Content\banners\mens-health-banner.jpg" />
-    <Content Include="Content\banners\skin-care-banner.jpg" />
-    <Content Include="Content\banners\sports-nutrition-banner.jpg" />
-    <Content Include="Content\banners\vitamins-minerals-banner.jpg" />
-    <Content Include="Content\banners\womens-health-banner.jpg" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
-    <Content Include="Content\icons\Cart-Icon-PNG-Graphic-Cave.png" />
-    <Content Include="Content\icons\logo3.png" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -261,9 +251,16 @@
     <Content Include="Views\Brands\Details.cshtml" />
     <Content Include="Views\Brands\Edit.cshtml" />
     <Content Include="Views\Brands\Index.cshtml" />
+    <Content Include="Views\Categories\Index.cshtml" />
+    <Content Include="Views\Categories\Create.cshtml" />
+    <Content Include="Views\Categories\Edit.cshtml" />
+    <Content Include="Views\Categories\Details.cshtml" />
+    <Content Include="Views\Categories\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\banners\" />
+    <Folder Include="Content\icons\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
