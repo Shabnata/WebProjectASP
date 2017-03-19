@@ -110,7 +110,7 @@ namespace ShoppingSite.Controllers {
 			BrandModel brand = await (from b in db.Brands where b.BrandName.ToLower() == BrandName.ToLower() select b).SingleAsync();
 
 			if(brand != null) {
-				return RedirectToAction("Details", brand.BrandID);
+				return RedirectToAction("Details", new { BrandID = brand.BrandID });
 			}
 			ViewBag.SearchString = BrandName;
 			ViewBag.NotFoundError = "Brand not found";
@@ -119,7 +119,10 @@ namespace ShoppingSite.Controllers {
 
 		[HttpPost]
 		public async Task<ActionResult> TypeSearch(string SearchString) {
-			ICollection<string> brands = await (from b in db.Brands where b.BrandName.ToLower().Contains(SearchString.ToLower()) select b.BrandName).ToListAsync();
+			if(SearchString == null || SearchString.Equals("")) {
+				return Json("");
+			}
+			ICollection<string> brands = await (from b in db.Brands where b.BrandName.ToLower().Contains(SearchString.ToLower()) select b.BrandName).ToArrayAsync();
 			return Json(brands);
 		}
 	}

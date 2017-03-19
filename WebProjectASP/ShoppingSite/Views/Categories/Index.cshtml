@@ -2,17 +2,15 @@
 
 @{
 	ViewBag.Title = "Index";
-	// This is here so that later can be changed for specific layout for managment side of site
 	Layout = (ViewBag.LayoutFile != null) ? ViewBag.LayoutFile : Layout;
 }
 
 <h2>Categories Index</h2>
 <h3>TODO - Bootstrap this page</h3>
 
-@* TODO Add AJAX stuff to search as you type *@
 @* BeginForm(string actionName, string controllerName, FormMethod method) *@
 @using(Html.BeginForm("Search", "Categories", FormMethod.Post)) {
-	<input type="search" name="CategoryName" placeholder="@Html.DisplayNameFor(model => model.CategoryName)" value="@ViewBag.SearchString" required />
+	<input type="search" name="CategoryName" placeholder="@Html.DisplayNameFor(model => model.CategoryName)" value="@ViewBag.SearchString" path="@Url.Action("TypeSearch", "Categories")" oninput="typeSearch(this)" autocomplete="on" required />
 	<input type="submit" value="Search" />
 	if(ViewBag.NotFoundError != null) {
 		<span style="background: Red;">@ViewBag.NotFoundError</span>
@@ -44,3 +42,7 @@
 		</tr>
 	}
 </table>
+
+@section scripts{
+	@Scripts.Render("~/Scripts/AutoCompleteTypeSearch.js")
+}

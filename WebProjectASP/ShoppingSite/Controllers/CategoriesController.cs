@@ -110,7 +110,7 @@ namespace ShoppingSite.Controllers {
 			CategoryModel category = await (from c in db.Categories where c.CategoryName.ToLower() == CategoryName.ToLower() select c).SingleAsync();
 
 			if(category != null) {
-				return RedirectToAction("Details", category.CategoryID);
+				return RedirectToAction("Details", new { CategoryID = category.CategoryID });
 			}
 			ViewBag.SearchString = CategoryName;
 			ViewBag.NotFoundError = "Category not found";
@@ -119,6 +119,9 @@ namespace ShoppingSite.Controllers {
 
 		[HttpPost]
 		public async Task<ActionResult> TypeSearch(string SearchString) {
+			if(SearchString == null || SearchString.Equals("")) {
+				return Json("");
+			}
 			ICollection<string> categories = await (from c in db.Categories where c.CategoryName.ToLower().Contains(SearchString.ToLower()) select c.CategoryName).ToListAsync();
 			return Json(categories);
 		}

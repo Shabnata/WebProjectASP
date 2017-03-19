@@ -8,9 +8,8 @@
 <h2>Brands Index</h2>
 <h3>TODO - Bootstrap this page</h3>
 
-@* TODO Add AJAX stuff to search as you type *@
 @using(Html.BeginForm("Search", "Brands", FormMethod.Post)) {
-	<input type="search" name="BrandName" placeholder="Brand name" value="@ViewBag.SearchString" required />
+	<input type="search" id="BrandName" name="BrandName" placeholder="Brand name" value="@ViewBag.SearchString" path="@Url.Action("TypeSearch", "Brands")" oninput="typeSearch(this)" autocomplete="on" required />
 	<input type="submit" value="Search" />
 	if(ViewBag.NotFoundError != null) {
 		<span style="background: Red;">@ViewBag.NotFoundError</span>
@@ -32,7 +31,7 @@
 
 	@foreach(var item in Model) {
 		<tr>
-			<td>@Html.DisplayFor(modelItem => item.BrandName)  | @Html.NameFor(modelItem => item.BrandName)</td>
+			<td>@Html.DisplayFor(modelItem => item.BrandName)</td>
 			<td>@Html.DisplayFor(modelItem => item.Logo)</td>
 			<td>@Html.DisplayFor(modelItem => item.Country)</td>
 			<td>@Html.DisplayFor(modelItem => item.Description)</td>
@@ -46,3 +45,7 @@
 	}
 
 </table>
+
+@section scripts{
+	@Scripts.Render("~/Scripts/AutoCompleteTypeSearch.js")
+}
