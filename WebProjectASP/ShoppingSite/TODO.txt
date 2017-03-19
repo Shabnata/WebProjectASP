@@ -1,0 +1,4 @@
+﻿
+- Add a different layout file for site administrator / managers / employees
+
+- Add checks to creating new users / categories / brands / etc that the name is not already taken (ajax) and disable submit button if it is
