@@ -1,0 +1,48 @@
+﻿@model IEnumerable<ShoppingSite.Models.SubCategoryModel>
+
+@{
+	ViewBag.Title = "Index";
+	Layout = (ViewBag.LayoutFile != null) ? ViewBag.LayoutFile : Layout;
+}
+
+<h2>SubCategories Index</h2>
+<h3>TODO - Bootstrap this page</h3>
+
+@using(Html.BeginForm("Search", "SubCategories", FormMethod.Post)) {
+	<input type="search" name="CategoryName" placeholder="@Html.DisplayNameFor(model => model.SubCategoryName)" value="@ViewBag.SearchString" path="@Url.Action("TypeSearch", "SubCategories")" oninput="typeSearch(this)" autocomplete="on" required />
+	<input type="submit" value="Search" />
+	if(ViewBag.NotFoundError != null) {
+		<span style="background: Red;">@ViewBag.NotFoundError</span>
+		<br />
+	}
+}
+
+@Html.ActionLink("Create SubCategory", "Create")
+
+<table class="table">
+	<tr>
+		<th>@Html.DisplayNameFor(model => model.SubCategoryLogo)</th>
+		<th>@Html.DisplayNameFor(model => model.SubCategoryID)</th>
+		<th>@Html.DisplayNameFor(model => model.SubCategoryName)</th>
+		<th>Number of products</th>
+		<th>Actions</th>
+	</tr>
+
+	@foreach(var item in Model) {
+		<tr>
+			<td>@Html.DisplayFor(modelItem => item.SubCategoryLogo)</td>
+			<td>@Html.DisplayFor(modelItem => item.SubCategoryID)</td>
+			<td>@Html.DisplayFor(modelItem => item.SubCategoryName)</td>
+			<td>@item.Products.Count</td>
+			<td>
+				@Html.ActionLink("Edit", "Edit", new { SubCategoryID = item.SubCategoryID }) |
+				@Html.ActionLink("Details", "Details", new { SubCategoryID = item.SubCategoryID }) |
+				@Html.ActionLink("Delete", "Delete", new { SubCategoryID = item.SubCategoryID })
+			</td>
+		</tr>
+	}
+</table>
+
+@section scripts{
+	@Scripts.Render("~/Scripts/AutoCompleteTypeSearch.js")
+}

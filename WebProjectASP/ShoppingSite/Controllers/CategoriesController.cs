@@ -28,7 +28,7 @@ namespace ShoppingSite.Controllers {
 		// POST: Categories/Create/5
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<ActionResult> Create([Bind(Include = "CategoryName")] CategoryModel categoryModel) {
+		public async Task<ActionResult> Create([Bind(Include = "CategoryName, Logo")] CategoryModel categoryModel) {
 			if(ModelState.IsValid) {
 				db.Categories.Add(categoryModel);
 				await db.SaveChangesAsync();
