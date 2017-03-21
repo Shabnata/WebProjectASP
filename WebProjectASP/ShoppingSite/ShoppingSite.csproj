@@ -193,8 +193,22 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\banners\banner1.png" />
+    <Content Include="Content\banners\banner2.png" />
+    <Content Include="Content\banners\banner3.png" />
+    <Content Include="Content\banners\banner4.png" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\categories\Botanical.png" />
+    <Content Include="Content\categories\Essential_Oils.png" />
+    <Content Include="Content\categories\General_Health.png" />
+    <Content Include="Content\categories\Lifestyle.png" />
+    <Content Include="Content\categories\Mens_Health.png" />
+    <Content Include="Content\categories\Skin_Care.png" />
+    <Content Include="Content\categories\Sports.png" />
+    <Content Include="Content\categories\Vitamins_Minerals.png" />
+    <Content Include="Content\categories\Womens_Health.png" />
+    <Content Include="Content\icons\cart.png" />
     <Content Include="Content\themes\base\accordion.css" />
     <Content Include="Content\themes\base\all.css" />
     <Content Include="Content\themes\base\autocomplete.css" />
@@ -312,8 +326,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Content\banners\" />
-    <Folder Include="Content\icons\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
