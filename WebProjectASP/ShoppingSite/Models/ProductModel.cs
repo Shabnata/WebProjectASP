@@ -58,4 +58,41 @@ namespace ShoppingSite.Models {
 		public virtual ICollection<OrderModel> Orders { get; set; }
 
 	}
+
+	public class ProductViewModel {
+		
+		[Required]
+		[Display(Name = "Product ID")]
+		[DataType(DataType.Text)]
+		public int SKU { get; set; }
+
+		[Required]
+		[Display(Name = "Product name")]
+		[DataType(DataType.Text)]
+		public string ProductName { get; set; }
+
+		[Required]
+		[Display(Name = "Product description")]
+		[DataType(DataType.MultilineText)]
+		public string Description { get; set; }
+
+		[Required]
+		[Display(Name = "CoverPath")]
+		[DataType(DataType.ImageUrl)]
+		public string CoverPath { get; set; }
+
+		[Required]
+		[Display(Name = "Price")]
+		[DataType(DataType.Currency)]
+		public decimal Price { get; set; }
+
+		[Required]
+		[Display(Name = "Brand ID")]
+		[DataType(DataType.Text)]
+		public int BrandID { get; set; }
+
+		public  IList<BrandModel> AllBrand { get; set; }
+
+		public IList<string> ProductPictures { get; set; }
+	}
 }
