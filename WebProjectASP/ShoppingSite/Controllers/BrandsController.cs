@@ -30,9 +30,11 @@ namespace ShoppingSite.Controllers {
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> Create([Bind(Include = "BrandID, BrandName, Logo, Country, Description, FoundationYear")] BrandModel brandModel) {
 			if(ModelState.IsValid) {
-				db.Brands.Add(brandModel);
-				await db.SaveChangesAsync();
-				return RedirectToAction("Index");
+				if(!await (from b in db.Brands where b.BrandName.ToLower() == brandModel.BrandName.ToLower() select b).AnyAsync()) {
+					db.Brands.Add(brandModel);
+					await db.SaveChangesAsync();
+					return RedirectToAction("Index");
+				}
 			}
 
 			return View("Error");
@@ -56,9 +58,11 @@ namespace ShoppingSite.Controllers {
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> Edit([Bind(Include = "BrandID, BrandName, Logo, Country, Description, FoundationYear")] BrandModel brandModel) {
 			if(ModelState.IsValid) {
-				db.Entry(brandModel).State = EntityState.Modified;
-				await db.SaveChangesAsync();
-				return RedirectToAction("Index");
+				if(!await (from b in db.Brands where b.BrandName.ToLower() == brandModel.BrandName.ToLower() select b).AnyAsync()) {
+					db.Entry(brandModel).State = EntityState.Modified;
+					await db.SaveChangesAsync();
+					return RedirectToAction("Index");
+				}
 			}
 			return View(brandModel);
 		}

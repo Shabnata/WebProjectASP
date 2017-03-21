@@ -31,9 +31,11 @@ namespace ShoppingSite.Controllers {
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> Create([Bind(Include = "CategoryName, Logo")] CategoryModel categoryModel) {
 			if(ModelState.IsValid) {
-				db.Categories.Add(categoryModel);
-				await db.SaveChangesAsync();
-				return RedirectToAction("Index");
+				if(!await (from c in db.Categories where c.CategoryName.ToLower() == categoryModel.CategoryName.ToLower() select c).AnyAsync()) {
+					db.Categories.Add(categoryModel);
+					await db.SaveChangesAsync();
+					return RedirectToAction("Index");
+				}
 			}
 
 			return View("Error");
@@ -57,9 +59,11 @@ namespace ShoppingSite.Controllers {
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> Edit([Bind(Include = "CategoryID, CategoryName, Logo")] CategoryModel categoryModel) {
 			if(ModelState.IsValid) {
-				db.Entry(categoryModel).State = EntityState.Modified;
-				await db.SaveChangesAsync();
-				return RedirectToAction("Index");
+				if(!await (from c in db.Categories where c.CategoryName.ToLower() == categoryModel.CategoryName.ToLower() select c).AnyAsync()) {
+					db.Entry(categoryModel).State = EntityState.Modified;
+					await db.SaveChangesAsync();
+					return RedirectToAction("Index");
+				}
 			}
 			return View(categoryModel);
 		}
@@ -126,11 +130,10 @@ namespace ShoppingSite.Controllers {
 			ICollection<string> categories = await (from c in db.Categories where c.CategoryName.ToLower().StartsWith(SearchString.ToLower()) select c.CategoryName).ToListAsync();
 			return Json(categories);
 		}
-        // GET: Categories/Browse
-        public async Task<ActionResult> Browse()
-        {
-            return View(await db.Categories.ToListAsync());
-        }
+		// GET: Categories/Browse
+		public async Task<ActionResult> Browse() {
+			return View(await db.Categories.ToListAsync());
+		}
 
-    }
+	}
 }

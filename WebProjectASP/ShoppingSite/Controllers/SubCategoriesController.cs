@@ -32,12 +32,15 @@ namespace ShoppingSite.Controllers {
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> Create([Bind(Include = "SubCategoryName, SubCategoryLogo")] SubCategoryModel subCategoryModel) {
 			if(ModelState.IsValid) {
-				foreach(string c in Request.Form.GetValues("SelectedCategories")) {
-					subCategoryModel.ParentCategories.Add(await db.Categories.FindAsync(Int32.Parse(c)));
+				if(!await (from sc in db.SubCategories where sc.SubCategoryName.ToLower() == subCategoryModel.SubCategoryName.ToLower() select sc).AnyAsync()) {
+					subCategoryModel.ParentCategories = new List<CategoryModel>();
+					foreach(string c in Request.Form.GetValues("SelectedCategories")) {
+						subCategoryModel.ParentCategories.Add(await db.Categories.FindAsync(Int32.Parse(c)));
+					}
+					db.SubCategories.Add(subCategoryModel);
+					await db.SaveChangesAsync();
+					return RedirectToAction("Index");
 				}
-				db.SubCategories.Add(subCategoryModel);
-				await db.SaveChangesAsync();
-				return RedirectToAction("Index");
 			}
 
 			return View("Error");
@@ -67,16 +70,18 @@ namespace ShoppingSite.Controllers {
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> Edit([Bind(Include = "SubCategoryID, SubCategoryName, SubCategoryLogo")] SubCategoryModel subCategoryModel) {
 			if(ModelState.IsValid) {
-				string[] selectedCategoriesStrings = Request.Form.GetValues("CheckedCategories");
-				List<CategoryModel> selectedCategoriesList = new List<CategoryModel>();
-				foreach(string str in selectedCategoriesStrings) {
-					CategoryModel cat = await (from c in db.Categories where c.CategoryID == Int32.Parse(str) select c).SingleAsync();
-					selectedCategoriesList.Add(cat);
+				if(!await (from sc in db.SubCategories where sc.SubCategoryName.ToLower() == subCategoryModel.SubCategoryName.ToLower() select sc).AnyAsync()) {
+					string[] selectedCategoriesStrings = Request.Form.GetValues("CheckedCategories");
+					List<CategoryModel> selectedCategoriesList = new List<CategoryModel>();
+					foreach(string str in selectedCategoriesStrings) {
+						CategoryModel cat = await (from c in db.Categories where c.CategoryID == Int32.Parse(str) select c).SingleAsync();
+						selectedCategoriesList.Add(cat);
+					}
+					subCategoryModel.ParentCategories = selectedCategoriesList;
+					db.Entry(subCategoryModel).State = EntityState.Modified;
+					await db.SaveChangesAsync();
+					return RedirectToAction("Index");
 				}
-				subCategoryModel.ParentCategories = selectedCategoriesList;
-				db.Entry(subCategoryModel).State = EntityState.Modified;
-				await db.SaveChangesAsync();
-				return RedirectToAction("Index");
 			}
 			return View(subCategoryModel);
 		}

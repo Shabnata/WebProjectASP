@@ -32,16 +32,18 @@ namespace ShoppingSite.Controllers {
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> Create([Bind(Include = "ProductName, Description, CoverPath, Price, BrandID")] ProductModel productModel) {
 			if(ModelState.IsValid) {
-				string[] pictures = Request.Form.GetValues("ProductPictures");
-				List<ProductPictureModel> ppm = new List<ProductPictureModel>();
-				foreach(string str in pictures) {
-					ppm.Add(new ProductPictureModel { SKU = productModel.SKU, PicturePath = str, Product = productModel });
+				if(!await (from p in db.Products where p.ProductName.ToLower() == productModel.ProductName.ToLower() && p.BrandID == productModel.BrandID select p).AnyAsync()) {
+					string[] pictures = Request.Form.GetValues("ProductPictures");
+					List<ProductPictureModel> ppm = new List<ProductPictureModel>();
+					foreach(string str in pictures) {
+						ppm.Add(new ProductPictureModel { SKU = productModel.SKU, PicturePath = str, Product = productModel });
+					}
+					productModel.ProductPictures = ppm;
+					productModel.Brand = await (from b in db.Brands where b.BrandID == productModel.BrandID select b).SingleAsync();
+					db.Products.Add(productModel);
+					await db.SaveChangesAsync();
+					return RedirectToAction("Index");
 				}
-				productModel.ProductPictures = ppm;
-				productModel.Brand = await (from b in db.Brands where b.BrandID == productModel.BrandID select b).SingleAsync();
-				db.Products.Add(productModel);
-				await db.SaveChangesAsync();
-				return RedirectToAction("Index");
 			}
 
 			return View("Error");
@@ -74,16 +76,18 @@ namespace ShoppingSite.Controllers {
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> Edit([Bind(Include = "SKU, ProductName, Description, CoverPath, Price, BrandID")] ProductModel productModel) {
 			if(ModelState.IsValid) {
-				string[] pictures = Request.Form.GetValues("ProductPictures");
-				List<ProductPictureModel> ppm = new List<ProductPictureModel>();
-				foreach(string str in pictures) {
-					ppm.Add(new ProductPictureModel { SKU = productModel.SKU, PicturePath = str, Product = productModel });
+				if(!await (from p in db.Products where p.ProductName.ToLower() == productModel.ProductName.ToLower() && p.BrandID == productModel.BrandID select p).AnyAsync()) {
+					string[] pictures = Request.Form.GetValues("ProductPictures");
+					List<ProductPictureModel> ppm = new List<ProductPictureModel>();
+					foreach(string str in pictures) {
+						ppm.Add(new ProductPictureModel { SKU = productModel.SKU, PicturePath = str, Product = productModel });
+					}
+					productModel.ProductPictures = ppm;
+					productModel.Brand = await (from b in db.Brands where b.BrandID == productModel.BrandID select b).SingleAsync();
+					db.Entry(productModel).State = EntityState.Modified;
+					await db.SaveChangesAsync();
+					return RedirectToAction("Index");
 				}
-				productModel.ProductPictures = ppm;
-				productModel.Brand = await (from b in db.Brands where b.BrandID == productModel.BrandID select b).SingleAsync();
-				db.Entry(productModel).State = EntityState.Modified;
-				await db.SaveChangesAsync();
-				return RedirectToAction("Index");
 			}
 			return View("Error");
 		}
