@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -122,7 +123,7 @@ namespace ShoppingSite.Controllers {
 			if(SearchString == null || SearchString.Equals("")) {
 				return Json("");
 			}
-			ICollection<string> categories = await (from c in db.Categories where c.CategoryName.ToLower().Contains(SearchString.ToLower()) select c.CategoryName).ToListAsync();
+			ICollection<string> categories = await (from c in db.Categories where c.CategoryName.ToLower().StartsWith(SearchString.ToLower()) select c.CategoryName).ToListAsync();
 			return Json(categories);
 		}
 

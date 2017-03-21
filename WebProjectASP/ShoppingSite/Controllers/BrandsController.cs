@@ -122,7 +122,7 @@ namespace ShoppingSite.Controllers {
 			if(SearchString == null || SearchString.Equals("")) {
 				return Json("");
 			}
-			ICollection<string> brands = await (from b in db.Brands where b.BrandName.ToLower().Contains(SearchString.ToLower()) select b.BrandName).ToArrayAsync();
+			ICollection<string> brands = await (from b in db.Brands where b.BrandName.ToLower().StartsWith(SearchString.ToLower()) select b.BrandName).ToArrayAsync();
 			return Json(brands);
 		}
 	}

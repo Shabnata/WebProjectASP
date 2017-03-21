@@ -323,6 +323,9 @@
     <Content Include="Views\Categories\Delete.cshtml" />
     <Content Include="Views\SubCategories\Index.cshtml" />
     <Content Include="Views\SubCategories\Create.cshtml" />
+    <Content Include="Views\SubCategories\Edit.cshtml" />
+    <Content Include="Views\SubCategories\Details.cshtml" />
+    <Content Include="Views\SubCategories\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

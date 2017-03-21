@@ -1,0 +1,35 @@
+﻿@model ShoppingSite.Models.SubCategoryModel
+
+@{
+	ViewBag.Title = "SubCategory details";
+	Layout = (ViewBag.LayoutFile != null) ? ViewBag.LayoutFile : Layout;
+}
+
+<h2>SubCategory details</h2>
+
+<div>
+	<h4>CategoryModel</h4>
+	<hr />
+	@Html.DisplayNameFor(model => model.SubCategoryID) :
+	@Html.DisplayFor(model => model.SubCategoryID)
+	<br />
+	@Html.DisplayNameFor(model => model.SubCategoryName) :
+	@Html.DisplayFor(model => model.SubCategoryName)
+	<br />
+	@Html.DisplayNameFor(model => model.SubCategoryLogo) :
+	@Html.DisplayFor(model => model.SubCategoryLogo)
+	<img src="@Model.SubCategoryLogo" alt="@Model.SubCategoryName" />
+	<br />
+
+	<ul>
+		@foreach(var pc in Model.ParentCategories) {
+			<li>
+				<label>@pc.CategoryName</label>
+			</li>
+		}
+	</ul>
+</div>
+
+@Html.ActionLink("Delete", "Delete", new { SubCategoryID = Model.SubCategoryID }) |
+@Html.ActionLink("Edit", "Edit", new { SubCategoryID = Model.SubCategoryID }) |
+@Html.ActionLink("Back to List", "Index")
