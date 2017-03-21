@@ -24,10 +24,16 @@
 	@Html.DisplayFor(model => model.Logo)
 	<img src="@Model.Logo" alt="@Model.CategoryName" />
 	<br />
+
+	<ul>
+		@foreach(var sc in Model.SubCategories) {
+			<li>
+				<label>@sc.SubCategoryName</label>
+			</li>
+		}
+	</ul>
 </div>
 
 @Html.ActionLink("Delete", "Delete", new { CategoryID = Model.CategoryID }) |
 @Html.ActionLink("Edit", "Edit", new { CategoryID = Model.CategoryID }) |
 @Html.ActionLink("Back to List", "Index")
-
-TODO - Add sub categories <br />
