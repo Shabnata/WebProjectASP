@@ -1,0 +1,41 @@
+﻿@model ShoppingSite.Models.ProductModel
+
+@{
+	ViewBag.Title = "Product details";
+	Layout = (ViewBag.LayoutFile != null) ? ViewBag.LayoutFile : Layout;
+}
+
+<h2>Product details</h2>
+
+<div>
+	<h4>ProductModel</h4>
+	<hr />
+
+	@Html.DisplayNameFor(model => model.SKU) :
+	@Html.DisplayFor(model => model.SKU)
+	<br />
+	@Html.DisplayNameFor(model => model.ProductName) :
+	@Html.DisplayFor(model => model.ProductName)
+	<br />
+	@Html.DisplayNameFor(model => model.Description) :
+	@Html.DisplayFor(model => model.Description)
+	<br />
+	@Html.DisplayNameFor(model => model.CoverPath) :
+	@Html.DisplayFor(model => model.CoverPath)
+	<br />
+	@Html.DisplayNameFor(model => model.Price) :
+	@Html.DisplayFor(model => model.Price)
+	<br />
+	@Html.DisplayNameFor(model => model.Brand.BrandName) :
+	@Html.DisplayFor(model => model.Brand.BrandName)
+	<br />
+	Additional pictures:
+	<br />
+	@foreach(var p in Model.ProductPictures) {
+		<img src="@p.PicturePath" alt="@Model.ProductName" />
+	}
+</div>
+
+@Html.ActionLink("Delete", "Delete", new { SKU = Model.SKU }) |
+@Html.ActionLink("Edit", "Edit", new { SKU = Model.SKU }) |
+@Html.ActionLink("Back to List", "Index")
