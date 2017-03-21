@@ -41,7 +41,7 @@ namespace ShoppingSite.Controllers {
 				productModel.Brand = await (from b in db.Brands where b.BrandID == productModel.BrandID select b).SingleAsync();
 				db.Products.Add(productModel);
 				await db.SaveChangesAsync();
-				return View("Index");
+				return RedirectToAction("Index");
 			}
 
 			return View("Error");

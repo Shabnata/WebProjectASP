@@ -37,7 +37,7 @@ namespace ShoppingSite.Controllers {
 				}
 				db.SubCategories.Add(subCategoryModel);
 				await db.SaveChangesAsync();
-				return View("Index");
+				return RedirectToAction("Index");
 			}
 
 			return View("Error");

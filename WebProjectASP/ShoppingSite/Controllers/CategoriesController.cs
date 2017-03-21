@@ -33,7 +33,7 @@ namespace ShoppingSite.Controllers {
 			if(ModelState.IsValid) {
 				db.Categories.Add(categoryModel);
 				await db.SaveChangesAsync();
-				return View("Index");
+				return RedirectToAction("Index");
 			}
 
 			return View("Error");

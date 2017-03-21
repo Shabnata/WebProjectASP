@@ -1,4 +1,4 @@
-﻿@model ICollection<ShoppingSite.Models.CategoryModel>
+﻿@model IEnumerable<ShoppingSite.Models.CategoryModel>
 
 @{
 	ViewBag.Title = "Index";
@@ -10,7 +10,7 @@
 
 @* BeginForm(string actionName, string controllerName, FormMethod method) *@
 @using(Html.BeginForm("Search", "Categories", FormMethod.Post)) {
-	<input type="search" name="CategoryName" value="@ViewBag.SearchString" path="@Url.Action("TypeSearch", "Categories")" oninput="typeSearch(this)" autocomplete="on" required />
+	<input type="search" name="CategoryName" value="@ViewBag.SearchString" placeholder="Category name" path="@Url.Action("TypeSearch", "Categories")" oninput="typeSearch(this)" autocomplete="on" required />
 	<input type="submit" value="Search" />
 	if(ViewBag.NotFoundError != null) {
 		<span style="background: Red;">@ViewBag.NotFoundError</span>
@@ -22,9 +22,9 @@
 
 <table class="table">
 	<tr>
-		<th>Logo</th>
-		<th>CategoryID)</th>
-		<th>CategoryName</th>
+		<th>@Html.DisplayNameFor(model => model.Logo)</th>
+		<th>@Html.DisplayNameFor(model => model.CategoryID)</th>
+		<th>@Html.DisplayNameFor(model => model.CategoryName)</th>
 		<th>Number of SubCategories</th>
 		<th>Actions</th>
 	</tr>
