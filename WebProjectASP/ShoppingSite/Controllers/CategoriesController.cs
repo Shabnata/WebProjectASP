@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
@@ -112,7 +113,12 @@ namespace ShoppingSite.Controllers {
 		[HttpPost, ActionName("Search")]
 		public async Task<ActionResult> Search(string CategoryName) {
 
-			CategoryModel category = await (from c in db.Categories where c.CategoryName.ToLower() == CategoryName.ToLower() select c).SingleAsync();
+			CategoryModel category = null;
+			try {
+				category = await (from c in db.Categories where c.CategoryName.ToLower() == CategoryName.ToLower() select c).SingleAsync();
+			} catch(SqlException ex) {
+
+			}
 
 			if(category != null) {
 				return RedirectToAction("Details", new { CategoryID = category.CategoryID });

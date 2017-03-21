@@ -8,6 +8,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using ShoppingSite.Models;
+using System.Data.SqlClient;
 
 namespace ShoppingSite.Controllers {
 	[Authorize(Roles = "Administrator, Manager")]
@@ -111,7 +112,12 @@ namespace ShoppingSite.Controllers {
 		[HttpPost, ActionName("Search")]
 		public async Task<ActionResult> Search(string BrandName) {
 
-			BrandModel brand = await (from b in db.Brands where b.BrandName.ToLower() == BrandName.ToLower() select b).SingleAsync();
+			BrandModel brand = null;
+			try {
+				brand = await (from b in db.Brands where b.BrandName.ToLower() == BrandName.ToLower() select b).SingleAsync();
+			} catch(SqlException ex) {
+
+			}
 
 			if(brand != null) {
 				return RedirectToAction("Details", new { BrandID = brand.BrandID });

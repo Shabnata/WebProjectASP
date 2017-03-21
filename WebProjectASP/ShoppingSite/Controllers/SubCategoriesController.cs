@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -61,7 +62,15 @@ namespace ShoppingSite.Controllers {
 			model.SubCategoryLogo = subCategoryModel.SubCategoryLogo;
 			model.SubCategoryName = subCategoryModel.SubCategoryName;
 			model.ParentCategories = subCategoryModel.ParentCategories.ToList();
-			model.AllCategories = await (from c in db.Categories where !model.ParentCategories.Contains(c) select c).ToListAsync();
+			model.AllCategories = await db.Categories.ToListAsync();
+			foreach(CategoryModel cm in model.AllCategories) {
+				foreach(CategoryModel pc in model.ParentCategories) {
+					if(cm.CategoryID. == pc.CategoryID) {
+						model.AllCategories.Remove(cm);
+						break;
+					}
+				}
+			}
 			return View(model);
 		}
 
@@ -130,10 +139,15 @@ namespace ShoppingSite.Controllers {
 		[HttpPost, ActionName("Search")]
 		public async Task<ActionResult> Search(string SubCategoryName) {
 
-			SubCategoryModel subCategory = await (from sc in db.SubCategories where sc.SubCategoryName.ToLower() == SubCategoryName.ToLower() select sc).SingleAsync();
+			SubCategoryModel subCategory = null;
+			try {
+				subCategory = await (from sc in db.SubCategories where sc.SubCategoryName.ToLower() == SubCategoryName.ToLower() select sc).SingleAsync();
+			} catch(SqlException ex) {
+
+			}
 
 			if(subCategory != null) {
-				return RedirectToAction("Details", new { CategoryID = subCategory.SubCategoryID });
+				return RedirectToAction("Details", new { SubCategoryID = subCategory.SubCategoryID });
 			}
 			ViewBag.SearchString = SubCategoryName;
 			ViewBag.NotFoundError = "SubCategory not found";

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -137,7 +138,12 @@ namespace ShoppingSite.Controllers {
 		[HttpPost, ActionName("Search")]
 		public async Task<ActionResult> Search(string ProductName) {
 
-			ProductModel product = await (from p in db.Products where p.ProductName.ToLower() == ProductName.ToLower() select p).SingleAsync();
+			ProductModel product = null;
+			try {
+				product = await (from p in db.Products where p.ProductName.ToLower() == ProductName.ToLower() select p).SingleAsync();
+			} catch(SqlException ex) {
+
+			}
 
 			if(product != null) {
 				return RedirectToAction("Details", new { SKU = product.SKU });
