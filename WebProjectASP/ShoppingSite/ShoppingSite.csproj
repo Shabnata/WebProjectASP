@@ -193,17 +193,37 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\banners\banner1.png" />
+    <Content Include="Content\banners\banner2.png" />
+    <Content Include="Content\banners\banner3.png" />
+    <Content Include="Content\banners\banner4.png" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\categories\Botanical.png" />
+    <Content Include="Content\categories\Children.png" />
+    <Content Include="Content\categories\Essential_Oils.png" />
+    <Content Include="Content\categories\General_Health.png" />
+    <Content Include="Content\categories\Lifestyle.png" />
+    <Content Include="Content\categories\Mens_Health.png" />
+    <Content Include="Content\categories\Omega.png" />
+    <Content Include="Content\categories\Skin_Care.png" />
+    <Content Include="Content\categories\Sports.png" />
+    <Content Include="Content\categories\Super_Food.png" />
+    <Content Include="Content\categories\Vitamins_Minerals.png" />
+    <Content Include="Content\categories\Womens_Health.png" />
+    <Content Include="Content\icons\cart.png" />
     <Content Include="Content\themes\base\accordion.css" />
     <Content Include="Content\themes\base\all.css" />
+    <Content Include="Content\themes\base\animate.css" />
     <Content Include="Content\themes\base\autocomplete.css" />
     <Content Include="Content\themes\base\base.css" />
+    <Content Include="Content\themes\base\bootstrap.min.css" />
     <Content Include="Content\themes\base\button.css" />
     <Content Include="Content\themes\base\core.css" />
     <Content Include="Content\themes\base\datepicker.css" />
     <Content Include="Content\themes\base\dialog.css" />
     <Content Include="Content\themes\base\draggable.css" />
+    <Content Include="Content\themes\base\font-awesome.min.css" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -225,9 +245,13 @@
     <Content Include="Content\themes\base\images\ui-icons_ffffff_256x240.png" />
     <Content Include="Content\themes\base\jquery-ui.css" />
     <Content Include="Content\themes\base\jquery-ui.min.css" />
+    <Content Include="Content\themes\base\main.css" />
     <Content Include="Content\themes\base\menu.css" />
+    <Content Include="Content\themes\base\prettyPhoto.css" />
+    <Content Include="Content\themes\base\price-range.css" />
     <Content Include="Content\themes\base\progressbar.css" />
     <Content Include="Content\themes\base\resizable.css" />
+    <Content Include="Content\themes\base\responsive.css" />
     <Content Include="Content\themes\base\selectable.css" />
     <Content Include="Content\themes\base\selectmenu.css" />
     <Content Include="Content\themes\base\slider.css" />
@@ -312,11 +336,10 @@
     <Content Include="Views\SubCategories\Edit.cshtml" />
     <Content Include="Views\SubCategories\Details.cshtml" />
     <Content Include="Views\SubCategories\Delete.cshtml" />
+    <Content Include="Views\Categories\Browse.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Content\banners\" />
-    <Folder Include="Content\icons\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

@@ -126,6 +126,11 @@ namespace ShoppingSite.Controllers {
 			ICollection<string> categories = await (from c in db.Categories where c.CategoryName.ToLower().StartsWith(SearchString.ToLower()) select c.CategoryName).ToListAsync();
 			return Json(categories);
 		}
+        // GET: Categories/Browse
+        public async Task<ActionResult> Browse()
+        {
+            return View(await db.Categories.ToListAsync());
+        }
 
-	}
+    }
 }
