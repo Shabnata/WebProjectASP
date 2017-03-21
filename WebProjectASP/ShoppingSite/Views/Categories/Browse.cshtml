@@ -1,4 +1,6 @@
-﻿@model IEnumerable<ShoppingSite.Models.CategoryModel>
+﻿@model IList<ShoppingSite.Models.SubCategoryModel>
+
+
 
 <section>
     <div class="container">
@@ -8,41 +10,17 @@
                     <h2>SubCategories</h2>
                     <div class="panel-group category-products" id="accordian">
                         <!--Sub category-list-->
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h4 class="panel-title"><a href="#">Kids</a></h4>
+                        
+                        @foreach (var SubCat in Model)
+                        {
+
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title"><a href="#">@SubCat.SubCategoryName</a></h4>
+                                </div>
                             </div>
-                        </div>
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h4 class="panel-title"><a href="#">Fashion</a></h4>
-                            </div>
-                        </div>
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h4 class="panel-title"><a href="#">Households</a></h4>
-                            </div>
-                        </div>
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h4 class="panel-title"><a href="#">Interiors</a></h4>
-                            </div>
-                        </div>
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h4 class="panel-title"><a href="#">Clothing</a></h4>
-                            </div>
-                        </div>
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h4 class="panel-title"><a href="#">Bags</a></h4>
-                            </div>
-                        </div>
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h4 class="panel-title"><a href="#">Shoes</a></h4>
-                            </div>
-                        </div>
+                        }
+                        
                     </div><!--/Sub category-list-->
                 </div>
             </div>

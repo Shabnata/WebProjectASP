@@ -137,9 +137,21 @@ namespace ShoppingSite.Controllers {
 			return Json(categories);
 		}
 		// GET: Categories/Browse
-		public async Task<ActionResult> Browse() {
-			return View(await db.Categories.ToListAsync());
+		public async Task<ActionResult> Browse(String Btn) {
+            
+            CategoryModel category = null;
+            try
+            {
+                category = await (from c in db.Categories where c.CategoryName.ToLower() == Btn.ToLower() select c).SingleAsync();
+            }
+            catch (SqlException ex)
+            {
+
+            }
+            return View(category.SubCategories.ToList());
 		}
 
-	}
+       
+
+    }
 }

@@ -65,7 +65,7 @@ namespace ShoppingSite.Controllers {
 			model.AllCategories = await db.Categories.ToListAsync();
 			foreach(CategoryModel cm in model.AllCategories) {
 				foreach(CategoryModel pc in model.ParentCategories) {
-					if(cm.CategoryID. == pc.CategoryID) {
+					if(cm.CategoryID == pc.CategoryID) {
 						model.AllCategories.Remove(cm);
 						break;
 					}
