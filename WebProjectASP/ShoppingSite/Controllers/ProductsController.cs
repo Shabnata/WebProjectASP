@@ -14,10 +14,17 @@ namespace ShoppingSite.Controllers {
 	public class ProductsController : Controller {
 
 		private ApplicationDbContext db = new ApplicationDbContext();
-
-		// GET: Products
-		public async Task<ActionResult> Index() {
-			return View(await db.Products.ToListAsync());
+        private async Task<Boolean> FillViewBag()
+        {
+            ViewBag.AllCategories = await db.Categories.ToListAsync();
+            ViewBag.AllBrands = await db.Brands.ToListAsync();
+            ViewBag.AllActiveSales = await db.GetActiveSalesAsync();
+            return true;
+        }
+        // GET: Products
+        public async Task<ActionResult> Index() {
+            await this.FillViewBag();
+            return View(await db.Products.ToListAsync());
 		}
 
 		// GET: Products/Create
@@ -25,22 +32,28 @@ namespace ShoppingSite.Controllers {
 		public async Task<ActionResult> Create() {
 			ProductViewModel model = new ProductViewModel();
 			model.AllBrand = await db.Brands.ToListAsync();
-			return View(model);
+            await this.FillViewBag();
+            return View(model);
 		}
 
 		// POST: Products/Create/5
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> Create([Bind(Include = "ProductName, Description, CoverPath, Price, BrandID")] ProductModel productModel) {
-			if(ModelState.IsValid) {
+            await this.FillViewBag();
+            if (ModelState.IsValid) {
 				if(!await (from p in db.Products where p.ProductName.ToLower() == productModel.ProductName.ToLower() && p.BrandID == productModel.BrandID select p).AnyAsync()) {
 					string[] pictures = Request.Form.GetValues("ProductPictures");
 					List<ProductPictureModel> ppm = new List<ProductPictureModel>();
 					foreach(string str in pictures) {
-						ppm.Add(new ProductPictureModel { SKU = productModel.SKU, PicturePath = str, Product = productModel });
+                        if (!str.Equals(""))
+                        {
+                            ppm.Add(new ProductPictureModel { SKU = productModel.SKU, PicturePath = str, Product = productModel });
+                        }
 					}
 					productModel.ProductPictures = ppm;
-					productModel.Brand = await (from b in db.Brands where b.BrandID == productModel.BrandID select b).SingleAsync();
+//					productModel.Brand = await (from b in db.Brands where b.BrandID == productModel.BrandID select b).SingleAsync();
+                    productModel.Brand = await db.Brands.FindAsync(productModel.BrandID);
 					db.Products.Add(productModel);
 					await db.SaveChangesAsync();
 					return RedirectToAction("Index");
@@ -68,29 +81,61 @@ namespace ShoppingSite.Controllers {
 			model.Price = productModel.Price;
 			model.ProductName = productModel.ProductName;
 			model.SKU = productModel.SKU;
-			model.ProductPictures = (from pp in productModel.ProductPictures select pp.PicturePath).ToList();
-			return View(model);
+            model.RelatedSubCategories = productModel.ProductCategories.ToList();
+            model.AllSubCategories = await db.SubCategories.ToListAsync(); ;
+            List<SubCategoryModel> tmpLst = new List<SubCategoryModel>();
+            foreach (SubCategoryModel cm in model.AllSubCategories)
+            {
+                foreach (SubCategoryModel pc in model.RelatedSubCategories)
+                {
+                    if (cm.SubCategoryID == pc.SubCategoryID)
+                    {
+                        tmpLst.Add(cm);
+                        break;
+                    }
+                }
+            }
+            foreach (SubCategoryModel tcm in tmpLst)
+            {
+                model.AllSubCategories.Remove(tcm);
+            }
+            model.ProductPictures = (from pp in productModel.ProductPictures select pp.PicturePath).ToList();
+            await this.FillViewBag();
+            return View(model);
 		}
 
 		// POST: Products/Edit/5
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> Edit([Bind(Include = "SKU, ProductName, Description, CoverPath, Price, BrandID")] ProductModel productModel) {
+            // TODO Fix this
 			if(ModelState.IsValid) {
-				if(!await (from p in db.Products where p.ProductName.ToLower() == productModel.ProductName.ToLower() && p.BrandID == productModel.BrandID select p).AnyAsync()) {
+				//if(!await (from p in db.Products where p.ProductName.ToLower() == productModel.ProductName.ToLower() && p.BrandID == productModel.BrandID select p).AnyAsync()) {
 					string[] pictures = Request.Form.GetValues("ProductPictures");
 					List<ProductPictureModel> ppm = new List<ProductPictureModel>();
 					foreach(string str in pictures) {
 						ppm.Add(new ProductPictureModel { SKU = productModel.SKU, PicturePath = str, Product = productModel });
 					}
 					productModel.ProductPictures = ppm;
-					productModel.Brand = await (from b in db.Brands where b.BrandID == productModel.BrandID select b).SingleAsync();
+                    string[] selectedSubCategoriesStrings = Request.Form.GetValues("CheckedSubCategories");
+                    List<SubCategoryModel> selectedSubCategoriesList = new List<SubCategoryModel>();
+                    foreach (string str in selectedSubCategoriesStrings)
+                    {
+                        //SubCategoryModel subCat = await (from sc in db.SubCategories where sc.SubCategoryID == Int32.Parse(str) select sc).SingleAsync();
+                        SubCategoryModel subCat = await db.SubCategories.FindAsync(Int32.Parse(str));
+                        selectedSubCategoriesList.Add(subCat);
+                    }
+                    productModel.ProductCategories = selectedSubCategoriesList;
+                    //productModel.Brand = await (from b in db.Brands where b.BrandID == productModel.BrandID select b).SingleAsync();
+                    productModel.Brand = await db.Brands.FindAsync(productModel.BrandID);
+                  
 					db.Entry(productModel).State = EntityState.Modified;
 					await db.SaveChangesAsync();
 					return RedirectToAction("Index");
 				}
-			}
-			return View("Error");
+			//}
+            await this.FillViewBag();
+            return View("Error");
 		}
 
 		// Products/Details/5
@@ -102,7 +147,8 @@ namespace ShoppingSite.Controllers {
 			if(productModel == null) {
 				return HttpNotFound();
 			}
-			return View(productModel);
+            await this.FillViewBag();
+            return View(productModel);
 		}
 
 
@@ -115,7 +161,8 @@ namespace ShoppingSite.Controllers {
 			if(productModel == null) {
 				return HttpNotFound();
 			}
-			return View(productModel);
+            await this.FillViewBag();
+            return View(productModel);
 		}
 
 		// POST: Products/Delete/5
@@ -125,7 +172,8 @@ namespace ShoppingSite.Controllers {
 			ProductModel productModel = await db.Products.FindAsync(SKU);
 			db.Products.Remove(productModel);
 			await db.SaveChangesAsync();
-			return RedirectToAction("Index");
+            await this.FillViewBag();
+            return RedirectToAction("Index");
 		}
 
 		protected override void Dispose(bool disposing) {
@@ -150,7 +198,8 @@ namespace ShoppingSite.Controllers {
 			}
 			ViewBag.SearchString = ProductName;
 			ViewBag.NotFoundError = "Product not found";
-			return View("Index");
+            await this.FillViewBag();
+            return View("Index");
 		}
 
 		[HttpPost]
@@ -161,5 +210,6 @@ namespace ShoppingSite.Controllers {
 			ICollection<string> products = await (from p in db.Products where p.ProductName.ToLower().StartsWith(SearchString.ToLower()) select p.ProductName).ToListAsync();
 			return Json(products);
 		}
+
 	}
 }

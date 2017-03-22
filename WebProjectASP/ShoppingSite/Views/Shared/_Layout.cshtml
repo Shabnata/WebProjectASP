@@ -72,10 +72,10 @@
                         <ul class="dropdown-menu">
 
 
-                            @*@foreach (var item in ??? )
+                            @foreach (var item in ViewBag.AllCategories)
                             {
-                                <li><a href="#">@item.CategoryName</a></li>
-                            }*@
+                                <li><a href="@Url.Action("BrowseByID", "Categories",new {CategoryID=item.CategoryID})">@item.CategoryName</a></li>
+                            }
                             @*<li><a href="#">Action</a></li>
                                 <li role="separator" class="divider"></li>
                                 <li><a href="#">Something else here</a></li>*@
@@ -87,8 +87,10 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Brands<span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="#">Action</a></li>
-                            <li><a href="#">Another action</a></li>
+                            @foreach (var brd in ViewBag.AllBrands)
+                            {
+                            <li><a href="@Url.Action("BrowseByID", "Brands",new {BrandID=brd.BrandID})">@brd.BrandName</a></li>
+                            }
                         </ul>
                     </li>
                 </ul>
