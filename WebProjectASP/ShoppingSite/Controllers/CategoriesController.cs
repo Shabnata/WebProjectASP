@@ -15,10 +15,16 @@ namespace ShoppingSite.Controllers {
 	public class CategoriesController : Controller {
 
 		private ApplicationDbContext db = new ApplicationDbContext();
-
+        private async void MenuHelper() {
+            ViewBag.AllCategories = await db.Categories.ToListAsync();
+            ViewBag.AllBrands = await db.Brands.ToListAsync();
+            ViewBag.AllActiveSales = await db.Sales.ToListAsync();
+        }
 		// GET: Categories
 		public async Task<ActionResult> Index() {
-			return View(await db.Categories.ToListAsync());
+            
+
+            return View(await db.Categories.ToListAsync());
 		}
 
 		// GET: Categories/Create
