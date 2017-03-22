@@ -63,13 +63,17 @@ namespace ShoppingSite.Controllers {
 			model.SubCategoryName = subCategoryModel.SubCategoryName;
 			model.ParentCategories = subCategoryModel.ParentCategories.ToList();
 			model.AllCategories = await db.Categories.ToListAsync();
+			List<CategoryModel> tmpLst = new List<CategoryModel>();
 			foreach(CategoryModel cm in model.AllCategories) {
 				foreach(CategoryModel pc in model.ParentCategories) {
 					if(cm.CategoryID == pc.CategoryID) {
-						model.AllCategories.Remove(cm);
+						tmpLst.Add(cm);
 						break;
 					}
 				}
+			}
+			foreach(CategoryModel tcm in tmpLst) {
+				model.AllCategories.Remove(tcm);
 			}
 			return View(model);
 		}
