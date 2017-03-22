@@ -7,7 +7,7 @@
 
 <h2>Edit product</h2>
 
-@using(Html.BeginForm("Edit", "Categories", FormMethod.Post)) {
+@using(Html.BeginForm("Edit", "Products", FormMethod.Post)) {
 	@Html.AntiForgeryToken()
 
 	<div class="form-horizontal">
@@ -57,7 +57,7 @@
 		<div class="form-group">
 			@Html.LabelFor(model => model.BrandID, htmlAttributes: new { @class = "control-label col-md-2" })
 			<div class="col-md-10">
-				<select required>
+				<select name="BrandID" required>
 					@foreach(var brand in Model.AllBrand) {
 						if(brand.BrandID.Equals(Model.BrandID)) {
 							<option value="@brand.BrandID" selected>@brand.BrandName</option>
@@ -80,9 +80,36 @@
 			}
 		</div>
 
+        <div>
+            Choose SubCategories:
+            <div class="form-group">
+                @foreach (var p in Model.RelatedSubCategories)
+                {
+                    <div class="col-md-12">
+                        <input type="checkbox" checked id="@p.SubCategoryName" name="CheckedSubCategories" value="@p.SubCategoryID" />
+                        <label for="@p.SubCategoryName">@p.SubCategoryName</label>
+                        <br />
+                    </div>
+
+                }
+                @foreach (var p in Model.AllSubCategories)
+                {
+                    <div class="col-md-12">
+                        <input type="checkbox" id="@p.SubCategoryName" name="CheckedSubCategories" value="@p.SubCategoryID" />
+                        <label for="@p.SubCategoryName">@p.SubCategoryName</label>
+                        <br />
+                    </div>
+                }
+            </div>
+
+
+            
+
+
+        </div>
 		<div class="form-group">
 			<div class="col-md-offset-2 col-md-10">
-				<input type="submit" value="Create" class="btn btn-default" />
+				<input type="submit" value="Edit" class="btn btn-default" />
 			</div>
 		</div>
 

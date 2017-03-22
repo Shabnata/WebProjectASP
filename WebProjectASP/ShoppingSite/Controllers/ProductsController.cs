@@ -46,10 +46,14 @@ namespace ShoppingSite.Controllers {
 					string[] pictures = Request.Form.GetValues("ProductPictures");
 					List<ProductPictureModel> ppm = new List<ProductPictureModel>();
 					foreach(string str in pictures) {
-						ppm.Add(new ProductPictureModel { SKU = productModel.SKU, PicturePath = str, Product = productModel });
+                        if (!str.Equals(""))
+                        {
+                            ppm.Add(new ProductPictureModel { SKU = productModel.SKU, PicturePath = str, Product = productModel });
+                        }
 					}
 					productModel.ProductPictures = ppm;
-					productModel.Brand = await (from b in db.Brands where b.BrandID == productModel.BrandID select b).SingleAsync();
+//					productModel.Brand = await (from b in db.Brands where b.BrandID == productModel.BrandID select b).SingleAsync();
+                    productModel.Brand = await db.Brands.FindAsync(productModel.BrandID);
 					db.Products.Add(productModel);
 					await db.SaveChangesAsync();
 					return RedirectToAction("Index");
@@ -77,7 +81,25 @@ namespace ShoppingSite.Controllers {
 			model.Price = productModel.Price;
 			model.ProductName = productModel.ProductName;
 			model.SKU = productModel.SKU;
-			model.ProductPictures = (from pp in productModel.ProductPictures select pp.PicturePath).ToList();
+            model.RelatedSubCategories = productModel.ProductCategories.ToList();
+            model.AllSubCategories = await db.SubCategories.ToListAsync(); ;
+            List<SubCategoryModel> tmpLst = new List<SubCategoryModel>();
+            foreach (SubCategoryModel cm in model.AllSubCategories)
+            {
+                foreach (SubCategoryModel pc in model.RelatedSubCategories)
+                {
+                    if (cm.SubCategoryID == pc.SubCategoryID)
+                    {
+                        tmpLst.Add(cm);
+                        break;
+                    }
+                }
+            }
+            foreach (SubCategoryModel tcm in tmpLst)
+            {
+                model.AllSubCategories.Remove(tcm);
+            }
+            model.ProductPictures = (from pp in productModel.ProductPictures select pp.PicturePath).ToList();
             await this.FillViewBag();
             return View(model);
 		}
@@ -86,20 +108,32 @@ namespace ShoppingSite.Controllers {
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> Edit([Bind(Include = "SKU, ProductName, Description, CoverPath, Price, BrandID")] ProductModel productModel) {
+            // TODO Fix this
 			if(ModelState.IsValid) {
-				if(!await (from p in db.Products where p.ProductName.ToLower() == productModel.ProductName.ToLower() && p.BrandID == productModel.BrandID select p).AnyAsync()) {
+				//if(!await (from p in db.Products where p.ProductName.ToLower() == productModel.ProductName.ToLower() && p.BrandID == productModel.BrandID select p).AnyAsync()) {
 					string[] pictures = Request.Form.GetValues("ProductPictures");
 					List<ProductPictureModel> ppm = new List<ProductPictureModel>();
 					foreach(string str in pictures) {
 						ppm.Add(new ProductPictureModel { SKU = productModel.SKU, PicturePath = str, Product = productModel });
 					}
 					productModel.ProductPictures = ppm;
-					productModel.Brand = await (from b in db.Brands where b.BrandID == productModel.BrandID select b).SingleAsync();
+                    string[] selectedSubCategoriesStrings = Request.Form.GetValues("CheckedSubCategories");
+                    List<SubCategoryModel> selectedSubCategoriesList = new List<SubCategoryModel>();
+                    foreach (string str in selectedSubCategoriesStrings)
+                    {
+                        //SubCategoryModel subCat = await (from sc in db.SubCategories where sc.SubCategoryID == Int32.Parse(str) select sc).SingleAsync();
+                        SubCategoryModel subCat = await db.SubCategories.FindAsync(Int32.Parse(str));
+                        selectedSubCategoriesList.Add(subCat);
+                    }
+                    productModel.ProductCategories = selectedSubCategoriesList;
+                    //productModel.Brand = await (from b in db.Brands where b.BrandID == productModel.BrandID select b).SingleAsync();
+                    productModel.Brand = await db.Brands.FindAsync(productModel.BrandID);
+                  
 					db.Entry(productModel).State = EntityState.Modified;
 					await db.SaveChangesAsync();
 					return RedirectToAction("Index");
 				}
-			}
+			//}
             await this.FillViewBag();
             return View("Error");
 		}
@@ -176,5 +210,6 @@ namespace ShoppingSite.Controllers {
 			ICollection<string> products = await (from p in db.Products where p.ProductName.ToLower().StartsWith(SearchString.ToLower()) select p.ProductName).ToListAsync();
 			return Json(products);
 		}
+
 	}
 }

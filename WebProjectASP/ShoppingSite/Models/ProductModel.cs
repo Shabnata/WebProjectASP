@@ -94,5 +94,8 @@ namespace ShoppingSite.Models {
 		public  IList<BrandModel> AllBrand { get; set; }
 
 		public IList<string> ProductPictures { get; set; }
-	}
+
+        public IList<SubCategoryModel> AllSubCategories { get; set; }
+        public IList<SubCategoryModel> RelatedSubCategories { get; set; }
+    }
 }

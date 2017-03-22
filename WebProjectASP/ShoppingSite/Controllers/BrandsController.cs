@@ -148,21 +148,21 @@ namespace ShoppingSite.Controllers {
 			return Json(brands);
 		}
 
-        //TODO with new function
+       
         public async Task<ActionResult> BrowseByID(int BrandID)
         {
 
-            CategoryModel category = null;
+            IList<SubCategoryModel> subCat = null;
             try
             {
-                category = await db.Categories.FindAsync(BrandID);
+                subCat = await db.GetBrandSubCategoriesAsync(BrandID);
             }
             catch (SqlException ex)
             {
 
             }
             await this.FillViewBag();
-            return View("Browse", category.SubCategories.ToList());
+            return View("Browse", subCat);
         }
     }
 }
