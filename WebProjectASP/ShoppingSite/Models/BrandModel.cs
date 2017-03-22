@@ -45,7 +45,7 @@ namespace ShoppingSite.Models {
 		[Display(Name = "Foundation Year")]
 		[Column("FoundationYear", TypeName = "date")]
 		[DataType(DataType.Date)]
-		[DisplayFormat(DataFormatString = "{0:y}")]
+		[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:y}")]
 		public DateTime FoundationYear { get; set; }
 
 		public virtual ICollection<ProductModel> Products { get; set; }
