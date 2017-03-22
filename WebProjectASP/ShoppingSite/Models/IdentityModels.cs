@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Data.Entity.Core.Objects;
 using System.Linq;
 using System;
+using System.Data.SqlClient;
 
 namespace ShoppingSite.Models {
 	// You can add profile data for the user by adding more properties to your ApplicationUser class, please visit http://go.microsoft.com/fwlink/?LinkID=317594 to learn more.
@@ -74,6 +75,32 @@ namespace ShoppingSite.Models {
 			List<SaleModel> activeSales = await (from s in this.Sales where s.StartDate <= today && s.EndDate >= today select s).ToListAsync();
 
 			return activeSales;
+		}
+
+		public async Task<IList<SubCategoryModel>> GetBrandSubCategoriesAsync(int BrandID) {
+			List<SubCategoryModel> brandSubCategories = new List<SubCategoryModel>();
+			BrandModel brand = null;
+			try {
+				brand = await this.Brands.FindAsync(BrandID);
+				Boolean flag = false;
+				foreach(ProductModel pm in brand.Products) {
+					foreach(SubCategoryModel pcm in pm.ProductCategories) {
+						flag = false;
+						foreach(SubCategoryModel scm in brandSubCategories) {
+							if(pcm.SubCategoryID == scm.SubCategoryID) {
+								flag = true;
+								break;
+							}
+						}
+						if(!flag) {
+							brandSubCategories.Add(pcm);
+						}
+					}
+				}
+			}catch(SqlException ex) {
+
+			}
+			return brandSubCategories;
 		}
 	}
 }
