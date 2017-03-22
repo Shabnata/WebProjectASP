@@ -6,6 +6,9 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Collections.Generic;
+using System.Data.Entity.Core.Objects;
+using System.Linq;
+using System;
 
 namespace ShoppingSite.Models {
 	// You can add profile data for the user by adding more properties to your ApplicationUser class, please visit http://go.microsoft.com/fwlink/?LinkID=317594 to learn more.
@@ -66,5 +69,11 @@ namespace ShoppingSite.Models {
 			return new ApplicationDbContext();
 		}
 
+		public async Task<IList<SaleModel>>  GetActiveSalesAsync() {
+			DateTime today = new DateTime();
+			List<SaleModel> activeSales = await (from s in this.Sales where s.StartDate <= today && s.EndDate >= today select s).ToListAsync();
+
+			return activeSales;
+		}
 	}
 }
