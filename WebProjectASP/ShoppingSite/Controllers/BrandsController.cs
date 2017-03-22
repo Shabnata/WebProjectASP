@@ -15,15 +15,23 @@ namespace ShoppingSite.Controllers {
 	public class BrandsController : Controller {
 
 		private ApplicationDbContext db = new ApplicationDbContext();
-
-		// GET: Brands
-		public async Task<ActionResult> Index() {
-			return View(await db.Brands.ToListAsync());
+        private async Task<Boolean> FillViewBag()
+        {
+            ViewBag.AllCategories = await db.Categories.ToListAsync();
+            ViewBag.AllBrands = await db.Brands.ToListAsync();
+            ViewBag.AllActiveSales = await db.GetActiveSalesAsync();
+            return true;
+        }
+        // GET: Brands
+        public async Task<ActionResult> Index() {
+            await this.FillViewBag();
+            return View(await db.Brands.ToListAsync());
 		}
 
 		// GET: Brands/Create
-		public ActionResult Create() {
-			return View();
+		public async Task<ActionResult> Create() {
+            await this.FillViewBag();
+            return View();
 		}
 
 		// POST: Brands/Create
@@ -37,14 +45,15 @@ namespace ShoppingSite.Controllers {
 					return RedirectToAction("Index");
 				}
 			}
-
-			return View("Error");
+            await this.FillViewBag();
+            return View("Error");
 		}
 
 		// GET: Brands/Edit/5
 		[HttpGet]
 		public async Task<ActionResult> Edit(int? BrandID) {
-			if(BrandID == null) {
+            await this.FillViewBag();
+            if (BrandID == null) {
 				return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 			}
 			BrandModel brandModel = await db.Brands.FindAsync(BrandID);
@@ -58,7 +67,8 @@ namespace ShoppingSite.Controllers {
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> Edit([Bind(Include = "BrandID, BrandName, Logo, Country, Description, FoundationYear")] BrandModel brandModel) {
-			if(ModelState.IsValid) {
+            await this.FillViewBag();
+            if (ModelState.IsValid) {
 				if(!await (from b in db.Brands where b.BrandName.ToLower() == brandModel.BrandName.ToLower() select b).AnyAsync()) {
 					db.Entry(brandModel).State = EntityState.Modified;
 					await db.SaveChangesAsync();
@@ -70,7 +80,8 @@ namespace ShoppingSite.Controllers {
 
 		// Brands/Details/5
 		public async Task<ActionResult> Details(int? BrandID) {
-			if(BrandID == null) {
+            await this.FillViewBag();
+            if (BrandID == null) {
 				return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 			}
 			BrandModel brandModel = await db.Brands.FindAsync(BrandID);
@@ -82,7 +93,8 @@ namespace ShoppingSite.Controllers {
 
 		// GET: Brands/Delete/5
 		public async Task<ActionResult> Delete(int? BrandID) {
-			if(BrandID == null) {
+            await this.FillViewBag();
+            if (BrandID == null) {
 				return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 			}
 			BrandModel brandModel = await db.Brands.FindAsync(BrandID);
@@ -111,8 +123,8 @@ namespace ShoppingSite.Controllers {
 
 		[HttpPost, ActionName("Search")]
 		public async Task<ActionResult> Search(string BrandName) {
-
-			BrandModel brand = null;
+            await this.FillViewBag();
+            BrandModel brand = null;
 			try {
 				brand = await (from b in db.Brands where b.BrandName.ToLower() == BrandName.ToLower() select b).SingleAsync();
 			} catch(SqlException ex) {
@@ -135,5 +147,22 @@ namespace ShoppingSite.Controllers {
 			ICollection<string> brands = await (from b in db.Brands where b.BrandName.ToLower().StartsWith(SearchString.ToLower()) select b.BrandName).ToArrayAsync();
 			return Json(brands);
 		}
-	}
+
+        //TODO with new function
+        public async Task<ActionResult> BrowseByID(int BrandID)
+        {
+
+            CategoryModel category = null;
+            try
+            {
+                category = await db.Categories.FindAsync(BrandID);
+            }
+            catch (SqlException ex)
+            {
+
+            }
+            await this.FillViewBag();
+            return View("Browse", category.SubCategories.ToList());
+        }
+    }
 }

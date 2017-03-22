@@ -7,6 +7,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using ShoppingSite.Models;
+using System.Data.Entity;
 
 namespace ShoppingSite.Controllers {
 	[Authorize]
@@ -14,7 +15,17 @@ namespace ShoppingSite.Controllers {
 		private ApplicationSignInManager _signInManager;
 		private ApplicationUserManager _userManager;
 
-		public ManageController() {
+        private ApplicationDbContext db = new ApplicationDbContext();
+
+        private async Task<Boolean> FillViewBag()
+        {
+            ViewBag.AllCategories = await db.Categories.ToListAsync();
+            ViewBag.AllBrands = await db.Brands.ToListAsync();
+            ViewBag.AllActiveSales = await db.GetActiveSalesAsync();
+            return true;
+        }
+
+        public ManageController() {
 		}
 
 		public ManageController(ApplicationUserManager userManager, ApplicationSignInManager signInManager) {
@@ -60,7 +71,8 @@ namespace ShoppingSite.Controllers {
 				Logins = await UserManager.GetLoginsAsync(userId),
 				BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId)
 			};
-			return View(model);
+            await this.FillViewBag();
+            return View(model);
 		}
 
 		//
@@ -84,8 +96,9 @@ namespace ShoppingSite.Controllers {
 
 		//
 		// GET: /Manage/AddPhoneNumber
-		public ActionResult AddPhoneNumber() {
-			return View();
+		public async Task<ActionResult> AddPhoneNumber() {
+            await this.FillViewBag();
+            return View();
 		}
 
 		/* TODO Pending deletion
@@ -181,8 +194,9 @@ namespace ShoppingSite.Controllers {
 
 		//
 		// GET: /Manage/ChangePassword
-		public ActionResult ChangePassword() {
-			return View();
+		public async Task<ActionResult> ChangePassword() {
+            await this.FillViewBag();
+            return View();
 		}
 
 		//
@@ -202,13 +216,15 @@ namespace ShoppingSite.Controllers {
 				return RedirectToAction("Index", new { Message = ManageMessageId.ChangePasswordSuccess });
 			}
 			AddErrors(result);
-			return View(model);
+            await this.FillViewBag();
+            return View(model);
 		}
 
 		//
 		// GET: /Manage/SetPassword
-		public ActionResult SetPassword() {
-			return View();
+		public async Task<ActionResult> SetPassword() {
+            await this.FillViewBag();
+            return View();
 		}
 
 		//
@@ -228,14 +244,16 @@ namespace ShoppingSite.Controllers {
 				AddErrors(result);
 			}
 
-			// If we got this far, something failed, redisplay form
-			return View(model);
+            // If we got this far, something failed, redisplay form
+            await this.FillViewBag();
+            return View(model);
 		}
 
 		//
 		// GET: /Manage/ManageLogins
 		public async Task<ActionResult> ManageLogins(ManageMessageId? message) {
-			ViewBag.StatusMessage =
+            await this.FillViewBag();
+            ViewBag.StatusMessage =
 				message == ManageMessageId.RemoveLoginSuccess ? "The external login was removed."
 				: message == ManageMessageId.Error ? "An error has occurred."
 				: "";

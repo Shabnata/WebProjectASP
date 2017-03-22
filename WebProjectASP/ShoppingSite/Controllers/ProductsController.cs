@@ -14,10 +14,17 @@ namespace ShoppingSite.Controllers {
 	public class ProductsController : Controller {
 
 		private ApplicationDbContext db = new ApplicationDbContext();
-
-		// GET: Products
-		public async Task<ActionResult> Index() {
-			return View(await db.Products.ToListAsync());
+        private async Task<Boolean> FillViewBag()
+        {
+            ViewBag.AllCategories = await db.Categories.ToListAsync();
+            ViewBag.AllBrands = await db.Brands.ToListAsync();
+            ViewBag.AllActiveSales = await db.GetActiveSalesAsync();
+            return true;
+        }
+        // GET: Products
+        public async Task<ActionResult> Index() {
+            await this.FillViewBag();
+            return View(await db.Products.ToListAsync());
 		}
 
 		// GET: Products/Create
@@ -25,14 +32,16 @@ namespace ShoppingSite.Controllers {
 		public async Task<ActionResult> Create() {
 			ProductViewModel model = new ProductViewModel();
 			model.AllBrand = await db.Brands.ToListAsync();
-			return View(model);
+            await this.FillViewBag();
+            return View(model);
 		}
 
 		// POST: Products/Create/5
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> Create([Bind(Include = "ProductName, Description, CoverPath, Price, BrandID")] ProductModel productModel) {
-			if(ModelState.IsValid) {
+            await this.FillViewBag();
+            if (ModelState.IsValid) {
 				if(!await (from p in db.Products where p.ProductName.ToLower() == productModel.ProductName.ToLower() && p.BrandID == productModel.BrandID select p).AnyAsync()) {
 					string[] pictures = Request.Form.GetValues("ProductPictures");
 					List<ProductPictureModel> ppm = new List<ProductPictureModel>();
@@ -69,7 +78,8 @@ namespace ShoppingSite.Controllers {
 			model.ProductName = productModel.ProductName;
 			model.SKU = productModel.SKU;
 			model.ProductPictures = (from pp in productModel.ProductPictures select pp.PicturePath).ToList();
-			return View(model);
+            await this.FillViewBag();
+            return View(model);
 		}
 
 		// POST: Products/Edit/5
@@ -90,7 +100,8 @@ namespace ShoppingSite.Controllers {
 					return RedirectToAction("Index");
 				}
 			}
-			return View("Error");
+            await this.FillViewBag();
+            return View("Error");
 		}
 
 		// Products/Details/5
@@ -102,7 +113,8 @@ namespace ShoppingSite.Controllers {
 			if(productModel == null) {
 				return HttpNotFound();
 			}
-			return View(productModel);
+            await this.FillViewBag();
+            return View(productModel);
 		}
 
 
@@ -115,7 +127,8 @@ namespace ShoppingSite.Controllers {
 			if(productModel == null) {
 				return HttpNotFound();
 			}
-			return View(productModel);
+            await this.FillViewBag();
+            return View(productModel);
 		}
 
 		// POST: Products/Delete/5
@@ -125,7 +138,8 @@ namespace ShoppingSite.Controllers {
 			ProductModel productModel = await db.Products.FindAsync(SKU);
 			db.Products.Remove(productModel);
 			await db.SaveChangesAsync();
-			return RedirectToAction("Index");
+            await this.FillViewBag();
+            return RedirectToAction("Index");
 		}
 
 		protected override void Dispose(bool disposing) {
@@ -150,7 +164,8 @@ namespace ShoppingSite.Controllers {
 			}
 			ViewBag.SearchString = ProductName;
 			ViewBag.NotFoundError = "Product not found";
-			return View("Index");
+            await this.FillViewBag();
+            return View("Index");
 		}
 
 		[HttpPost]

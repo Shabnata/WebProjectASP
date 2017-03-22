@@ -338,6 +338,7 @@
     <Content Include="Views\SubCategories\Details.cshtml" />
     <Content Include="Views\SubCategories\Delete.cshtml" />
     <Content Include="Views\Categories\Browse.cshtml" />
+    <Content Include="Views\Brands\Browse.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

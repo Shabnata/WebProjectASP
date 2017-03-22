@@ -16,23 +16,25 @@ namespace ShoppingSite.Controllers {
 
 		private ApplicationDbContext db = new ApplicationDbContext();
 
-        private async void FillViewBag() {
+        private async Task<Boolean> FillViewBag() {
             ViewBag.AllCategories = await db.Categories.ToListAsync();
             ViewBag.AllBrands = await db.Brands.ToListAsync();
-			ViewBag.AllActiveSales = await db.GetActiveSalesAsync();
+            ViewBag.AllActiveSales = await db.GetActiveSalesAsync();
+            return true;
         }
 
 		// GET: Categories
 		public async Task<ActionResult> Index() {
-			this.FillViewBag();
+			await this.FillViewBag();
 
             return View(await db.Categories.ToListAsync());
 		}
 
 		// GET: Categories/Create
 		[HttpGet]
-		public ActionResult Create() {
-			return View();
+		public async Task<ActionResult> Create() {
+            await this.FillViewBag();
+            return View();
 		}
 
 		// POST: Categories/Create/5
@@ -43,11 +45,12 @@ namespace ShoppingSite.Controllers {
 				if(!await (from c in db.Categories where c.CategoryName.ToLower() == categoryModel.CategoryName.ToLower() select c).AnyAsync()) {
 					db.Categories.Add(categoryModel);
 					await db.SaveChangesAsync();
-					return RedirectToAction("Index");
+                   
+                    return RedirectToAction("Index");
 				}
 			}
-
-			return View("Error");
+            await this.FillViewBag();
+            return View("Error");
 		}
 
 		// POST: Categories/Edit/5
@@ -60,7 +63,8 @@ namespace ShoppingSite.Controllers {
 			if(categoryModel == null) {
 				return HttpNotFound();
 			}
-			return View(categoryModel);
+            await this.FillViewBag();
+            return View(categoryModel);
 		}
 
 		// POST: Categories/Edit/5
@@ -74,7 +78,8 @@ namespace ShoppingSite.Controllers {
 					return RedirectToAction("Index");
 				}
 			}
-			return View(categoryModel);
+            await this.FillViewBag();
+            return View(categoryModel);
 		}
 
 		// Categories/Details/5
@@ -86,7 +91,8 @@ namespace ShoppingSite.Controllers {
 			if(categoryModel == null) {
 				return HttpNotFound();
 			}
-			return View(categoryModel);
+            await this.FillViewBag();
+            return View(categoryModel);
 		}
 
 		// GET: Categories/Delete/5
@@ -98,7 +104,8 @@ namespace ShoppingSite.Controllers {
 			if(categoryModel == null) {
 				return HttpNotFound();
 			}
-			return View(categoryModel);
+            await this.FillViewBag();
+            return View(categoryModel);
 		}
 
 		// POST: Categories/Delete/5
@@ -133,7 +140,8 @@ namespace ShoppingSite.Controllers {
 			}
 			ViewBag.SearchString = CategoryName;
 			ViewBag.NotFoundError = "Category not found";
-			return View("Index");
+            await this.FillViewBag();
+            return View("Index");
 		}
 
 		[HttpPost]
@@ -156,10 +164,26 @@ namespace ShoppingSite.Controllers {
             {
 
             }
+            await this.FillViewBag();
             return View(category.SubCategories.ToList());
 		}
+        public async Task<ActionResult> BrowseByID(int CategoryID)
+        {
 
-       
+            CategoryModel category = null;
+            try
+            {
+                category = await db.Categories.FindAsync(CategoryID);
+            }
+            catch (SqlException ex)
+            {
+
+            }
+            await this.FillViewBag();
+            return View("Browse",category.SubCategories.ToList());
+        }
+
+
 
     }
 }

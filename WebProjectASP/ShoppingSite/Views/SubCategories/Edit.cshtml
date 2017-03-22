@@ -1,62 +1,61 @@
 ﻿@model ShoppingSite.Models.SubCategoryCreateEditViewModel
-
 @{
-	ViewBag.Title = "Edit subcategory";
-	Layout = (ViewBag.LayoutFile != null) ? ViewBag.LayoutFile : Layout;
+    ViewBag.Title = "Edit subcategory";
+    Layout = (ViewBag.LayoutFile != null) ? ViewBag.LayoutFile : Layout;
 }
-
 <h2>Edit category</h2>
+@using (Html.BeginForm("Edit", "Categories", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
 
-@using(Html.BeginForm("Edit", "Categories", FormMethod.Post)) {
-	@Html.AntiForgeryToken()
-
-	<div class="form-horizontal">
-		<h4>CategoryModel</h4>
-		<hr />
-		@Html.ValidationSummary(true, "", new { @class = "text-danger" })
-		@Html.HiddenFor(model => model.SubCategoryID)
-
-		<div class="form-group">
-			@Html.LabelFor(model => model.SubCategoryName, htmlAttributes: new { @class = "control-label col-md-2" })
-			<div class="col-md-10">
-				@Html.EditorFor(model => model.SubCategoryName, new { htmlAttributes = new { @class = "form-control", @value = Model.SubCategoryName } })
-				@Html.ValidationMessageFor(model => model.SubCategoryName, "", new { @class = "text-danger" })
-			</div>
-		</div>
-
-		<div class="form-group">
-			@Html.LabelFor(model => model.SubCategoryLogo, htmlAttributes: new { @class = "control-label col-md-2" })
-			<div class="col-md-10">
-				@Html.EditorFor(model => model.SubCategoryLogo, new { htmlAttributes = new { @class = "form-control", @value = Model.SubCategoryLogo } })
-				@Html.ValidationMessageFor(model => model.SubCategoryLogo, "", new { @class = "text-danger" })
-			</div>
-		</div>
-
-		<div class="form-group">
-			@foreach(var p in Model.ParentCategories) {
-				<input type="checkbox" checked id="@p.CategoryName" name="CheckedCategories" value="@p.CategoryID" class="form-control col-md-1" />
-				<label for="@p.CategoryName" class="form-control col-lg-11">@p.CategoryName</label>
-				<br />
-			}
-			@foreach(var p in Model.AllCategories) {
-				<input type="checkbox" id="@p.CategoryName" name="CheckedCategories" value="@p.CategoryID" class="form-control col-md-1" />
-				<label for="@p.CategoryName" class="form-control col-lg-11">@p.CategoryName</label>
-				<br />
-			}
-		</div>
-
-		<div class="form-group">
-			<div class="col-md-offset-2 col-md-10">
-				<input type="submit" value="Create" class="btn btn-default" />
-			</div>
-		</div>
-	</div>
+    <div class="form-horizontal">
+        <h4>CategoryModel</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.SubCategoryID)
+        <div class="form-group">
+            <div class="col-md-12">
+                @Html.LabelFor(model => model.SubCategoryName, htmlAttributes: new { @class = "control-label col-md-2", style = "text-align: left" })
+                @Html.EditorFor(model => model.SubCategoryName, new { htmlAttributes = new { @class = "form-control col-md-10", @value = Model.SubCategoryName } })
+                @Html.ValidationMessageFor(model => model.SubCategoryName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-12">
+                @Html.LabelFor(model => model.SubCategoryLogo, htmlAttributes: new { @class = "control-label col-md-2", style = "text-align: left" })
+                @Html.EditorFor(model => model.SubCategoryLogo, new { htmlAttributes = new { @class = "form-control col-md-10", @value = Model.SubCategoryLogo } })
+                @Html.ValidationMessageFor(model => model.SubCategoryLogo, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @foreach (var p in Model.ParentCategories)
+                {
+                <div class="col-md-12">
+                    <input type="checkbox" checked id="@p.CategoryName" name="CheckedCategories" value="@p.CategoryID"  />
+                    <label for="@p.CategoryName" >@p.CategoryName</label>
+                    <br />
+                </div>
+                    
+            }
+            @foreach (var p in Model.AllCategories)
+                {
+                <div class="col-md-12">
+                    <input type="checkbox" id="@p.CategoryName" name="CheckedCategories" value="@p.CategoryID" />
+                    <label for="@p.CategoryName" >@p.CategoryName</label>
+                    <br />
+                </div>
+            }
+                </div>
+        <div class="form-group">
+            <div class="col-md-1">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
 }
-
 <div>
-	@Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Back to List", "Index")
 </div>
-
 @section Scripts {
-	@Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jqueryval")
 }

@@ -14,10 +14,17 @@ namespace ShoppingSite.Controllers {
 	public class SubCategoriesController : Controller {
 
 		private ApplicationDbContext db = new ApplicationDbContext();
-
-		// GET: SubCategories
-		public async Task<ActionResult> Index() {
-			return View(await db.SubCategories.ToListAsync());
+        private async Task<Boolean> FillViewBag()
+        {
+            ViewBag.AllCategories = await db.Categories.ToListAsync();
+            ViewBag.AllBrands = await db.Brands.ToListAsync();
+            ViewBag.AllActiveSales = await db.GetActiveSalesAsync();
+            return true;
+        }
+        // GET: SubCategories
+        public async Task<ActionResult> Index() {
+            await this.FillViewBag();
+            return View(await db.SubCategories.ToListAsync());
 		}
 
 		// GET: SubCategories/Create
@@ -25,7 +32,8 @@ namespace ShoppingSite.Controllers {
 		public async Task<ActionResult> Create() {
 			SubCategoryCreateEditViewModel model = new SubCategoryCreateEditViewModel();
 			model.AllCategories = await db.Categories.ToListAsync();
-			return View(model);
+            await this.FillViewBag();
+            return View(model);
 		}
 
 		// POST: SubCategories/Create/5
@@ -43,8 +51,8 @@ namespace ShoppingSite.Controllers {
 					return RedirectToAction("Index");
 				}
 			}
-
-			return View("Error");
+            await this.FillViewBag();
+            return View("Error");
 		}
 
 		// POST: Categories/Edit/5
@@ -75,7 +83,8 @@ namespace ShoppingSite.Controllers {
 			foreach(CategoryModel tcm in tmpLst) {
 				model.AllCategories.Remove(tcm);
 			}
-			return View(model);
+            await this.FillViewBag();
+            return View(model);
 		}
 
 		// POST: Categories/Edit/5
@@ -96,7 +105,8 @@ namespace ShoppingSite.Controllers {
 					return RedirectToAction("Index");
 				}
 			}
-			return View(subCategoryModel);
+            await this.FillViewBag();
+            return View(subCategoryModel);
 		}
 
 		// SubCategories/Details/5
@@ -108,7 +118,8 @@ namespace ShoppingSite.Controllers {
 			if(subCategoryModel == null) {
 				return HttpNotFound();
 			}
-			return View(subCategoryModel);
+            await this.FillViewBag();
+            return View(subCategoryModel);
 		}
 
 		// GET: SubCategories/Delete/5
@@ -120,7 +131,8 @@ namespace ShoppingSite.Controllers {
 			if(subCategoryModel == null) {
 				return HttpNotFound();
 			}
-			return View(subCategoryModel);
+            await this.FillViewBag();
+            return View(subCategoryModel);
 		}
 
 		// POST: SubCategories/Delete/5
@@ -155,7 +167,8 @@ namespace ShoppingSite.Controllers {
 			}
 			ViewBag.SearchString = SubCategoryName;
 			ViewBag.NotFoundError = "SubCategory not found";
-			return View("Index");
+            await this.FillViewBag();
+            return View("Index");
 		}
 
 		[HttpPost]

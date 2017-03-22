@@ -10,14 +10,23 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using ShoppingSite.Models;
 using Microsoft.AspNet.Identity.EntityFramework;
+using System.Data.Entity;
 
 namespace ShoppingSite.Controllers {
 	[Authorize]
 	public class AccountController : Controller {
 		private ApplicationSignInManager _signInManager;
 		private ApplicationUserManager _userManager;
+        private ApplicationDbContext db = new ApplicationDbContext();
+        private async Task<Boolean> FillViewBag()
+        {
+            ViewBag.AllCategories = await db.Categories.ToListAsync();
+            ViewBag.AllBrands = await db.Brands.ToListAsync();
+            ViewBag.AllActiveSales = await db.GetActiveSalesAsync();
+            return true;
+        }
 
-		public AccountController() {
+        public AccountController() {
 		}
 
 		public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager) {
@@ -46,9 +55,10 @@ namespace ShoppingSite.Controllers {
 		//
 		// GET: /Account/Login
 		[AllowAnonymous]
-		public ActionResult Login(string returnUrl) {
+		public async Task<ActionResult> Login(string returnUrl) {
 			ViewBag.ReturnUrl = returnUrl;
-			return View();
+            await this.FillViewBag();
+            return View();
 		}
 
 		//
@@ -58,15 +68,18 @@ namespace ShoppingSite.Controllers {
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> Login(LoginViewModel model, string returnUrl) {
 			if(!ModelState.IsValid) {
-				return View(model);
+                await this.FillViewBag();
+                return View(model);
 			}
 
 			// This doesn't count login failures towards account lockout
 			// To enable password failures to trigger account lockout, change to shouldLockout: true
 			var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
-			switch(result) {
+            await this.FillViewBag();
+            switch (result) {
 				case SignInStatus.Success:
-					return RedirectToLocal(returnUrl);
+                   
+                    return RedirectToLocal(returnUrl);
 				case SignInStatus.LockedOut:
 					return View("Lockout");
 				case SignInStatus.RequiresVerification:
@@ -121,8 +134,9 @@ namespace ShoppingSite.Controllers {
 		//
 		// GET: /Account/Register
 		[AllowAnonymous]
-		public ActionResult Register() {
-			return View();
+		public async Task<ActionResult> Register() {
+            await this.FillViewBag();
+            return View();
 		}
 
 		//
@@ -153,8 +167,9 @@ namespace ShoppingSite.Controllers {
 				AddErrors(result);
 			}
 
-			// If we got this far, something failed, redisplay form
-			return View(model);
+            // If we got this far, something failed, redisplay form
+            await this.FillViewBag();
+            return View(model);
 		}
 
 		/* TODO Pending deletion
@@ -173,8 +188,9 @@ namespace ShoppingSite.Controllers {
 		//
 		// GET: /Account/ForgotPassword
 		[AllowAnonymous]
-		public ActionResult ForgotPassword() {
-			return View();
+        public async Task<ActionResult> ForgotPassword() {
+            await this.FillViewBag();
+            return View();
 		}
 
 		//
@@ -183,7 +199,8 @@ namespace ShoppingSite.Controllers {
 		[AllowAnonymous]
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> ForgotPassword(ForgotPasswordViewModel model) {
-			if(ModelState.IsValid) {
+            await this.FillViewBag();
+            if (ModelState.IsValid) {
 				var user = await UserManager.FindByNameAsync(model.Email);
 				if(user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id))) {
 					// Don't reveal that the user does not exist or is not confirmed
@@ -205,15 +222,17 @@ namespace ShoppingSite.Controllers {
 		//
 		// GET: /Account/ForgotPasswordConfirmation
 		[AllowAnonymous]
-		public ActionResult ForgotPasswordConfirmation() {
-			return View();
+		public async Task<ActionResult> ForgotPasswordConfirmation() {
+            await this.FillViewBag();
+            return View();
 		}
 
 		//
 		// GET: /Account/ResetPassword
 		[AllowAnonymous]
-		public ActionResult ResetPassword(string code) {
-			return code == null ? View("Error") : View();
+		public async Task<ActionResult> ResetPassword(string code) {
+            await this.FillViewBag();
+            return code == null ? View("Error") : View();
 		}
 
 		//
@@ -222,7 +241,8 @@ namespace ShoppingSite.Controllers {
 		[AllowAnonymous]
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> ResetPassword(ResetPasswordViewModel model) {
-			if(!ModelState.IsValid) {
+            await this.FillViewBag();
+            if (!ModelState.IsValid) {
 				return View(model);
 			}
 			var user = await UserManager.FindByNameAsync(model.Email);
@@ -241,8 +261,9 @@ namespace ShoppingSite.Controllers {
 		//
 		// GET: /Account/ResetPasswordConfirmation
 		[AllowAnonymous]
-		public ActionResult ResetPasswordConfirmation() {
-			return View();
+		public async Task<ActionResult> ResetPasswordConfirmation() {
+            await this.FillViewBag();
+            return View();
 		}
 
 		/* TODO Pending deletion
@@ -350,9 +371,10 @@ namespace ShoppingSite.Controllers {
 		// POST: /Account/LogOff
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult LogOff() {
+		public async Task<ActionResult> LogOff() {
 			AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-			return RedirectToAction("Index", "Home");
+            await this.FillViewBag();
+            return RedirectToAction("Index", "Home");
 		}
 
 		/* TODO Pending deletion
