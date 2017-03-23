@@ -102,5 +102,27 @@ namespace ShoppingSite.Models {
 			}
 			return brandSubCategories;
 		}
+
+		public async Task<IList<ProductModel>> GetCategoryProductsAsync(int CategoryID) {
+			List<ProductModel> categoryProducts = new List<ProductModel>();
+
+			CategoryModel category = await this.Categories.FindAsync(CategoryID);
+			Boolean flag = false;
+			foreach(SubCategoryModel scm in category.SubCategories) {
+				foreach(ProductModel scpm in scm.Products) {
+					flag = false;
+					foreach(ProductModel pm in categoryProducts) {
+						if(scpm.SKU == pm.SKU) {
+							flag = true;
+							break;
+						}
+					}
+					if(!flag) {
+						categoryProducts.Add(scpm);
+					}
+				}
+			}
+			return categoryProducts;
+		}
 	}
 }
