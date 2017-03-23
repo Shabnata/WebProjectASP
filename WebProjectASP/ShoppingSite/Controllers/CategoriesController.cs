@@ -168,9 +168,12 @@ namespace ShoppingSite.Controllers {
             await this.FillViewBag();
             CategoryBrowseViewModel model = new CategoryBrowseViewModel();
             model.subCategories = category.SubCategories.ToList();
+            IList<ProductModel> allProucts = await db.GetCategoryProductsAsync(category.CategoryID);
             List<ProductModel> featuredProucts = new List<ProductModel>();
-
-            //model.featuredProducts = 
+            for (int i = 0; i < 10 && i< allProucts.Count; i++) {
+                featuredProucts.Add(allProucts[i]);
+            }
+            model.featuredProducts = featuredProucts;
             return View(model);
 		}
         public async Task<ActionResult> BrowseByID(int CategoryID)
@@ -186,7 +189,16 @@ namespace ShoppingSite.Controllers {
 
             }
             await this.FillViewBag();
-            return View("Browse",category.SubCategories.ToList());
+            CategoryBrowseViewModel model = new CategoryBrowseViewModel();
+            model.subCategories = category.SubCategories.ToList();
+            IList<ProductModel> allProucts = await db.GetCategoryProductsAsync(CategoryID);
+            List<ProductModel> featuredProucts = new List<ProductModel>();
+            for (int i = 0; i < 10 && i < allProucts.Count; i++)
+            {
+                featuredProucts.Add(allProucts[i]);
+            }
+            model.featuredProducts = featuredProucts;
+            return View("Browse",model);
         }
 
 

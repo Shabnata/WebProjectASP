@@ -1,90 +1,96 @@
 ﻿@model ShoppingSite.Models.ProductViewModel
-
 @{
-	ViewBag.Title = "Create product";
-	Layout = (ViewBag.LayoutFile != null) ? ViewBag.LayoutFile : Layout;
+    ViewBag.Title = "Create product";
+    Layout = (ViewBag.LayoutFile != null) ? ViewBag.LayoutFile : Layout;
 }
-
 <h2>Create product</h2>
+@using (Html.BeginForm("Create", "Products", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        <h4>ProductModel</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.ProductName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ProductName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ProductName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.CoverPath, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.CoverPath, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.CoverPath, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.BrandID, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <select name="BrandID" required>
+                    @foreach (var brand in Model.AllBrand)
+                    {
+                        <option value="@brand.BrandID">@brand.BrandName</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            Additional pictures:
+            <br />
+            <div class="col-md-12">
+                <input type="url" name="ProductPictures" />
+            </div>
+            <div class="col-md-12">
+                <input type="url" name="ProductPictures" />
+            </div>
+            <div class="col-md-12">
+                <input type="url" name="ProductPictures" />
+            </div>
+            <div class="col-md-12">
+                <input type="url" name="ProductPictures" />
+            </div>
+        </div>
+        Choose SubCategories:
+        <div class="form-group">
 
-@using(Html.BeginForm("Create", "Products", FormMethod.Post)) {
-	@Html.AntiForgeryToken()
-	<div class="form-horizontal">
-		<h4>ProductModel</h4>
-		<hr />
-		@Html.ValidationSummary(true, "", new { @class = "text-danger" })
-		<div class="form-group">
-			@Html.LabelFor(model => model.ProductName, htmlAttributes: new { @class = "control-label col-md-2" })
-			<div class="col-md-10">
-				@Html.EditorFor(model => model.ProductName, new { htmlAttributes = new { @class = "form-control" } })
-				@Html.ValidationMessageFor(model => model.ProductName, "", new { @class = "text-danger" })
-			</div>
-		</div>
-
-		<div class="form-group">
-			@Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
-			<div class="col-md-10">
-				@Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
-				@Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
-			</div>
-		</div>
-
-		<div class="form-group">
-			@Html.LabelFor(model => model.CoverPath, htmlAttributes: new { @class = "control-label col-md-2" })
-			<div class="col-md-10">
-				@Html.EditorFor(model => model.CoverPath, new { htmlAttributes = new { @class = "form-control" } })
-				@Html.ValidationMessageFor(model => model.CoverPath, "", new { @class = "text-danger" })
-			</div>
-		</div>
-
-		<div class="form-group">
-			@Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "control-label col-md-2" })
-			<div class="col-md-10">
-				@Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control" } })
-				@Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
-			</div>
-		</div>
-
-		<div class="form-group">
-			@Html.LabelFor(model => model.BrandID, htmlAttributes: new { @class = "control-label col-md-2" })
-			<div class="col-md-10">
-				<select name="BrandID" required>
-					@foreach(var brand in Model.AllBrand) {
-						<option value="@brand.BrandID">@brand.BrandName</option>
-					}
-				</select>
-			</div>
-		</div>
-
-		<div class="form-group">
-			Additional pictures:
-			<br />
-			<div class="col-md-12">
-				<input type="url" name="ProductPictures" />
-			</div>
-			<div class="col-md-12">
-				<input type="url" name="ProductPictures" />
-			</div>
-			<div class="col-md-12">
-				<input type="url" name="ProductPictures" />
-			</div>
-			<div class="col-md-12">
-				<input type="url" name="ProductPictures" />
-			</div>
-		</div>
-
-		<div class="form-group">
-			<div class="col-md-offset-2 col-md-10">
-				<input type="submit" value="Create" class="btn btn-default" />
-			</div>
-		</div>
-	</div>
+            @foreach (var p in Model.AllSubCategories)
+                {
+                <div class="col-md-12">
+                    <input type="checkbox" id="@p.SubCategoryName" name="CheckedSubCategories" value="@p.SubCategoryID" />
+                    <label for="@p.SubCategoryName">@p.SubCategoryName</label>
+                    <br />
+                </div>
+            }
+        </div>
+        <div class="form-group">
+            <div class="col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+    <div>
+      
+    </div>
 }
-
 <div>
-	@Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Back to List", "Index")
 </div>
-
 @section Scripts {
-	@Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jqueryval")
 }

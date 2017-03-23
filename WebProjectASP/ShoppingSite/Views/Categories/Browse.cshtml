@@ -1,4 +1,4 @@
-﻿@model IList<ShoppingSite.Models.SubCategoryModel>
+﻿@model ShoppingSite.Models.CategoryBrowseViewModel
 
 
 
@@ -11,7 +11,7 @@
                     <div class="panel-group category-products" id="accordian">
                         <!--Sub category-list-->
                         
-                        @foreach (var SubCat in Model)
+                        @foreach (var SubCat in Model.subCategories)
                         {
 
                             <div class="panel panel-default">
@@ -31,22 +31,27 @@
                     <!--features_items-->
                     <h2 class="title text-center">Features Items</h2>
                     
-                
-                
-                <div class="col-sm-4">
-                        <div class="product-image-wrapper">
-                            <div class="single-products">
-                                <div class="productinfo text-center">
-                                    <img src="images/home/product1.jpg" alt="" />
-                                    <h2>$56</h2>
-                                    <p>1Easy Polo Black Edition</p>
-                                    <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
+
+                    @foreach (var product in Model.featuredProducts)
+                    {
+                        <div class="col-sm-4">
+                            <div class="product-image-wrapper">
+                                <div class="single-products">
+                                    <div class="productinfo text-center">
+                                        <img src="images/home/product1.jpg" alt="" />
+                                        <h2>@product.Price</h2>
+                                        <p>@product.ProductName</p>
+                                        <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
+                                    </div>
                                 </div>
-                                
                             </div>
-                            
                         </div>
-                    </div>
+
+                    }
+                
+
+
+                
 
 
                 </div><!--features_items-->

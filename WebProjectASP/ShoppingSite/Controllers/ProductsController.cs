@@ -32,6 +32,7 @@ namespace ShoppingSite.Controllers {
 		public async Task<ActionResult> Create() {
 			ProductViewModel model = new ProductViewModel();
 			model.AllBrand = await db.Brands.ToListAsync();
+            model.AllSubCategories = await db.SubCategories.ToListAsync(); 
             await this.FillViewBag();
             return View(model);
 		}
