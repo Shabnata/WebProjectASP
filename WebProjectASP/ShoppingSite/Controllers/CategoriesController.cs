@@ -164,8 +164,14 @@ namespace ShoppingSite.Controllers {
             {
 
             }
+
             await this.FillViewBag();
-            return View(category.SubCategories.ToList());
+            CategoryBrowseViewModel model = new CategoryBrowseViewModel();
+            model.subCategories = category.SubCategories.ToList();
+            List<ProductModel> featuredProucts = new List<ProductModel>();
+
+            //model.featuredProducts = 
+            return View(model);
 		}
         public async Task<ActionResult> BrowseByID(int CategoryID)
         {
