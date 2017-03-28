@@ -107,33 +107,41 @@ namespace ShoppingSite.Controllers {
 				if(!await (from p in db.Products where p.ProductName.ToLower() == productModel.ProductName.ToLower() && p.BrandID == productModel.BrandID && p.SKU != productModel.SKU select p).AnyAsync()) {
 					ProductModel editedProduct = await db.Products.FindAsync(productModel.SKU);
 					string[] pictures = (Request.Form.GetValues("ProductPictures") != null) ? Request.Form.GetValues("ProductPictures") : new string[] { };
-					List<ProductPictureModel> ppm = new List<ProductPictureModel>();
+					List<ProductPictureModel> ppmLst = new List<ProductPictureModel>();
 					foreach(string str in pictures) {
-						ppm.Add(new ProductPictureModel { SKU = productModel.SKU, PicturePath = str, Product = productModel });
+						ppmLst.Add(new ProductPictureModel { SKU = productModel.SKU, PicturePath = str, Product = productModel });
 					}
 
+					if(editedProduct.ProductPictures != null && editedProduct.ProductPictures.Count != 0) {
+						db.ProductPictures.RemoveRange(editedProduct.ProductPictures);
+					}
+					
 					string[] selectedSubCategoriesStrings = (Request.Form.GetValues("CheckedSubCategories") != null) ? Request.Form.GetValues("CheckedSubCategories") : new string[] { };
                     List<SubCategoryModel> selectedSubCategoriesList = new List<SubCategoryModel>();
 					foreach(string str in selectedSubCategoriesStrings) {
                         SubCategoryModel subCat = await db.SubCategories.FindAsync(Int32.Parse(str));
                         selectedSubCategoriesList.Add(subCat);
                     }
+
 					BrandModel brand = await db.Brands.FindAsync(productModel.BrandID);
 					if(editedProduct.BrandID != productModel.BrandID) {
 						brand.Products.Remove(editedProduct);
-						db.Entry(brand).State = EntityState.Modified;
+						//db.Entry(brand).State = EntityState.Modified;
 					}
+
 					foreach(SubCategoryModel scm in editedProduct.ProductCategories) {
 						scm.Products.Remove(editedProduct);
 					}
-					editedProduct.Brand = await db.Brands.FindAsync(productModel.BrandID);
+
+					//editedProduct.Brand = await db.Brands.FindAsync(productModel.BrandID);
+					editedProduct.Brand = brand;
 					editedProduct.BrandID = productModel.BrandID;
 					editedProduct.CoverPath = productModel.CoverPath;
 					editedProduct.Description = productModel.Description;
 					editedProduct.Price = productModel.Price;
 					editedProduct.ProductCategories = selectedSubCategoriesList;
 					editedProduct.ProductName = productModel.ProductName;
-					editedProduct.ProductPictures = ppm;
+					editedProduct.ProductPictures = ppmLst;
                   
 					db.Entry(editedProduct).State = EntityState.Modified;
 					await db.SaveChangesAsync();
