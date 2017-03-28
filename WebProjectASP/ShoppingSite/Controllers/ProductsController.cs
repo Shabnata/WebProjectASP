@@ -113,15 +113,14 @@ namespace ShoppingSite.Controllers {
 							ppmLst.Add(new ProductPictureModel { SKU = productModel.SKU, PicturePath = str, Product = productModel });
 						}	
 					}
-
-					foreach(ProductPictureModel ppm in editedProduct.ProductPictures) {
-						db.ProductPictures.Remove(ppm);
-						db.Entry(ppm).State = EntityState.Deleted;
-					}
-
+				
 					//if(editedProduct.ProductPictures != null && editedProduct.ProductPictures.Count != 0) {
 					//	db.ProductPictures.RemoveRange(editedProduct.ProductPictures);
 					//}
+
+					foreach(ProductPictureModel ppm in editedProduct.ProductPictures) {
+						db.Entry(ppm).State = EntityState.Deleted;
+					}
 
 					string[] selectedSubCategoriesStrings = (Request.Form.GetValues("CheckedSubCategories") != null) ? Request.Form.GetValues("CheckedSubCategories") : new string[] { };
                     List<SubCategoryModel> selectedSubCategoriesList = new List<SubCategoryModel>();
