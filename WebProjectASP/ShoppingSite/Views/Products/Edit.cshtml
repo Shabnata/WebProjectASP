@@ -86,11 +86,13 @@
                 counter--;
                 <div class="col-md-12">
                     <input type="url" name="ProductPictures" value="@pp" />
+                    @*@Html.ValidationMessageFor(model => model.ProductPictures, "abc", new { @class = "text-danger" })*@
                 </div>}
             @for (int i = 0; i < counter; i++)
             {
                 <div class="col-md-12">
                     <input type="url" name="ProductPictures" />
+                   
                 </div>
             }
 
