@@ -124,9 +124,7 @@ namespace ShoppingSite.Controllers {
 
                     ICollection<SubCategoryModel> scmLst = editedProduct.ProductCategories;
                     foreach (SubCategoryModel scm in scmLst) {
-                        //editedProduct.ProductCategories.Remove(scm);
                         scm.Products.Remove(editedProduct);
-                        //db.Entry(scm).State = EntityState.Modified;
                     }
 
                     string[] selectedSubCategoriesStrings = (Request.Form.GetValues("CheckedSubCategories") != null) ? Request.Form.GetValues("CheckedSubCategories") : new string[] { };
@@ -142,7 +140,6 @@ namespace ShoppingSite.Controllers {
                         db.Entry(brand).State = EntityState.Modified;
                     }
 
-                    //editedProduct.Brand = await db.Brands.FindAsync(productModel.BrandID);
                     editedProduct.Brand = brand;
                     editedProduct.BrandID = productModel.BrandID;
                     editedProduct.CoverPath = productModel.CoverPath;
