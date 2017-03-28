@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -15,11 +16,11 @@ namespace ShoppingSite.Controllers {
 		private ApplicationDbContext db = new ApplicationDbContext();
 
 		private async Task<Boolean> FillViewBag() {
-            ViewBag.AllCategories = await db.Categories.ToListAsync();
-            ViewBag.AllBrands = await db.Brands.ToListAsync();
+			ViewBag.AllCategories = await db.Categories.ToListAsync();
+			ViewBag.AllBrands = await db.Brands.ToListAsync();
 			ViewBag.AllActiveSales = await db.GetActiveSalesAsync();
 			return true;
-        }
+		}
 
 		// Sales
 		public async Task<ActionResult> Index() {
@@ -38,7 +39,7 @@ namespace ShoppingSite.Controllers {
 
 		// POST: Sales/Create/5
 		[HttpPost]
-		public async Task<ActionResult> Create([Bind(Include= "SaleName, StartDate, EndDate, Discount, Emblem")] SaleModel saleModel) {
+		public async Task<ActionResult> Create([Bind(Include = "SaleName, StartDate, EndDate, Discount, Emblem")] SaleModel saleModel) {
 			if(ModelState.IsValid) {
 				if(!await (from s in db.Sales where s.SaleName.ToLower() == saleModel.SaleName.ToLower() && !(s.StartDate >= saleModel.EndDate || s.EndDate <= saleModel.StartDate) select s).AnyAsync()) {
 					db.Sales.Add(saleModel);
@@ -60,29 +61,47 @@ namespace ShoppingSite.Controllers {
 			if(saleModel == null) {
 				return HttpNotFound();
 			}
+
+			SaleEditViewModel viewModel = new SaleEditViewModel();
+			viewModel.AllBrands = await db.Brands.ToListAsync();
+			viewModel.AllSubCategories = await db.SubCategories.ToListAsync();
+			viewModel.Discount = saleModel.Discount;
+			viewModel.Emblem = saleModel.Emblem;
+			viewModel.StartDate = saleModel.StartDate;
+			viewModel.EndDate = saleModel.EndDate;
+			viewModel.SaleID = saleModel.SaleID;
+			viewModel.SaleName = saleModel.SaleName;
+			
+			viewModel.ProductsOnSale = saleModel.Products.ToList();
+			viewModel.AllProducts = (await db.Products.ToListAsync()).Except(viewModel.ProductsOnSale).ToList();
+			//viewModel.AllProducts = await (db.Products).ToListAsync();
+			//foreach(ProductModel pm in viewModel.ProductsOnSale) {
+			//	viewModel.AllProducts.Remove(pm);
+			//}
+
 			await this.FillViewBag();
-			return View(saleModel);
+			return View(viewModel);
 		}
 
 		// POST: Sales/Edit/5
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<ActionResult> Edit([Bind(Include= "SaleName, StartDate, EndDate, Discount, Emblem")] SaleModel saleModel) {
+		public async Task<ActionResult> Edit([Bind(Include = "SaleName, StartDate, EndDate, Discount, Emblem")] SaleModel saleModel) {
 			if(ModelState.IsValid) {
 				if(!await (from s in db.Sales where s.SaleName.ToLower() == saleModel.SaleName.ToLower() && !(s.StartDate >= saleModel.EndDate || s.EndDate <= saleModel.StartDate) select s).AnyAsync()) {
-					string[] brands = Request.Form.GetValues("Brands");
-					string[] subCategories = Request.Form.GetValues("SubCategories");
-					string[] products = Request.Form.GetValues("Products");
+					string[] brandIDs = (Request.Form.GetValues("Brands") != null) ? Request.Form.GetValues("Brands") : new string[] { };
+					string[] subCategoriesIDs = (Request.Form.GetValues("SubCategories") != null) ? Request.Form.GetValues("SubCategories") : new string[] { };
+					string[] productIDs = (Request.Form.GetValues("Products") != null) ? Request.Form.GetValues("Products") : new string[] { };
 					List<ProductModel> productsOnSale = new List<ProductModel>();
 
-					foreach(string b in brands) {
+					foreach(string b in brandIDs) {
 						BrandModel tmpBrand = await db.Brands.FindAsync(Int32.Parse(b));
 						foreach(ProductModel pm in tmpBrand.Products) {
 							productsOnSale.Add(pm);
 						}
 					}
 					Boolean flag = false;
-					foreach(string c in subCategories) {
+					foreach(string c in subCategoriesIDs) {
 						SubCategoryModel tmpSubCategory = await db.SubCategories.FindAsync(Int32.Parse(c));
 						foreach(ProductModel scpm in tmpSubCategory.Products) {
 							flag = false;
@@ -97,7 +116,7 @@ namespace ShoppingSite.Controllers {
 							}
 						}
 					}
-					foreach(string p in products) {
+					foreach(string p in productIDs) {
 						ProductModel product = await db.Products.FindAsync(Int32.Parse(p));
 						flag = false;
 						foreach(ProductModel pm in productsOnSale) {
@@ -111,8 +130,15 @@ namespace ShoppingSite.Controllers {
 						}
 					}
 
-					saleModel.Products = productsOnSale;
-					db.Entry(saleModel).State = EntityState.Modified;
+					SaleModel sm = await db.Sales.FindAsync(saleModel.SaleID);
+					sm.Discount = saleModel.Discount;
+					sm.Emblem = saleModel.Emblem;
+					sm.StartDate = saleModel.StartDate;
+					sm.EndDate = saleModel.EndDate;
+					sm.Products = productsOnSale;
+					sm.SaleName = saleModel.SaleName;
+
+					db.Entry(sm).State = EntityState.Modified;
 					await db.SaveChangesAsync();
 					return RedirectToAction("Index");
 				}
@@ -120,5 +146,85 @@ namespace ShoppingSite.Controllers {
 			await this.FillViewBag();
 			return View(saleModel);
 		}
+
+		// Sales/Details/5
+		public async Task<ActionResult> Details(int? SaleID) {
+			if(SaleID == null) {
+				return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+			}
+			SaleModel saleModel = await db.Sales.FindAsync(SaleID);
+			if(saleModel == null) {
+				return HttpNotFound();
+			}
+			await this.FillViewBag();
+			return View(saleModel);
+		}
+
+		// GET: Sales/Delete/5
+		public async Task<ActionResult> Delete(int? SaleID) {
+			if(SaleID == null) {
+				return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+			}
+			SaleModel saleModel = await db.Sales.FindAsync(SaleID);
+			if(saleModel == null) {
+				return HttpNotFound();
+			}
+			await this.FillViewBag();
+			return View(saleModel);
+		}
+
+		// POST: Sales/Delete/5
+		[HttpPost, ActionName("Delete")]
+		[ValidateAntiForgeryToken]
+		public async Task<ActionResult> DeleteConfirmed(int SaleID) {
+			SaleModel saleModel = await db.Sales.FindAsync(SaleID);
+			db.Sales.Remove(saleModel);
+			await db.SaveChangesAsync();
+			await this.FillViewBag();
+			return RedirectToAction("Index");
+		}
+
+		protected override void Dispose(bool disposing) {
+			if(disposing) {
+				db.Dispose();
+			}
+			base.Dispose(disposing);
+		}
+
+
+		[HttpPost, ActionName("Search")]
+		public async Task<ActionResult> Search(string SaleName) {
+
+			List<SaleModel> salesLst = null;
+			try {
+				salesLst = await (from s in db.Sales where s.SaleName.ToLower() == SaleName.ToLower() select s).ToListAsync();
+			} catch(SqlException ex) {
+
+			}
+
+			if(salesLst != null) {
+				if(salesLst.Count == 1) {
+					return RedirectToAction("Details", new { SaleID = salesLst[0].SaleID });
+				} else {
+					await this.FillViewBag();
+					// TODO Add this View
+					return View("ListSales", salesLst);
+				}
+			}
+			ViewBag.SearchString = SaleName;
+			ViewBag.NotFoundError = "Sale not found";
+			await this.FillViewBag();
+			return View("Index");
+		}
+
+		[HttpPost]
+		public async Task<ActionResult> TypeSearch(string SearchString) {
+			if(SearchString == null || SearchString.Equals("")) {
+				return Json("");
+			}
+			ICollection<string> sales = await (from s in db.Sales where s.SaleName.ToLower().StartsWith(SearchString.ToLower()) select s.SaleName).ToListAsync();
+			return Json(sales);
+		}
+
 	}
 }
