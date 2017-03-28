@@ -109,13 +109,20 @@ namespace ShoppingSite.Controllers {
 					string[] pictures = (Request.Form.GetValues("ProductPictures") != null) ? Request.Form.GetValues("ProductPictures") : new string[] { };
 					List<ProductPictureModel> ppmLst = new List<ProductPictureModel>();
 					foreach(string str in pictures) {
-						ppmLst.Add(new ProductPictureModel { SKU = productModel.SKU, PicturePath = str, Product = productModel });
+						if(!str.Equals("")) {
+							ppmLst.Add(new ProductPictureModel { SKU = productModel.SKU, PicturePath = str, Product = productModel });
+						}	
 					}
 
-					if(editedProduct.ProductPictures != null && editedProduct.ProductPictures.Count != 0) {
-						db.ProductPictures.RemoveRange(editedProduct.ProductPictures);
+					foreach(ProductPictureModel ppm in editedProduct.ProductPictures) {
+						db.ProductPictures.Remove(ppm);
+						db.Entry(ppm).State = EntityState.Deleted;
 					}
-					
+
+					//if(editedProduct.ProductPictures != null && editedProduct.ProductPictures.Count != 0) {
+					//	db.ProductPictures.RemoveRange(editedProduct.ProductPictures);
+					//}
+
 					string[] selectedSubCategoriesStrings = (Request.Form.GetValues("CheckedSubCategories") != null) ? Request.Form.GetValues("CheckedSubCategories") : new string[] { };
                     List<SubCategoryModel> selectedSubCategoriesList = new List<SubCategoryModel>();
 					foreach(string str in selectedSubCategoriesStrings) {
@@ -126,11 +133,12 @@ namespace ShoppingSite.Controllers {
 					BrandModel brand = await db.Brands.FindAsync(productModel.BrandID);
 					if(editedProduct.BrandID != productModel.BrandID) {
 						brand.Products.Remove(editedProduct);
-						//db.Entry(brand).State = EntityState.Modified;
+						db.Entry(brand).State = EntityState.Modified;
 					}
 
 					foreach(SubCategoryModel scm in editedProduct.ProductCategories) {
 						scm.Products.Remove(editedProduct);
+						db.Entry(scm).State = EntityState.Modified;
 					}
 
 					//editedProduct.Brand = await db.Brands.FindAsync(productModel.BrandID);
@@ -142,7 +150,7 @@ namespace ShoppingSite.Controllers {
 					editedProduct.ProductCategories = selectedSubCategoriesList;
 					editedProduct.ProductName = productModel.ProductName;
 					editedProduct.ProductPictures = ppmLst;
-                  
+
 					db.Entry(editedProduct).State = EntityState.Modified;
 					await db.SaveChangesAsync();
 					return RedirectToAction("Index");
