@@ -1,4 +1,7 @@
-﻿function formantDatePicker(elm) {
-	var value = elm.value.split(" ");
-	elm.value = value[0];
+﻿function formatDatePicker(elmID) {
+	var elm = $("#" + elmID);
+	var dateStr = elm.val();
+	var formattedDate = dateStr.split(" ")[0];
+
+	$(elm).val(formattedDate);
 }
