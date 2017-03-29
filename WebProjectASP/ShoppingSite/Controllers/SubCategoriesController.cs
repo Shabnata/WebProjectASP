@@ -14,29 +14,28 @@ namespace ShoppingSite.Controllers {
 	public class SubCategoriesController : Controller {
 
 		private ApplicationDbContext db = new ApplicationDbContext();
-        private async Task<Boolean> FillViewBag()
-        {
-            ViewBag.AllCategories = await db.Categories.ToListAsync();
-            ViewBag.AllBrands = await db.Brands.ToListAsync();
-            ViewBag.AllActiveSales = await db.GetActiveSalesAsync();
-            return true;
-        }
-        // GET: SubCategories
-        public async Task<ActionResult> Index() {
-            await this.FillViewBag();
-            return View(await db.SubCategories.ToListAsync());
+
+		private async Task<Boolean> FillViewBag() {
+			ViewBag.AllCategories = await db.Categories.ToListAsync();
+			ViewBag.AllBrands = await db.Brands.ToListAsync();
+			ViewBag.AllActiveSales = await db.GetActiveSalesAsync();
+			return true;
 		}
 
-		// GET: SubCategories/Create
+		[HttpGet]
+		public async Task<ActionResult> Index() {
+			await this.FillViewBag();
+			return View(await db.SubCategories.ToListAsync());
+		}
+
 		[HttpGet]
 		public async Task<ActionResult> Create() {
 			SubCategoryCreateEditViewModel model = new SubCategoryCreateEditViewModel();
 			model.AllCategories = await db.Categories.ToListAsync();
-            await this.FillViewBag();
-            return View(model);
+			await this.FillViewBag();
+			return View(model);
 		}
 
-		// POST: SubCategories/Create/5
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> Create([Bind(Include = "SubCategoryName, SubCategoryLogo")] SubCategoryModel subCategoryModel) {
@@ -51,11 +50,10 @@ namespace ShoppingSite.Controllers {
 					return RedirectToAction("Index");
 				}
 			}
-            await this.FillViewBag();
-            return View("Error");
+			await this.FillViewBag();
+			return View("Error");
 		}
 
-		// POST: Categories/Edit/5
 		[HttpGet]
 		public async Task<ActionResult> Edit(int? SubCategoryID) {
 			if(SubCategoryID == null) {
@@ -83,11 +81,10 @@ namespace ShoppingSite.Controllers {
 			foreach(CategoryModel tcm in tmpLst) {
 				model.AllCategories.Remove(tcm);
 			}
-            await this.FillViewBag();
-            return View(model);
+			await this.FillViewBag();
+			return View(model);
 		}
 
-		// POST: Categories/Edit/5
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> Edit([Bind(Include = "SubCategoryID, SubCategoryName, SubCategoryLogo")] SubCategoryModel subCategoryModel) {
@@ -105,11 +102,11 @@ namespace ShoppingSite.Controllers {
 					return RedirectToAction("Index");
 				}
 			}
-            await this.FillViewBag();
-            return View(subCategoryModel);
+			await this.FillViewBag();
+			return View(subCategoryModel);
 		}
 
-		// SubCategories/Details/5
+		[HttpGet]
 		public async Task<ActionResult> Details(int? SubCategoryID) {
 			if(SubCategoryID == null) {
 				return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -118,11 +115,11 @@ namespace ShoppingSite.Controllers {
 			if(subCategoryModel == null) {
 				return HttpNotFound();
 			}
-            await this.FillViewBag();
-            return View(subCategoryModel);
+			await this.FillViewBag();
+			return View(subCategoryModel);
 		}
 
-		// GET: SubCategories/Delete/5
+		[HttpGet]
 		public async Task<ActionResult> Delete(int? SubCategoryID) {
 			if(SubCategoryID == null) {
 				return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -131,11 +128,10 @@ namespace ShoppingSite.Controllers {
 			if(subCategoryModel == null) {
 				return HttpNotFound();
 			}
-            await this.FillViewBag();
-            return View(subCategoryModel);
+			await this.FillViewBag();
+			return View(subCategoryModel);
 		}
 
-		// POST: SubCategories/Delete/5
 		[HttpPost, ActionName("Delete")]
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> DeleteConfirmed(int SubCategoryID) {
@@ -152,6 +148,7 @@ namespace ShoppingSite.Controllers {
 			base.Dispose(disposing);
 		}
 
+		[AllowAnonymous]
 		[HttpPost, ActionName("Search")]
 		public async Task<ActionResult> Search(string SubCategoryName) {
 
@@ -167,10 +164,11 @@ namespace ShoppingSite.Controllers {
 			}
 			ViewBag.SearchString = SubCategoryName;
 			ViewBag.NotFoundError = "SubCategory not found";
-            await this.FillViewBag();
-            return View("Index");
+			await this.FillViewBag();
+			return View("Index");
 		}
 
+		[AllowAnonymous]
 		[HttpPost]
 		public async Task<ActionResult> TypeSearch(string SearchString) {
 			if(SearchString == null || SearchString.Equals("")) {

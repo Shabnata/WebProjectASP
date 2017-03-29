@@ -22,14 +22,13 @@ namespace ShoppingSite.Controllers {
 			return true;
 		}
 
-		// Sales
+		[HttpGet]
 		public async Task<ActionResult> Index() {
 			await this.FillViewBag();
 
 			return View(await db.Sales.ToListAsync());
 		}
 
-		// GET: Sales/Create
 		[HttpGet]
 		public async Task<ActionResult> Create() {
 			await this.FillViewBag();
@@ -37,7 +36,6 @@ namespace ShoppingSite.Controllers {
 			return View();
 		}
 
-		// POST: Sales/Create/5
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> Create([Bind(Include = "SaleName, StartDate, EndDate, Discount, Emblem")] SaleModel saleModel) {
@@ -52,7 +50,6 @@ namespace ShoppingSite.Controllers {
 			return View("Error");
 		}
 
-		// GET: Sales/Edit/5
 		[HttpGet]
 		public async Task<ActionResult> Edit(int? SaleID) {
 			if(SaleID == null) {
@@ -72,7 +69,7 @@ namespace ShoppingSite.Controllers {
 			viewModel.EndDate = saleModel.EndDate;
 			viewModel.SaleID = saleModel.SaleID;
 			viewModel.SaleName = saleModel.SaleName;
-			
+
 			viewModel.ProductsOnSale = saleModel.Products.ToList();
 			viewModel.AllProducts = (await db.Products.ToListAsync()).Except(viewModel.ProductsOnSale).ToList();
 			//viewModel.AllProducts = await (db.Products).ToListAsync();
@@ -84,7 +81,6 @@ namespace ShoppingSite.Controllers {
 			return View(viewModel);
 		}
 
-		// POST: Sales/Edit/5
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> Edit([Bind(Include = "SaleName, StartDate, EndDate, Discount, Emblem")] SaleModel saleModel) {
@@ -148,7 +144,7 @@ namespace ShoppingSite.Controllers {
 			return View(saleModel);
 		}
 
-		// Sales/Details/5
+		[HttpGet]
 		public async Task<ActionResult> Details(int? SaleID) {
 			if(SaleID == null) {
 				return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -161,7 +157,7 @@ namespace ShoppingSite.Controllers {
 			return View(saleModel);
 		}
 
-		// GET: Sales/Delete/5
+		[HttpGet]
 		public async Task<ActionResult> Delete(int? SaleID) {
 			if(SaleID == null) {
 				return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -174,7 +170,6 @@ namespace ShoppingSite.Controllers {
 			return View(saleModel);
 		}
 
-		// POST: Sales/Delete/5
 		[HttpPost, ActionName("Delete")]
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> DeleteConfirmed(int SaleID) {
@@ -192,7 +187,7 @@ namespace ShoppingSite.Controllers {
 			base.Dispose(disposing);
 		}
 
-
+		[AllowAnonymous]
 		[HttpPost, ActionName("Search")]
 		public async Task<ActionResult> Search(string SaleName) {
 
@@ -218,6 +213,7 @@ namespace ShoppingSite.Controllers {
 			return View("Index");
 		}
 
+		[AllowAnonymous]
 		[HttpPost]
 		public async Task<ActionResult> TypeSearch(string SearchString) {
 			if(SearchString == null || SearchString.Equals("")) {
@@ -228,7 +224,9 @@ namespace ShoppingSite.Controllers {
 			return Json(sales);
 		}
 
-		 public async Task<ActionResult> BrowseByID(int SaleID) {
+		[AllowAnonymous]
+		[HttpGet]
+		public async Task<ActionResult> BrowseByID(int SaleID) {
 
 			SaleModel sale = await db.Sales.FindAsync(SaleID);
 			SaleBrowseViewModel model = new SaleBrowseViewModel();
