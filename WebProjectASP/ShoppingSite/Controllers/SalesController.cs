@@ -39,6 +39,7 @@ namespace ShoppingSite.Controllers {
 
 		// POST: Sales/Create/5
 		[HttpPost]
+		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> Create([Bind(Include = "SaleName, StartDate, EndDate, Discount, Emblem")] SaleModel saleModel) {
 			if(ModelState.IsValid) {
 				if(!await (from s in db.Sales where s.SaleName.ToLower() == saleModel.SaleName.ToLower() && !(s.StartDate >= saleModel.EndDate || s.EndDate <= saleModel.StartDate) select s).AnyAsync()) {
@@ -222,9 +223,19 @@ namespace ShoppingSite.Controllers {
 			if(SearchString == null || SearchString.Equals("")) {
 				return Json("");
 			}
-			ICollection<string> sales = await (from s in db.Sales where s.SaleName.ToLower().StartsWith(SearchString.ToLower()) select s.SaleName).ToListAsync();
+			// TODO Check if Distinct() works 
+			ICollection<string> sales = await (from s in db.Sales where s.SaleName.ToLower().StartsWith(SearchString.ToLower()) select s.SaleName).Distinct().ToListAsync();
 			return Json(sales);
 		}
 
+		 public async Task<ActionResult> BrowseByID(int SaleID) {
+
+			SaleModel sale = await db.Sales.FindAsync(SaleID);
+			SaleBrowseViewModel model = new SaleBrowseViewModel();
+			model.AllActiveSales = await db.GetActiveSalesAsync();
+			model.ThisSale = sale;
+			await this.FillViewBag();
+			return View(model);
+		}
 	}
 }

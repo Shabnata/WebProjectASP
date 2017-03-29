@@ -37,7 +37,7 @@ namespace ShoppingSite.Models {
 		public DateTime EndDate { get; set; }
 
 		[Required]
-		[Display(Name = "Discount")]
+		[Display(Name = "Discount %")]
 		[Column("Discount", TypeName = "decimal")]
 		[DataType(DataType.Text)]
 		public decimal Discount { get; set; }
@@ -76,7 +76,7 @@ namespace ShoppingSite.Models {
 		public DateTime EndDate { get; set; }
 
 		[Required]
-		[Display(Name = "Discount")]
+		[Display(Name = "Discount %")]
 		[DataType(DataType.Text)]
 		public decimal Discount { get; set; }
 
@@ -93,5 +93,11 @@ namespace ShoppingSite.Models {
 		public IList<SubCategoryModel> AllSubCategories { get; set; }
 
 		public IList<ProductModel> AllProducts { get; set; }
+	}
+
+	public class SaleBrowseViewModel {
+
+		public IList<SaleModel> AllActiveSales { get; set; }
+		public SaleModel ThisSale { get; set; }
 	}
 }
