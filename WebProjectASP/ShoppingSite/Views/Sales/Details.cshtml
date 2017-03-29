@@ -1,0 +1,37 @@
+﻿@model ShoppingSite.Models.SaleModel
+@{
+    ViewBag.Title = "Sale details";
+    Layout = (ViewBag.LayoutFile != null) ? ViewBag.LayoutFile : Layout;
+}
+<h2>Sale details</h2>
+<div>
+    <h4>SaleModel</h4>
+    <hr />
+    
+    @Html.DisplayNameFor(model => model.SaleID) :
+    @Html.DisplayFor(model => model.SaleID)
+    <br />
+    @Html.DisplayNameFor(model => model.SaleName) :
+    @Html.DisplayFor(model => model.SaleName)
+    <br />
+    @Html.DisplayNameFor(model => model.StartDate) :
+    @Html.DisplayFor(model => model.StartDate)
+    <br />
+    @Html.DisplayNameFor(model => model.EndDate) :
+    @Html.DisplayFor(model => model.EndDate)
+    <br />
+    @Html.DisplayNameFor(model => model.Emblem) :
+    <br />
+    <img src="@Model.Emblem" alt="@Model.SaleName" width="300" />
+    <br />
+    Products in sale:
+    <ul>
+        @foreach (var product in Model.Products) {
+            <li>
+                <label>@product.ProductName</label>
+            </li>}
+    </ul>
+</div>
+@Html.ActionLink("Delete", "Delete", new { SaleID = Model.SaleID }) |
+@Html.ActionLink("Edit", "Edit", new { SaleID = Model.SaleID }) |
+@Html.ActionLink("Back to List", "Index")

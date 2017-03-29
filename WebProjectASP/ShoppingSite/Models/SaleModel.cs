@@ -26,14 +26,14 @@ namespace ShoppingSite.Models {
 		[Display(Name = "Start date")]
 		[Column("StartDate", TypeName = "date")]
 		[DataType(DataType.Date)]
-		[DisplayFormat(DataFormatString = "{0:dd-MM-yyyy hh:mm}")]
+		[DisplayFormat(ApplyFormatInEditMode =true ,DataFormatString = "{0:u}")]
 		public DateTime StartDate { get; set; }
 
 		[Required]
 		[Display(Name = "End date")]
 		[Column("EndDate", TypeName = "date")]
 		[DataType(DataType.Date)]
-		[DisplayFormat(DataFormatString = "{0:dd-MM-yyyy hh:mm}")]
+		[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:u}")]
 		public DateTime EndDate { get; set; }
 
 		[Required]
@@ -66,13 +66,13 @@ namespace ShoppingSite.Models {
 		[Required]
 		[Display(Name = "Start date")]
 		[DataType(DataType.Date)]
-		[DisplayFormat(DataFormatString = "{0:dd-MM-yyyy hh:mm}")]
+		[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:u}")]
 		public DateTime StartDate { get; set; }
 
 		[Required]
 		[Display(Name = "End date")]
 		[DataType(DataType.Date)]
-		[DisplayFormat(DataFormatString = "{0:dd-MM-yyyy hh:mm}")]
+		[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:u}")]
 		public DateTime EndDate { get; set; }
 
 		[Required]
