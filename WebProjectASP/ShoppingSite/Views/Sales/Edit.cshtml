@@ -27,9 +27,16 @@
             </div>
         </div>
         <div class="form-group">
+            @Html.LabelFor(model => model.Discount, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Discount, new { htmlAttributes = new { @class = "form-control", @value = Model.Discount } })
+                @Html.ValidationMessageFor(model => model.Discount, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
             @Html.LabelFor(model => model.StartDate, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-       
+
                 @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "datepicker" } })
                 @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
             </div>
@@ -41,18 +48,41 @@
                 @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
             </div>
         </div>
+
+        <br/>
+        //TODO
+        Brands:
+        <div class="form-group">
+            @foreach (var p in Model.AllBrands) {
+                <div class="col-md-12">
+                    <input type="checkbox" checked id="@p.BrandName" name="CheckedBrandes" value="@p.BrandID" />
+                    <label for="@p.BrandName">@p.BrandName</label>
+                    <br />
+                </div>
+
+            }
+          
+        </div>
+
+
+
+
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Create" class="btn btn-default" />
             </div>
         </div>
+
     </div>
 }
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>
+
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/Scripts/DateTimeFormater.js")
+    <script type="text/javascript">
+        $("#StartDate").ready(formatDatePicker())
+    </script>
 }
-
-
