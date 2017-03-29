@@ -176,6 +176,7 @@ namespace ShoppingSite.Controllers {
             model.featuredProducts = featuredProucts;
             return View(model);
 		}
+        [AllowAnonymous]
         public async Task<ActionResult> BrowseByID(int CategoryID)
         {
 
