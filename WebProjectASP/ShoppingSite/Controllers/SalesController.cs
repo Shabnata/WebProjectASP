@@ -61,8 +61,7 @@ namespace ShoppingSite.Controllers {
 			}
 
 			SaleEditViewModel viewModel = new SaleEditViewModel();
-			viewModel.AllBrands = await db.Brands.ToListAsync();
-			viewModel.AllSubCategories = await db.SubCategories.ToListAsync();
+            viewModel.AllSubCategories = await db.SubCategories.ToListAsync();
 			viewModel.Discount = saleModel.Discount;
 			viewModel.Emblem = saleModel.Emblem;
 			viewModel.StartDate = saleModel.StartDate;
@@ -70,14 +69,17 @@ namespace ShoppingSite.Controllers {
 			viewModel.SaleID = saleModel.SaleID;
 			viewModel.SaleName = saleModel.SaleName;
 
-			viewModel.ProductsOnSale = saleModel.Products.ToList();
-			viewModel.AllProducts = (await db.Products.ToListAsync()).Except(viewModel.ProductsOnSale).ToList();
-			//viewModel.AllProducts = await (db.Products).ToListAsync();
-			//foreach(ProductModel pm in viewModel.ProductsOnSale) {
-			//	viewModel.AllProducts.Remove(pm);
-			//}
+            //viewModel.ProductsOnSale = saleModel.Products.ToList();
+            viewModel.BrandsOnSale= saleModel.Brands.ToList();
+            viewModel.AllBrands= (await db.Brands.ToListAsync()).Except(viewModel.BrandsOnSale).ToList();
 
-			await this.FillViewBag();
+            //viewModel.AllProducts = (await db.Products.ToListAsync()).Except(viewModel.ProductsOnSale).ToList();
+            //viewModel.AllProducts = await (db.Products).ToListAsync();
+            //foreach(ProductModel pm in viewModel.ProductsOnSale) {
+            //	viewModel.AllProducts.Remove(pm);
+            //}
+
+            await this.FillViewBag();
 			return View(viewModel);
 		}
 
@@ -132,8 +134,9 @@ namespace ShoppingSite.Controllers {
 					sm.Emblem = model.Emblem;
 					sm.StartDate = model.StartDate;
 					sm.EndDate = model.EndDate;
-					sm.Products = productsOnSale;
-					sm.SaleName = model.SaleName;
+                    //sm.Brands= BrandsOnSale;
+                    //sm.Products = productsOnSale;
+                    sm.SaleName = model.SaleName;
 
 					db.Entry(sm).State = EntityState.Modified;
 					await db.SaveChangesAsync();

@@ -54,20 +54,19 @@
 			</div>
 		</div>
 
-		<br />
-		//TODO
-		Brands:
-		<div class="form-group">
-			@foreach(var p in Model.AllBrands) {
-				<div class="col-md-12">
-					<input type="checkbox" checked id="@p.BrandName" name="CheckedBrandes" value="@p.BrandID" />
-					<label for="@p.BrandName">@p.BrandName</label>
-					<br />
-				</div>
-
-			}
-
-		</div>
+        <br/>
+        //TODO
+        Brands:
+        <div class="form-group">
+            @foreach (var p in Model.AllBrands) {
+                <div class="col-md-12">
+                    <input type="checkbox" checked id="@p.BrandName" name="CheckedBrandes" value="@p.BrandID" />
+                    <label for="@p.BrandName">@p.BrandName</label>
+                    <br />
+                </div>
+            }
+          
+        </div>
 
 
 

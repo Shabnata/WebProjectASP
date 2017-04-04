@@ -49,5 +49,6 @@ namespace ShoppingSite.Models {
 		public DateTime FoundationYear { get; set; }
 
 		public virtual ICollection<ProductModel> Products { get; set; }
-	}
+        public virtual ICollection<SaleModel> Sales { get; set; }
+    }
 }

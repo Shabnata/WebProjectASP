@@ -41,10 +41,10 @@ namespace ShoppingSite.Models {
 		[Column("Discount", TypeName = "decimal")]
 		[DataType(DataType.Text)]
 		public decimal Discount { get; set; }
+        public virtual ICollection<BrandModel> Brands { get; set; }
+        //public virtual ICollection<ProductModel> Products { get; set; }
 
-		public virtual ICollection<ProductModel> Products { get; set; }
-
-		[Required]
+        [Required]
 		[Display(Name ="Emblem")]
 		[Column("Emblem", TypeName = "varchar")]
 		[DataType(DataType.ImageUrl)]
@@ -88,9 +88,11 @@ namespace ShoppingSite.Models {
 
 		public IList<ProductModel> ProductsOnSale { get; set; }
 
-		public IList<BrandModel> AllBrands { get; set; }
+        public IList<BrandModel> BrandsOnSale { get; set; }
+        public IList<BrandModel> AllBrands { get; set; }
+        
 
-		public IList<SubCategoryModel> AllSubCategories { get; set; }
+        public IList<SubCategoryModel> AllSubCategories { get; set; }
 
 		public IList<ProductModel> AllProducts { get; set; }
 	}

@@ -218,6 +218,8 @@
     <Content Include="Content\categories\Vitamins_Minerals.png" />
     <Content Include="Content\categories\Womens_Health.png" />
     <Content Include="Content\icons\cart.png" />
+    <Content Include="Content\icons\cart1.png" />
+    <Content Include="Content\icons\logo2.png" />
     <Content Include="Content\themes\base\accordion.css" />
     <Content Include="Content\themes\base\all.css" />
     <Content Include="Content\themes\base\animate.css" />
@@ -355,6 +357,7 @@
     <Content Include="Views\Sales\Edit.cshtml" />
     <Content Include="Views\Sales\Details.cshtml" />
     <Content Include="Views\Sales\Browse.cshtml" />
+    <Content Include="Views\Sales\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
