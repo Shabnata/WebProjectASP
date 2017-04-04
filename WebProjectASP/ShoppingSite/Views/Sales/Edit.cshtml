@@ -37,9 +37,9 @@
 			@Html.LabelFor(model => model.StartDate, htmlAttributes: new { @class = "control-label col-md-2" })
 			<div class="col-md-10">
 				@{
-					string sDate = Model.StartDate.Year + "-" + Model.StartDate.Month.ToString().PadLeft(2,'0') + "-" + Model.StartDate.Day.ToString().PadLeft(2, '0');
+					string sDate = Model.StartDate.Year + "-" + Model.StartDate.Month.ToString().PadLeft(2, '0') + "-" + Model.StartDate.Day.ToString().PadLeft(2, '0');
 				}
-				<input type="date" class="datepicker" data-val="true" data-val-date="The field Start date must be a date." data-val-required="The Start date field is required." id="StartDate" name="StartDate" value="@sDate"/>
+				<input type="date" class="datepicker" data-val="true" data-val-date="The field Start date must be a date." data-val-required="The Start date field is required." id="StartDate" name="StartDate" value="@sDate" />
 				@Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
 			</div>
 		</div>
@@ -54,19 +54,19 @@
 			</div>
 		</div>
 
-        <br/>
-        //TODO
-        Brands:
-        <div class="form-group">
-            @foreach (var p in Model.AllBrands) {
-                <div class="col-md-12">
-                    <input type="checkbox" checked id="@p.BrandName" name="CheckedBrandes" value="@p.BrandID" />
-                    <label for="@p.BrandName">@p.BrandName</label>
-                    <br />
-                </div>
-            }
-          
-        </div>
+		<br />
+		//TODO
+		Brands:
+		<div class="form-group">
+			@foreach(var p in Model.AllBrands) {
+				<div class="col-md-12">
+					<input type="checkbox" checked id="@p.BrandName" name="CheckedBrandes" value="@p.BrandID" />
+					<label for="@p.BrandName">@p.BrandName</label>
+					<br />
+				</div>
+			}
+
+		</div>
 
 
 
@@ -78,11 +78,28 @@
 		</div>
 
 	</div>
-}
+					}
 <div>
 	@Html.ActionLink("Back to List", "Index")
 </div>
 
-@section Scripts {
+@section AfterScripts {
 	@Scripts.Render("~/bundles/jqueryval")
+	<script type="text/javascript">
+		$("form").on("submit", function (e) {
+
+			var sDate = new Date($("#StartDate").get()[0].value);
+			var eDate = new Date($("#EndDate").get()[0].value);
+		
+			if (sDate >= eDate) {
+				var elm = $("[data-valmsg-for='StartDate']").get()[0];
+				elm.innerHTML = "asdaSD";
+				console.log(elm);
+				//stop form submission
+				e.preventDefault();
+			}
+			
+		});
+	</script>
+
 }
