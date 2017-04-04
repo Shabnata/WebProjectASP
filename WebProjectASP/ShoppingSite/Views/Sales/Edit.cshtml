@@ -83,23 +83,22 @@
 	@Html.ActionLink("Back to List", "Index")
 </div>
 
-@section AfterScripts {
+@section Scripts {
 	@Scripts.Render("~/bundles/jqueryval")
+
 	<script type="text/javascript">
 		$("form").on("submit", function (e) {
 
-			var sDate = new Date($("#StartDate").get()[0].value);
-			var eDate = new Date($("#EndDate").get()[0].value);
+			var sDate = new Date($("#StartDate").val());
+			var eDate = new Date($("#EndDate").val());
 		
 			if (sDate >= eDate) {
-				var elm = $("[data-valmsg-for='StartDate']").get()[0];
-				elm.innerHTML = "asdaSD";
-				console.log(elm);
+				$("span[data-valmsg-for='StartDate']").html("Start date must be before end date.");
+				$("span[data-valmsg-for='EndDate']").html("End date must be before start date.");
+
 				//stop form submission
 				e.preventDefault();
 			}
-			
 		});
 	</script>
-
 }
