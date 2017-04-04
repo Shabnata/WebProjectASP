@@ -71,8 +71,8 @@ namespace ShoppingSite.Models {
 		}
 
 		public async Task<IList<SaleModel>>  GetActiveSalesAsync() {
-			DateTime today = new DateTime();
-			List<SaleModel> activeSales = await (from s in this.Sales where s.StartDate <= today && s.EndDate >= today select s).ToListAsync();
+            DateTime today = DateTime.Now;
+            List<SaleModel> activeSales = await (from s in this.Sales where s.StartDate <= today && s.EndDate >= today select s).ToListAsync();
 
 			return activeSales;
 		}
