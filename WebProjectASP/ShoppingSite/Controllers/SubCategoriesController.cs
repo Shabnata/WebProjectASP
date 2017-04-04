@@ -89,7 +89,7 @@ namespace ShoppingSite.Controllers {
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> Edit([Bind(Include = "SubCategoryID, SubCategoryName, SubCategoryLogo")] SubCategoryModel subCategoryModel) {
 			if(ModelState.IsValid) {
-				if(!await (from sc in db.SubCategories where sc.SubCategoryName.ToLower() == subCategoryModel.SubCategoryName.ToLower() select sc).AnyAsync()) {
+				if(!await (from sc in db.SubCategories where sc.SubCategoryID != subCategoryModel.SubCategoryID && sc.SubCategoryName.ToLower() == subCategoryModel.SubCategoryName.ToLower() select sc).AnyAsync()) {
 					string[] selectedCategoriesStrings = Request.Form.GetValues("CheckedCategories");
 					List<CategoryModel> selectedCategoriesList = new List<CategoryModel>();
 					foreach(string str in selectedCategoriesStrings) {
