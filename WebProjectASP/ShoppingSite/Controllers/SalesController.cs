@@ -233,7 +233,7 @@ namespace ShoppingSite.Controllers {
 			model.AllActiveSales = await db.GetActiveSalesAsync();
 			model.ThisSale = sale;
 			await this.FillViewBag();
-			return View(model);
-		}
+            return View("Browse", model);
+        }
 	}
 }

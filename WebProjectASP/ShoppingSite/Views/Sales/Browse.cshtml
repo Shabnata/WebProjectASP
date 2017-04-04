@@ -1,4 +1,4 @@
-﻿@model ShoppingSite.Models.SaleModel
+﻿@model ShoppingSite.Models.SaleBrowseViewModel
 
 
 
@@ -7,20 +7,21 @@
         <div class="row">
             <div class="col-sm-3">
                 <div class="left-sidebar">
-                    <h2>SubCategories</h2>
+                    <h2>All Sales</h2>
                     <div class="panel-group category-products" id="accordian">
-                        <!--Sub category-list-->
-                    ////????
-                        @foreach (var sale in Model.subCategories) {
+                        <!--sale -list-->
+                        
+                        @foreach (var sale in Model.AllActiveSales)
+                        {
 
                             <div class="panel panel-default">
                                 <div class="panel-heading">
-                                    <h4 class="panel-title"><a href="#">@SubCat.SubCategoryName</a></h4>
+                                    <h4 class="panel-title"><a href="#">@sale.SaleName</a></h4>
                                 </div>
                             </div>
                         }
-
-                    </div><!--/Sub category-list-->
+                        
+                    </div><!--/Sale-list-->
                 </div>
             </div>
 
@@ -28,15 +29,16 @@
             <div class="col-sm-9 padding-right">
                 <div class="features_items">
                     <!--features_items-->
-                    <h2 class="title text-center">Features Items</h2>
+                    <h2 class="title text-center">Items on sale</h2>
+                    
 
-
-                    @foreach (var product in Model.featuredProducts) {
+                    @foreach (var product in Model.ThisSale.Products)
+                    {
                         <div class="col-sm-4">
                             <div class="product-image-wrapper">
                                 <div class="single-products">
                                     <div class="productinfo text-center">
-                                        <img src=@product.CoverPath alt=@product.ProductName width="100" />
+                                        <img src=@product.CoverPath alt=@product.ProductName width="100"/>
                                         <h2>@product.Price</h2>
                                         <p>@product.ProductName</p>
                                         <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
@@ -46,23 +48,23 @@
                         </div>
 
                     }
+                
 
 
-
-
+                
 
 
                 </div><!--features_items-->
 
+              
 
-
-
+ 
 
             </div>
 
 
+            </div>
         </div>
-    </div>
-
+   
 </section>
 
