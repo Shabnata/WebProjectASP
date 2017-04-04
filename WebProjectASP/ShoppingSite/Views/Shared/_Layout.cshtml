@@ -15,8 +15,10 @@
 </head>
 <body>
     <div class="navbar navbar-default navbar-fixed-top">
-        <div style="float:left"><img src="@Url.Content("~/Content/icons/logo2.png")" alt="Logo" height="50" /></div>
 
+        <div style="float:left">
+            <a class="" href="/"><img src="@Url.Content("~/Content/icons/logo2.png")" alt="Logo" height="50" /></a>
+        </div>
         <div class="container">
 
             <div class="navbar-header">
@@ -72,8 +74,7 @@
                         <ul class="dropdown-menu">
 
 
-                            @foreach (var item in ViewBag.AllCategories)
-                            {
+                            @foreach (var item in ViewBag.AllCategories) {
                                 <li><a href="@Url.Action("BrowseByID", "Categories",new {CategoryID=item.CategoryID})">@item.CategoryName</a></li>
                             }
                             @*<li><a href="#">Action</a></li>
@@ -87,9 +88,8 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Brands<span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            @foreach (var brd in ViewBag.AllBrands)
-                            {
-                            <li><a href="@Url.Action("BrowseByID", "Brands",new {BrandID=brd.BrandID})">@brd.BrandName</a></li>
+                            @foreach (var brd in ViewBag.AllBrands) {
+                                <li><a href="@Url.Action("BrowseByID", "Brands",new {BrandID=brd.BrandID})">@brd.BrandName</a></li>
                             }
                         </ul>
                     </li>
@@ -100,8 +100,9 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">On Sale!<span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="#">Action</a></li>
-                            <li><a href="#">Another action</a></li>
+                            @foreach (var brd in ViewBag.AllActiveSales) {
+                                <li><a href="@Url.Action("BrowseByID", "Sales",new {SaleID=brd.SaleID})">@brd.SaleName</a></li>
+                            }
                         </ul>
                     </li>
                 </ul>

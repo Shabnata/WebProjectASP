@@ -27,21 +27,21 @@ namespace ShoppingSite.Controllers {
 		[HttpGet]
 		public async Task<ActionResult> About() {
 			await this.FillViewBag();
-			ViewBag.Message = "Your application description page.";
+			ViewBag.Message = "Online Sup-Shop";
 
 			return View();
 		}
 
 		[HttpGet]
 		public async Task<ActionResult> Contact() {
-			ViewBag.Message = "Your contact page.";
+			ViewBag.Message = "Contact page";
 			await this.FillViewBag();
 			return View();
 		}
 
 		[HttpGet]
 		public async Task<ActionResult> PrivacyPolicy() {
-			ViewBag.Message = "Your contact page.";
+			ViewBag.Message = "Contact page";
 			await this.FillViewBag();
 			return View();
 		}
