@@ -40,7 +40,7 @@ namespace ShoppingSite.Controllers {
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> Create([Bind(Include = "CategoryName, Logo")] CategoryModel categoryModel) {
 			if(ModelState.IsValid) {
-				if(!await (from c in db.Categories where c.CategoryName.ToLower() == categoryModel.CategoryName.ToLower() select c).AnyAsync()) {
+				if(!await (from c in db.Categories where c.CategoryID != categoryModel.CategoryID && c.CategoryName.ToLower() == categoryModel.CategoryName.ToLower() select c).AnyAsync()) {
 					db.Categories.Add(categoryModel);
 					await db.SaveChangesAsync();
 

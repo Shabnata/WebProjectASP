@@ -68,7 +68,7 @@ namespace ShoppingSite.Controllers {
 		public async Task<ActionResult> Edit([Bind(Include = "BrandID, BrandName, Logo, Country, Description, FoundationYear")] BrandModel brandModel) {
 			await this.FillViewBag();
 			if(ModelState.IsValid) {
-				if(!await (from b in db.Brands where b.BrandName.ToLower() == brandModel.BrandName.ToLower() select b).AnyAsync()) {
+				if(!await (from b in db.Brands where b.BrandID != brandModel.BrandID && b.BrandName.ToLower() == brandModel.BrandName.ToLower() select b).AnyAsync()) {
 					db.Entry(brandModel).State = EntityState.Modified;
 					await db.SaveChangesAsync();
 					return RedirectToAction("Index");
