@@ -11,14 +11,14 @@ namespace ShoppingSite.Models {
 
 		[Key]
 		[Required]
-		[Display(Name = "Sale ID",AutoGenerateField = true)]
-		[Column("SaleID",TypeName = "int")]
+		[Display(Name = "Sale ID", AutoGenerateField = true)]
+		[Column("SaleID", TypeName = "int")]
 		[DataType(DataType.Text)]
 		public int SaleID { get; set; }
 
 		[Required]
 		[Display(Name = "Sale name")]
-		[Column("SaleName",TypeName = "varchar")]
+		[Column("SaleName", TypeName = "varchar")]
 		[DataType(DataType.Text)]
 		public string SaleName { get; set; }
 
@@ -26,7 +26,7 @@ namespace ShoppingSite.Models {
 		[Display(Name = "Start date")]
 		[Column("StartDate", TypeName = "date")]
 		[DataType(DataType.Date)]
-		[DisplayFormat(ApplyFormatInEditMode =true ,DataFormatString = "{0:u}")]
+		[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:u}")]
 		public DateTime StartDate { get; set; }
 
 		[Required]
@@ -41,18 +41,18 @@ namespace ShoppingSite.Models {
 		[Column("Discount", TypeName = "decimal")]
 		[DataType(DataType.Text)]
 		public decimal Discount { get; set; }
-        public virtual ICollection<BrandModel> Brands { get; set; }
-        //public virtual ICollection<ProductModel> Products { get; set; }
+		public virtual ICollection<BrandModel> Brands { get; set; }
+		//public virtual ICollection<ProductModel> Products { get; set; }
 
-        [Required]
-		[Display(Name ="Emblem")]
+		[Required]
+		[Display(Name = "Emblem")]
 		[Column("Emblem", TypeName = "varchar")]
 		[DataType(DataType.ImageUrl)]
 		public string Emblem { get; set; }
 	}
 
 	public class SaleEditViewModel {
-		
+
 		[Required]
 		[Display(Name = "Sale ID")]
 		[DataType(DataType.Text)]
@@ -81,18 +81,18 @@ namespace ShoppingSite.Models {
 		public decimal Discount { get; set; }
 
 		[Required]
-		[Display(Name ="Emblem")]
+		[Display(Name = "Emblem")]
 		[Column("Emblem", TypeName = "varchar")]
 		[DataType(DataType.ImageUrl)]
 		public string Emblem { get; set; }
 
 		public IList<ProductModel> ProductsOnSale { get; set; }
 
-        public IList<BrandModel> BrandsOnSale { get; set; }
-        public IList<BrandModel> AllBrands { get; set; }
-        
+		public IList<BrandModel> BrandsOnSale { get; set; }
+		public IList<BrandModel> AllBrands { get; set; }
 
-        public IList<SubCategoryModel> AllSubCategories { get; set; }
+
+		public IList<SubCategoryModel> AllSubCategories { get; set; }
 
 		public IList<ProductModel> AllProducts { get; set; }
 	}
