@@ -83,9 +83,9 @@ namespace ShoppingSite.Controllers {
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<ActionResult> Edit([Bind(Include = "SaleName, StartDate, EndDate, Discount, Emblem")] SaleModel saleModel) {
+		public async Task<ActionResult> Edit([Bind(Include = "SaleID, SaleName, StartDate, EndDate, Discount, Emblem")] SaleEditViewModel model) {
 			if(ModelState.IsValid) {
-				if(!await (from s in db.Sales where s.SaleName.ToLower() == saleModel.SaleName.ToLower() && !(s.StartDate >= saleModel.EndDate || s.EndDate <= saleModel.StartDate) select s).AnyAsync()) {
+				if(!await (from s in db.Sales where s.SaleID != model.SaleID && s.SaleName.ToLower() == model.SaleName.ToLower() && !(s.StartDate >= model.EndDate || s.EndDate <= model.StartDate) select s).AnyAsync()) {
 					string[] brandIDs = (Request.Form.GetValues("Brands") != null) ? Request.Form.GetValues("Brands") : new string[] { };
 					string[] subCategoriesIDs = (Request.Form.GetValues("SubCategories") != null) ? Request.Form.GetValues("SubCategories") : new string[] { };
 					string[] productIDs = (Request.Form.GetValues("Products") != null) ? Request.Form.GetValues("Products") : new string[] { };
@@ -127,13 +127,13 @@ namespace ShoppingSite.Controllers {
 						}
 					}
 
-					SaleModel sm = await db.Sales.FindAsync(saleModel.SaleID);
-					sm.Discount = saleModel.Discount;
-					sm.Emblem = saleModel.Emblem;
-					sm.StartDate = saleModel.StartDate;
-					sm.EndDate = saleModel.EndDate;
+					SaleModel sm = await db.Sales.FindAsync(model.SaleID);
+					sm.Discount = model.Discount;
+					sm.Emblem = model.Emblem;
+					sm.StartDate = model.StartDate;
+					sm.EndDate = model.EndDate;
 					sm.Products = productsOnSale;
-					sm.SaleName = saleModel.SaleName;
+					sm.SaleName = model.SaleName;
 
 					db.Entry(sm).State = EntityState.Modified;
 					await db.SaveChangesAsync();
@@ -141,7 +141,7 @@ namespace ShoppingSite.Controllers {
 				}
 			}
 			await this.FillViewBag();
-			return View(saleModel);
+			return View(model);
 		}
 
 		[HttpGet]
