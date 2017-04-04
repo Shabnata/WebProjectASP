@@ -56,8 +56,9 @@ namespace ShoppingSite.Models {
 		//public virtual ICollection<SaleModel> Sales { get; set; }
 
 		public virtual ICollection<OrderModel> Orders { get; set; }
+        
 
-	}
+    }
 
 	public class ProductViewModel {
 		

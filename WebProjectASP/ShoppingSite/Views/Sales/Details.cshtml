@@ -7,7 +7,7 @@
 <div>
     <h4>SaleModel</h4>
     <hr />
-    
+
     @Html.DisplayNameFor(model => model.SaleID) :
     @Html.DisplayFor(model => model.SaleID)
     <br />
@@ -27,12 +27,13 @@
     <br />
     <img src="@Model.Emblem" alt="@Model.SaleName" width="300" />
     <br />
-    Products in sale:
+    Brands on sale:
     <ul>
-        @foreach (var product in Model.Products) {
+        @foreach (var brand in Model.Brands) {
             <li>
-                <label>@product.ProductName</label>
-            </li>}
+                <label>@brand.BrandName</label>
+            </li>
+        }
     </ul>
 </div>
 @Html.ActionLink("Delete", "Delete", new { SaleID = Model.SaleID }) |

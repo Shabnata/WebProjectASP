@@ -31,9 +31,10 @@ namespace ShoppingSite.Controllers {
 
 		[HttpGet]
 		public async Task<ActionResult> Create() {
-			await this.FillViewBag();
-
-			return View();
+            SaleViewModel model = new SaleViewModel();
+            model.AllBrands = await db.Brands.ToListAsync();
+            await this.FillViewBag();
+            return View(model);
 		}
 
 		[HttpPost]
@@ -61,7 +62,7 @@ namespace ShoppingSite.Controllers {
 			}
 
 			SaleEditViewModel viewModel = new SaleEditViewModel();
-            viewModel.AllSubCategories = await db.SubCategories.ToListAsync();
+            //viewModel.AllSubCategories = await db.SubCategories.ToListAsync();
 			viewModel.Discount = saleModel.Discount;
 			viewModel.Emblem = saleModel.Emblem;
 			viewModel.StartDate = saleModel.StartDate;
