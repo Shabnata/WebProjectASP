@@ -38,7 +38,7 @@ namespace ShoppingSite.Models {
 		[Display(Name = "Price")]
 		[Column("Price", TypeName = "decimal")]
 		[DataType(DataType.Currency)]
-		public decimal Price { get; set; }
+        public decimal Price { get; set; }
 
 		[Required]
 		[Display(Name = "Brand ID")]
@@ -53,7 +53,7 @@ namespace ShoppingSite.Models {
 
 		public virtual ICollection<ProductPictureModel> ProductPictures { get; set; }
 
-		public virtual ICollection<SaleModel> Sales { get; set; }
+		//public virtual ICollection<SaleModel> Sales { get; set; }
 
 		public virtual ICollection<OrderModel> Orders { get; set; }
 

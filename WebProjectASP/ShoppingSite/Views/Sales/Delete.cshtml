@@ -1,0 +1,34 @@
+﻿@model ShoppingSite.Models.SaleModel
+@{
+    ViewBag.Title = "Delete sale";
+    Layout = (ViewBag.LayoutFile != null) ? ViewBag.LayoutFile : Layout;
+}
+<h2>Delete sale</h2>
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>SaleModel</h4>
+    <hr />
+    @Html.DisplayNameFor(model => model.SaleName)
+    @Html.DisplayFor(model => model.SaleName)
+    <br />
+    @Html.DisplayNameFor(model => model.Emblem)
+    @Html.DisplayFor(model => model.Emblem)
+    <br />
+    @Html.DisplayNameFor(model => model.StartDate)
+    @Html.DisplayFor(model => model.StartDate)
+    <br />
+    @Html.DisplayNameFor(model => model.EndDate)
+    @Html.DisplayFor(model => model.EndDate)
+    <br />
+    <br />
+    @Html.DisplayNameFor(model => model.Discount)
+    @Html.DisplayFor(model => model.Discount)
+    <br />
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.SaleID)
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>    }
+</div>
