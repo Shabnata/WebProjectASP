@@ -177,5 +177,34 @@ namespace ShoppingSite.Controllers {
 			ICollection<string> subCategories = await (from sc in db.SubCategories where sc.SubCategoryName.ToLower().StartsWith(SearchString.ToLower()) select sc.SubCategoryName).ToListAsync();
 			return Json(subCategories);
 		}
-	}
+
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<ActionResult> BrowseByID(int SubCategoryID, int CategoryID) {
+            SubCategoryModel subcategory = null;
+            try {
+                subcategory = await db.SubCategories.FindAsync(SubCategoryID);
+            } catch (SqlException ex) {
+
+            }
+            CategoryModel category = null;
+            try {
+                category = await db.Categories.FindAsync(CategoryID);
+            } catch (SqlException ex) {
+
+            }
+            await this.FillViewBag();
+            SubCategoryBrowseViewModel submodel = new SubCategoryBrowseViewModel();
+            CategoryBrowseViewModel model = new CategoryBrowseViewModel();
+
+            model.subCategories = category.SubCategories.ToList();
+            submodel.subCategories = category.SubCategories.ToList();
+            submodel.CategoryID = CategoryID;
+            IList<ProductModel> allSubProucts = submodel.products;
+            
+           
+            return View("Browse", submodel);
+        }
+
+    }
 }

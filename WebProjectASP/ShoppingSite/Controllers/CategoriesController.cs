@@ -186,7 +186,8 @@ namespace ShoppingSite.Controllers {
 			await this.FillViewBag();
 			CategoryBrowseViewModel model = new CategoryBrowseViewModel();
 			model.subCategories = category.SubCategories.ToList();
-			IList<ProductModel> allProucts = await db.GetCategoryProductsAsync(CategoryID);
+            model.CategoryID = CategoryID;
+            IList<ProductModel> allProucts = await db.GetCategoryProductsAsync(CategoryID);
 			List<ProductModel> featuredProucts = new List<ProductModel>();
 			for(int i = 0; i < 8 && i < allProucts.Count; i++) {
 				featuredProucts.Add(allProucts[i]);
