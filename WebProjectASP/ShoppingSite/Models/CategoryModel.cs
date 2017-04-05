@@ -38,5 +38,7 @@ namespace ShoppingSite.Models
     {
         public IList<SubCategoryModel> subCategories { get; set; }
         public IList<ProductModel> featuredProducts { get; set; }
+        public int CategoryID { get; set; }
+
     }
 }

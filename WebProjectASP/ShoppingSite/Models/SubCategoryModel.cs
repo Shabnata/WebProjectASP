@@ -56,4 +56,12 @@ namespace ShoppingSite.Models {
 		[Display(Name = "All categories")]
 		public IList<CategoryModel> AllCategories { get; set; }
 	}
+
+    public class SubCategoryBrowseViewModel {
+
+
+        public IList<SubCategoryModel> subCategories { get; set; }
+        public IList<ProductModel> products { get; set; }
+        public int CategoryID { get; set; }
+    }
 }
