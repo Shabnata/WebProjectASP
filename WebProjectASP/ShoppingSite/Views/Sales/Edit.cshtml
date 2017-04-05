@@ -40,7 +40,9 @@
 					string sDate = Model.StartDate.Year + "-" + Model.StartDate.Month.ToString().PadLeft(2, '0') + "-" + Model.StartDate.Day.ToString().PadLeft(2, '0');
 				}
 				<input type="date" class="datepicker" data-val="true" data-val-date="The field Start date must be a date." data-val-required="The Start date field is required." id="StartDate" name="StartDate" value="@sDate" />
-				@Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
+				@Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" , @id = "StartDateValidation"})
+				<span id="test"></span>
+				<span id="test2" class="text-danger"></span>
 			</div>
 		</div>
 		<div class="form-group">
@@ -91,11 +93,13 @@
 
 			var sDate = new Date($("#StartDate").val());
 			var eDate = new Date($("#EndDate").val());
-		
+			console.log("aaa");
 			if (sDate >= eDate) {
-				$("span[data-valmsg-for='StartDate']").html("Start date must be before end date.");
+				console.log("bbb");
+				$("span .text-danger").html("Start date must be before end date.").show();
 				$("span[data-valmsg-for='EndDate']").html("End date must be before start date.");
-
+				$("#StartDateValidation").html("aaaa");
+				$("#test2").html("bbbb");
 				//stop form submission
 				e.preventDefault();
 			}
