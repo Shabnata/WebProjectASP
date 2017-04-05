@@ -31,10 +31,10 @@ namespace ShoppingSite.Controllers {
 
 		[HttpGet]
 		public async Task<ActionResult> Create() {
-            SaleViewModel model = new SaleViewModel();
-            model.AllBrands = await db.Brands.ToListAsync();
-            await this.FillViewBag();
-            return View(model);
+			SaleViewModel model = new SaleViewModel();
+			model.AllBrands = await db.Brands.ToListAsync();
+			await this.FillViewBag();
+			return View(model);
 		}
 
 		[HttpPost]
@@ -62,7 +62,7 @@ namespace ShoppingSite.Controllers {
 			}
 
 			SaleEditViewModel viewModel = new SaleEditViewModel();
-            //viewModel.AllSubCategories = await db.SubCategories.ToListAsync();
+			//viewModel.AllSubCategories = await db.SubCategories.ToListAsync();
 			viewModel.Discount = saleModel.Discount;
 			viewModel.Emblem = saleModel.Emblem;
 			viewModel.StartDate = saleModel.StartDate;
@@ -70,17 +70,17 @@ namespace ShoppingSite.Controllers {
 			viewModel.SaleID = saleModel.SaleID;
 			viewModel.SaleName = saleModel.SaleName;
 
-            //viewModel.ProductsOnSale = saleModel.Products.ToList();
-            viewModel.BrandsOnSale= saleModel.Brands.ToList();
-            viewModel.AllBrands= (await db.Brands.ToListAsync()).Except(viewModel.BrandsOnSale).ToList();
+			//viewModel.ProductsOnSale = saleModel.Products.ToList();
+			viewModel.BrandsOnSale = saleModel.Brands.ToList();
+			viewModel.AllBrands = (await db.Brands.ToListAsync()).Except(viewModel.BrandsOnSale).ToList();
 
-            //viewModel.AllProducts = (await db.Products.ToListAsync()).Except(viewModel.ProductsOnSale).ToList();
-            //viewModel.AllProducts = await (db.Products).ToListAsync();
-            //foreach(ProductModel pm in viewModel.ProductsOnSale) {
-            //	viewModel.AllProducts.Remove(pm);
-            //}
+			//viewModel.AllProducts = (await db.Products.ToListAsync()).Except(viewModel.ProductsOnSale).ToList();
+			//viewModel.AllProducts = await (db.Products).ToListAsync();
+			//foreach(ProductModel pm in viewModel.ProductsOnSale) {
+			//	viewModel.AllProducts.Remove(pm);
+			//}
 
-            await this.FillViewBag();
+			await this.FillViewBag();
 			return View(viewModel);
 		}
 
@@ -135,9 +135,9 @@ namespace ShoppingSite.Controllers {
 					sm.Emblem = model.Emblem;
 					sm.StartDate = model.StartDate;
 					sm.EndDate = model.EndDate;
-                    //sm.Brands= BrandsOnSale;
-                    //sm.Products = productsOnSale;
-                    sm.SaleName = model.SaleName;
+					//sm.Brands= BrandsOnSale;
+					//sm.Products = productsOnSale;
+					sm.SaleName = model.SaleName;
 
 					db.Entry(sm).State = EntityState.Modified;
 					await db.SaveChangesAsync();
@@ -195,26 +195,17 @@ namespace ShoppingSite.Controllers {
 		[HttpPost, ActionName("Search")]
 		public async Task<ActionResult> Search(string SaleName) {
 
-			List<SaleModel> salesLst = null;
-			try {
-				salesLst = await (from s in db.Sales where s.SaleName.ToLower() == SaleName.ToLower() select s).ToListAsync();
-			} catch(SqlException ex) {
+			IList<SaleModel> sales = await (from s in db.Sales where s.SaleName.ToLower().Contains(SaleName.ToLower()) select s).ToListAsync();
 
-			}
-
-			if(salesLst != null) {
-				if(salesLst.Count == 1) {
-					return RedirectToAction("Details", new { SaleID = salesLst[0].SaleID });
-				} else {
-					await this.FillViewBag();
-					// TODO Add this View
-					return View("ListSales", salesLst);
-				}
-			}
-			ViewBag.SearchString = SaleName;
-			ViewBag.NotFoundError = "Sale not found";
 			await this.FillViewBag();
-			return View("Index");
+			ViewBag.SearchString = SaleName;
+			if(sales.Count == 0) {
+				ViewBag.NotFoundError = "Sale not found";
+			} else if(sales.Count == 1 && sales.First().SaleName.ToLower().Equals(SaleName.ToLower())) {
+				return RedirectToAction("Details", new { SaleID = sales.First().SaleID });
+			}
+
+			return View("Index", sales);
 		}
 
 		[AllowAnonymous]
@@ -237,7 +228,7 @@ namespace ShoppingSite.Controllers {
 			model.AllActiveSales = await db.GetActiveSalesAsync();
 			model.ThisSale = sale;
 			await this.FillViewBag();
-            return View("Browse", model);
-        }
+			return View("Browse", model);
+		}
 	}
 }

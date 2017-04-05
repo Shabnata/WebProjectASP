@@ -122,20 +122,18 @@ namespace ShoppingSite.Controllers {
 		[AllowAnonymous]
 		[HttpPost, ActionName("Search")]
 		public async Task<ActionResult> Search(string BrandName) {
+
+			IList<BrandModel> brands = await (from b in db.Brands where b.BrandName.ToLower().Contains(BrandName.ToLower()) select b).ToListAsync();
+
 			await this.FillViewBag();
-			BrandModel brand = null;
-			try {
-				brand = await (from b in db.Brands where b.BrandName.ToLower() == BrandName.ToLower() select b).SingleAsync();
-			} catch(SqlException ex) {
-
-			}
-
-			if(brand != null) {
-				return RedirectToAction("Details", new { BrandID = brand.BrandID });
-			}
 			ViewBag.SearchString = BrandName;
-			ViewBag.NotFoundError = "Brand not found";
-			return View("Index");
+			if(brands.Count == 0) {
+				ViewBag.NotFoundError = "Brand not found";
+			} else if(brands.Count == 1 && brands.First().BrandName.ToLower().Equals(BrandName.ToLower())) {
+				return RedirectToAction("Details", new { BrandID = brands.First().BrandID });
+			}
+
+			return View("Index", brands);
 		}
 
 		[AllowAnonymous]

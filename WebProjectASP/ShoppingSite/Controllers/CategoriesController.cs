@@ -124,20 +124,17 @@ namespace ShoppingSite.Controllers {
 		[HttpPost, ActionName("Search")]
 		public async Task<ActionResult> Search(string CategoryName) {
 
-			CategoryModel category = null;
-			try {
-				category = await (from c in db.Categories where c.CategoryName.ToLower() == CategoryName.ToLower() select c).SingleAsync();
-			} catch(SqlException ex) {
+			IList<CategoryModel> categories = await (from c in db.Categories where c.CategoryName.ToLower().Contains(CategoryName.ToLower()) select c).ToListAsync();
 
-			}
-
-			if(category != null) {
-				return RedirectToAction("Details", new { CategoryID = category.CategoryID });
-			}
-			ViewBag.SearchString = CategoryName;
-			ViewBag.NotFoundError = "Category not found";
 			await this.FillViewBag();
-			return View("Index");
+			ViewBag.SearchString = CategoryName;
+			if(categories.Count == 0) {
+				ViewBag.NotFoundError = "Category not found";
+			} else if(categories.Count == 1 && categories.First().CategoryName.ToLower().Equals(CategoryName.ToLower())) {
+				return RedirectToAction("Details", new { CategoryID = categories.First().CategoryID });
+			}
+
+			return View("Index", categories);
 		}
 
 		[AllowAnonymous]

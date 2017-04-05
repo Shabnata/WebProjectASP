@@ -152,20 +152,17 @@ namespace ShoppingSite.Controllers {
 		[HttpPost, ActionName("Search")]
 		public async Task<ActionResult> Search(string SubCategoryName) {
 
-			SubCategoryModel subCategory = null;
-			try {
-				subCategory = await (from sc in db.SubCategories where sc.SubCategoryName.ToLower() == SubCategoryName.ToLower() select sc).SingleAsync();
-			} catch(SqlException ex) {
+			IList<SubCategoryModel> subCategories = await (from sc in db.SubCategories where sc.SubCategoryName.ToLower().Contains(SubCategoryName.ToLower()) select sc).ToListAsync();
 
-			}
-
-			if(subCategory != null) {
-				return RedirectToAction("Details", new { SubCategoryID = subCategory.SubCategoryID });
-			}
-			ViewBag.SearchString = SubCategoryName;
-			ViewBag.NotFoundError = "SubCategory not found";
 			await this.FillViewBag();
-			return View("Index");
+			ViewBag.SearchString = SubCategoryName;
+			if(subCategories.Count == 0) {
+				ViewBag.NotFoundError = "SubCategory not found";
+			} else if(subCategories.Count == 1 && subCategories.First().SubCategoryName.ToLower().Equals(SubCategoryName.ToLower())) {
+				return RedirectToAction("Details", new { SubcategoryID = subCategories.First().SubCategoryID });
+			}
+
+			return View("Index", subCategories);
 		}
 
 		[AllowAnonymous]
@@ -178,17 +175,17 @@ namespace ShoppingSite.Controllers {
 			return Json(subCategories);
 		}
 
-        [AllowAnonymous]
-        [HttpGet]
-        public async Task<ActionResult> BrowseByID(int SubCategoryID, int CategoryID) {
-            SubCategoryModel subCategory = await db.SubCategories.FindAsync(SubCategoryID);
+		[AllowAnonymous]
+		[HttpGet]
+		public async Task<ActionResult> BrowseByID(int SubCategoryID, int CategoryID) {
+			SubCategoryModel subCategory = await db.SubCategories.FindAsync(SubCategoryID);
 			CategoryModel category = await db.Categories.FindAsync(CategoryID);
 
-			SubCategoryBrowseViewModel viewModel = new SubCategoryBrowseViewModel() { ParentCategory = category, SubCategory = subCategory};
-			
-            await this.FillViewBag();
-            return View("Browse", viewModel);
-        }
+			SubCategoryBrowseViewModel viewModel = new SubCategoryBrowseViewModel() { ParentCategory = category, SubCategory = subCategory };
 
-    }
+			await this.FillViewBag();
+			return View("Browse", viewModel);
+		}
+
+	}
 }

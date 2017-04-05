@@ -211,20 +211,17 @@ namespace ShoppingSite.Controllers {
 		[HttpPost, ActionName("Search")]
 		public async Task<ActionResult> Search(string ProductName) {
 
-			ProductModel product = null;
-			try {
-				product = await (from p in db.Products where p.ProductName.ToLower() == ProductName.ToLower() select p).SingleAsync();
-			} catch(SqlException ex) {
+			IList<ProductModel> products = await (from p in db.Products where p.ProductName.ToLower().Contains(ProductName.ToLower()) select p).ToListAsync();
 
-			}
-
-			if(product != null) {
-				return RedirectToAction("Details", new { SKU = product.SKU });
-			}
-			ViewBag.SearchString = ProductName;
-			ViewBag.NotFoundError = "Product not found";
 			await this.FillViewBag();
-			return View("Index");
+			ViewBag.SearchString = ProductName;
+			if(products.Count == 0) {
+				ViewBag.NotFoundError = "Product not found";
+			} else if(products.Count == 1 && products.First().ProductName.ToLower().Equals(ProductName.ToLower())) {
+				return RedirectToAction("Details", new { SKU = products.First().SKU });
+			}
+
+			return View("Index", products);
 		}
 
 		[AllowAnonymous]
