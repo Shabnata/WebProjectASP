@@ -11,29 +11,28 @@
 <div>
 	<h4>BrandModel</h4>
 	<hr />
-	@Html.DisplayNameFor(model => model.BrandName)
+	@Html.DisplayNameFor(model => model.Logo):
+	<img id="Logo" src="@Model.Logo" />
+	<br />
+	@Html.DisplayNameFor(model => model.BrandName):
 	@Html.DisplayFor(model => model.BrandName)
 	<br />
-	@Html.DisplayNameFor(model => model.Logo)
-	@Html.DisplayFor(model => model.Logo)
-	<br />
-	@Html.DisplayNameFor(model => model.Country)
+	@Html.DisplayNameFor(model => model.Country):
 	@Html.DisplayFor(model => model.Country)
 	<br />
-	@Html.DisplayNameFor(model => model.Description)
+	@Html.DisplayNameFor(model => model.Description):
 	@Html.DisplayFor(model => model.Description)
 	<br />
-	@Html.DisplayNameFor(model => model.FoundationYear)
-	@Html.DisplayFor(model => model.FoundationYear)
+	@Html.DisplayNameFor(model => model.FoundationYear): 
+	@Model.FoundationYear.Year
+	<br />
 
 	@using(Html.BeginForm()) {
 		@Html.AntiForgeryToken()
 		@Html.HiddenFor(model => model.BrandID)
 		<div class="form-actions no-color">
 			<input type="submit" value="Delete" class="btn btn-default" /> |
-			@Html.ActionLink("Back to List", "Index")
 		</div>
 	}
+	@Html.ActionLink("Back to List", "Index")
 </div>
-
-TODO - Add brand products <br/>

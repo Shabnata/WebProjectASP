@@ -1,110 +1,111 @@
 ﻿@model ShoppingSite.Models.SaleEditViewModel
 @{
-    ViewBag.Title = "Edit Sale";
-    Layout = (ViewBag.LayoutFile != null) ? ViewBag.LayoutFile : Layout;
+	ViewBag.Title = "Edit Sale";
+	Layout = (ViewBag.LayoutFile != null) ? ViewBag.LayoutFile : Layout;
 }
 <h2>Edit Sale</h2>
 @using (Html.BeginForm("Edit", "Sales", FormMethod.Post)) {
-    @Html.AntiForgeryToken()
+	@Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
-        <h4>SaleModel</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.SaleID)
-        <div class="form-group">
-            @Html.LabelFor(model => model.SaleName, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.SaleName, new { htmlAttributes = new { @class = "form-control", @value = Model.SaleName } })
-                @Html.ValidationMessageFor(model => model.SaleName, "", new { @class = "text-danger" })
-            </div>
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(model => model.Emblem, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Emblem, new { htmlAttributes = new { @class = "form-control", @value = Model.Emblem } })
-                @Html.ValidationMessageFor(model => model.Emblem, "", new { @class = "text-danger" })
-            </div>
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(model => model.Discount, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Discount, new { htmlAttributes = new { @class = "form-control", @value = Model.Discount } })
-                @Html.ValidationMessageFor(model => model.Discount, "", new { @class = "text-danger" })
-            </div>
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(model => model.StartDate, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
+	<div class="form-horizontal">
+		<h4>SaleModel</h4>
+		<hr />
+		@Html.ValidationSummary(false, "", new { @class = "text-danger" })
+		@Html.HiddenFor(model => model.SaleID)
+		<div class="form-group">
+			@Html.LabelFor(model => model.SaleName, htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="col-md-10">
+				@Html.EditorFor(model => model.SaleName, new { htmlAttributes = new { @class = "form-control", @value = Model.SaleName } })
+				@Html.ValidationMessageFor(model => model.SaleName, "", new { @class = "text-danger" })
+			</div>
+		</div>
+		<div class="form-group">
+			@Html.LabelFor(model => model.Emblem, htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="col-md-10">
+				@Html.EditorFor(model => model.Emblem, new { htmlAttributes = new { @class = "form-control", @value = Model.Emblem } })
+				@Html.ValidationMessageFor(model => model.Emblem, "", new { @class = "text-danger" })
+			</div>
+		</div>
+		<div class="form-group">
+			@Html.LabelFor(model => model.Discount, htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="col-md-10">
+				@Html.EditorFor(model => model.Discount, new { htmlAttributes = new { @class = "form-control", @value = Model.Discount } })
+				@Html.ValidationMessageFor(model => model.Discount, "", new { @class = "text-danger" })
+			</div>
+		</div>
+		<div class="form-group">
+			@Html.LabelFor(model => model.StartDate, htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="col-md-10">
                 @{string sDate = Model.StartDate.Year + "-" + Model.StartDate.Month.ToString().PadLeft(2, '0') + "-" + Model.StartDate.Day.ToString().PadLeft(2, '0');
-                }
-                <input type="date" class="datepicker" data-val="true" data-val-date="The field Start date must be a date." data-val-required="The Start date field is required." id="StartDate" name="StartDate" value="@sDate" />
-                @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger", @id = "StartDateValidation" })
-                <span id="test"></span>
-                <span id="test2" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(model => model.EndDate, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
+				}
+				<input type="date" class="datepicker" data-val="true" data-val-date="The field Start date must be a date." data-val-required="The Start date field is required." id="StartDate" name="StartDate" value="@sDate" />
+				@Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
+				<span id="StartDateValMsg" class="text-danger" style="display: none">Start date must be before end date.</span>
+			</div>
+		</div>
+		<div class="form-group">
+			@Html.LabelFor(model => model.EndDate, htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="col-md-10">
                 @{string eDate = Model.EndDate.Year + "-" + Model.EndDate.Month.ToString().PadLeft(2, '0') + "-" + Model.EndDate.Day.ToString().PadLeft(2, '0');
-                }
-                <input type="date" class="datepicker" data-val="true" data-val-date="The field End date must be a date." data-val-required="The End date field is required." id="EndDate" name="EndDate" value="@eDate" />
-                @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
-            </div>
-        </div>
+				}
+				<input type="date" class="datepicker" data-val="true" data-val-date="The field End date must be a date." data-val-required="The End date field is required." id="EndDate" name="EndDate" value="@eDate" />
+				@Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
+				<span id="EndDateValMsg" class="text-danger" style="display: none">End date must be after start date.</span>
+			</div>
+		</div>
 
-        <br />
-        //TODO
-        Brands:
-        <div class="form-group">
+		<br />
+		//TODO
+		Brands:
+		<div class="form-group">
             @foreach (var p in Model.AllBrands) {
-                <div class="col-md-12">
-                    <input type="checkbox" checked id="@p.BrandName" name="CheckedBrandes" value="@p.BrandID" />
-                    <label for="@p.BrandName">@p.BrandName</label>
-                    <br />
+				<div class="col-md-12">
+					<input type="checkbox" checked id="@p.BrandName" name="CheckedBrandes" value="@p.BrandID" />
+					<label for="@p.BrandName">@p.BrandName</label>
+					<br />
                 </div>}
 
-        </div>
+		</div>
 
 
 
 
-        <div class="form-group">
-            <div class="col-md-10">
-                <input type="submit" value="Edit" class="btn btn-default" />
-            </div>
-        </div>
+		<div class="form-group">
+			<div class="col-md-10">
+				<input type="submit" value="Edit" class="btn btn-default" />
+			</div>
+		</div>
 
-    </div>
-                    }
+	</div>
+					}
 <div>
-    @Html.ActionLink("Back to List", "Index")
+	@Html.ActionLink("Back to List", "Index")
 </div>
 
 @section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
+	@Scripts.Render("~/bundles/jqueryval")
 
-    <script type="text/javascript">
-        $("form").on("submit", function (e) {
+	<script type="text/javascript">
+		$("document").ready(function () {
+			$(".datepicker").datepicker();
+		});
+	</script>
 
-            var sDate = new Date($("#StartDate").val());
-            var eDate = new Date($("#EndDate").val());
-            console.log("aaa");
-            if (sDate >= eDate) {
-                console.log("bbb");
-                $("span .text-danger").html("Start date must be before end date.").show();
-                $("span[data-valmsg-for='EndDate']").html("End date must be before start date.");
-                $("#StartDateValidation").html("aaaa");
-                $("#test2").html("bbbb");
-                //stop form submission
-                e.preventDefault();
-            }
-        });
-    </script>
-    <script type="text/javascript">
-        $("document").ready(function () {
-            $(".datepicker").datepicker();
-        });
-    </script>
+	<script type="text/javascript">
+		$("form").on("submit", function (e) {
+
+			var sDate = new Date($("#StartDate").val());
+			var eDate = new Date($("#EndDate").val());
+
+			if (sDate >= eDate) {
+				$("#StartDateValMsg").show();
+				$("#EndDateValMsg").show();
+				// Stop form submission
+				e.preventDefault();
+			} else {
+				$("#StartDateValMsg").hide();
+				$("#EndDateValMsg").hide();
+			}
+		});
+	</script>
 }
