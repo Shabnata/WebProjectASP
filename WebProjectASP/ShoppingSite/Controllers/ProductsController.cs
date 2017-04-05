@@ -224,6 +224,12 @@ namespace ShoppingSite.Controllers {
 			return View("Index", products);
 		}
 
+		[HttpPost]
+		public async Task<ActionResult> CheckAvailability(int ID, string Name) {
+			Boolean available = await (from p in db.Products where p.SKU != ID && p.ProductName.ToLower().Equals(Name.ToLower()) select p).AnyAsync();
+			return Json(!available);
+		}
+
 		[AllowAnonymous]
 		[HttpPost]
 		public async Task<ActionResult> TypeSearch(string SearchString) {

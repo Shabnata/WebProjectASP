@@ -146,6 +146,12 @@ namespace ShoppingSite.Controllers {
 			return Json(brands);
 		}
 
+		[HttpPost]
+		public async Task<ActionResult> CheckAvailability(int ID, string Name) {
+			Boolean available = await (from b in db.Brands where b.BrandID != ID && b.BrandName.ToLower().Equals(Name.ToLower()) select b).AnyAsync();
+			return Json(!available);
+		}
+
 		[AllowAnonymous]
 		[HttpGet]
 		public async Task<ActionResult> BrowseByID(int BrandID) {

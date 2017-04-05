@@ -1,58 +1,72 @@
 ﻿@model ShoppingSite.Models.SubCategoryCreateEditViewModel
 @{
-    ViewBag.Title = "Create subcategory";
-    Layout = (ViewBag.LayoutFile != null) ? ViewBag.LayoutFile : Layout;
+	ViewBag.Title = "Create subcategory";
+	Layout = (ViewBag.LayoutFile != null) ? ViewBag.LayoutFile : Layout;
 }
 <h2>Create subcategory</h2>
 <div>
-    @Html.ActionLink("Back to List", "Index")
+	@Html.ActionLink("Back to List", "Index")
 </div>
-@using (Html.BeginForm("Create", "SubCategories", FormMethod.Post))
-{
-    @Html.AntiForgeryToken()
-    <div class="form-horizontal">
-        <h4>CategoryModel</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+@using(Html.BeginForm("Create", "SubCategories", FormMethod.Post)) {
+	@Html.AntiForgeryToken()
+	<div class="form-horizontal">
+		<h4>CategoryModel</h4>
+		<hr />
+		@Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.SubCategoryName, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.SubCategoryName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.SubCategoryName, "", new { @class = "text-danger" })
-            </div>
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(model => model.SubCategoryLogo, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.SubCategoryLogo, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.SubCategoryLogo, "", new { @class = "text-danger" })
-            </div>
-        </div>
+		<div class="form-group">
+			@Html.LabelFor(model => model.SubCategoryName, htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="col-md-10">
+				@Html.EditorFor(model => model.SubCategoryName, new { htmlAttributes = new { @class = "form-control" } })
+				@Html.ValidationMessageFor(model => model.SubCategoryName, "", new { @class = "text-danger" })
+				<span class="glyphicon glyphicon-ok" aria-hidden="true" style="display: none;"></span>
+				<span class="glyphicon glyphicon-remove" aria-hidden="false" style="display: none;"></span>
+			</div>
+		</div>
+		<div class="form-group">
+			@Html.LabelFor(model => model.SubCategoryLogo, htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="col-md-10">
+				@Html.EditorFor(model => model.SubCategoryLogo, new { htmlAttributes = new { @class = "form-control" } })
+				@Html.ValidationMessageFor(model => model.SubCategoryLogo, "", new { @class = "text-danger" })
+			</div>
+		</div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.AllCategories, htmlAttributes: new { @class = "col-md-12" })
-            <br/><br/>
-            <div class="form-group">
-                @foreach (var cat in Model.AllCategories)
-                {
-                    
-                        <div class="col-md-12">
-                            <input type="checkbox" name="SelectedCategories" id="@cat.CategoryName" value="@cat.CategoryID" />
-                            <label for="@cat.CategoryName">@cat.CategoryName</label>
-                        </div>
-                    
-                }
-            </div>
+		<div class="form-group">
+			@Html.LabelFor(model => model.AllCategories, htmlAttributes: new { @class = "col-md-12" })
+			<br /><br />
+			<div class="form-group">
+				@foreach(var cat in Model.AllCategories) {
 
-        </div>
-        <div class="form-group">
-            <div class="col-md-12">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
-        </div>
-    </div>
+					<div class="col-md-12">
+						<input type="checkbox" name="SelectedCategories" id="@cat.CategoryName" value="@cat.CategoryID" />
+						<label for="@cat.CategoryName">@cat.CategoryName</label>
+					</div>
+
+				}
+			</div>
+
+		</div>
+		<div class="form-group">
+			<div class="col-md-12">
+				<input type="submit" value="Create" class="btn btn-default" />
+			</div>
+		</div>
+	</div>
 }
+
+<div>
+	@Html.ActionLink("Back to List", "Index")
+</div>
+
 @section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
+	@Scripts.Render("~/bundles/jqueryval")
+	@Scripts.Render("~/Scripts/CheckAvailability.js")
+
+	<script type="text/javascript">
+		$("#SubCategoryName").on("input", {
+			url: "@Url.Action("CheckAvailability", "SubCategories")",
+			id: -1,
+			name: "SubCategoryName"
+		}, CheckAvailability);
+	</script>
 }

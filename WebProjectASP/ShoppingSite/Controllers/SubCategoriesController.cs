@@ -165,6 +165,12 @@ namespace ShoppingSite.Controllers {
 			return View("Index", subCategories);
 		}
 
+		[HttpPost]
+		public async Task<ActionResult> CheckAvailability(int ID, string Name) {
+			Boolean available = await (from sc in db.SubCategories where sc.SubCategoryID != ID && sc.SubCategoryName.ToLower().Equals(Name.ToLower()) select sc).AnyAsync();
+			return Json(!available);
+		}
+
 		[AllowAnonymous]
 		[HttpPost]
 		public async Task<ActionResult> TypeSearch(string SearchString) {

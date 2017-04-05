@@ -147,6 +147,12 @@ namespace ShoppingSite.Controllers {
 			return Json(categories);
 		}
 
+		[HttpPost]
+		public async Task<ActionResult> CheckAvailability(int ID, string Name) {
+			Boolean available = await (from c in db.Categories where c.CategoryID != ID && c.CategoryName.ToLower().Equals(Name.ToLower()) select c).AnyAsync();
+			return Json(!available);
+		}
+
 		[AllowAnonymous]
 		[HttpGet]
 		public async Task<ActionResult> Browse(String Btn) {

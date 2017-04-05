@@ -21,6 +21,8 @@
 			<div class="col-md-10">
 				@Html.EditorFor(model => model.ProductName, new { htmlAttributes = new { @class = "form-control", @value = Model.ProductName, @required = true } })
 				@Html.ValidationMessageFor(model => model.ProductName, "", new { @class = "text-danger" })
+				<span class="glyphicon glyphicon-ok" aria-hidden="true" style="display: none;"></span>
+				<span class="glyphicon glyphicon-remove" aria-hidden="false" style="display: none;"></span>
 			</div>
 		</div>
 
@@ -123,6 +125,7 @@
 
 @section Scripts {
 	@Scripts.Render("~/bundles/jqueryval")
+	@Scripts.Render("~/Scripts/CheckAvailability.js")
 
 	<script type="text/javascript">
 		$("form").on("submit", function (e) {
@@ -147,5 +150,13 @@
 				$("#url4Msg").show();
 			}
 		});
+	</script>
+
+	<script type="text/javascript">
+		$("#ProductName").on("input", {
+			url: "@Url.Action("CheckAvailability", "Products")",
+			id: $("#SKU").val(),
+			name: "ProductName"
+		}, CheckAvailability);
 	</script>
 }
