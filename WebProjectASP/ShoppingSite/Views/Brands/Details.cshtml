@@ -23,7 +23,7 @@
 	@Html.DisplayFor(model => model.Description)
 	<br />
 	@Html.DisplayNameFor(model => model.FoundationYear)
-	@Html.DisplayFor(model => model.FoundationYear)
+	@Html.DisplayFor(model => model.FoundationYear.Year)
 </div>
 
 @Html.ActionLink("Delete", "Delete", new { BrandID = Model.BrandID }) |

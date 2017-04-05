@@ -35,7 +35,7 @@
 			<td><img src=@Html.DisplayFor(modelItem => item.Logo) alt="Logo" width="300" /></td>
 			<td>@Html.DisplayFor(modelItem => item.Country)</td>
 			<td>@Html.DisplayFor(modelItem => item.Description)</td>
-			<td>@Html.DisplayFor(modelItem => item.FoundationYear)</td>
+			<td>@Html.DisplayFor(modelItem => item.FoundationYear.Year)</td>
 			<td>
 				@Html.ActionLink("Edit", "Edit", new { BrandID = item.BrandID }) |
 				@Html.ActionLink("Details", "Details", new { BrandID = item.BrandID }) |

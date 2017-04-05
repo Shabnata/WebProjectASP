@@ -52,7 +52,7 @@
 		<div class="form-group">
 			@Html.LabelFor(model => model.FoundationYear, htmlAttributes: new { @class = "control-label col-md-2" })
 			<div class="col-md-10">
-				@Html.EditorFor(model => model.FoundationYear, new { htmlAttributes = new { @class = "form-control", @value = Model.FoundationYear } })
+				@Html.TextBoxFor(model => model.FoundationYear, new { @type = "number", @min = "1800", @step = "1", @max = "2030" })
 				@Html.ValidationMessageFor(model => model.FoundationYear, "", new { @class = "text-danger" })
 			</div>
 		</div>
@@ -71,4 +71,11 @@
 
 @section Scripts {
 	@Scripts.Render("~/bundles/jqueryval")
+
+	<script type="text/javascript">
+		$("document").ready(function () {
+			
+			$("#FoundationYear").val(@Model.FoundationYear.Year);
+		});
+	</script>
 }
