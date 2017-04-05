@@ -154,46 +154,36 @@ namespace ShoppingSite.Controllers {
 		[HttpGet]
 		public async Task<ActionResult> Browse(String Btn) {
 
-			CategoryModel category = null;
-			try {
-				category = await (from c in db.Categories where c.CategoryName.ToLower() == Btn.ToLower() select c).SingleAsync();
-			} catch(SqlException ex) {
+			CategoryModel category = await (from c in db.Categories where c.CategoryName.ToLower() == Btn.ToLower() select c).SingleAsync();
 
-			}
-
-			await this.FillViewBag();
-			CategoryBrowseViewModel model = new CategoryBrowseViewModel();
-			model.subCategories = category.SubCategories.ToList();
 			IList<ProductModel> allProucts = await db.GetCategoryProductsAsync(category.CategoryID);
 			List<ProductModel> featuredProucts = new List<ProductModel>();
+			// TODO Randomize this maybe?
 			for(int i = 0; i < 8 && i < allProucts.Count; i++) {
 				featuredProucts.Add(allProucts[i]);
 			}
-			model.featuredProducts = featuredProucts;
-			return View(model);
+			CategoryBrowseViewModel viewModel = new CategoryBrowseViewModel() { Category = category, FeaturedProducts = featuredProucts };
+
+			await this.FillViewBag();
+			return View(viewModel);
 		}
 
 		[AllowAnonymous]
 		[HttpGet]
 		public async Task<ActionResult> BrowseByID(int CategoryID) {
 
-			CategoryModel category = null;
-			try {
-				category = await db.Categories.FindAsync(CategoryID);
-			} catch(SqlException ex) {
+			CategoryModel category = await db.Categories.FindAsync(CategoryID);
 
-			}
-			await this.FillViewBag();
-			CategoryBrowseViewModel model = new CategoryBrowseViewModel();
-			model.subCategories = category.SubCategories.ToList();
-            model.CategoryID = CategoryID;
-            IList<ProductModel> allProucts = await db.GetCategoryProductsAsync(CategoryID);
+			IList<ProductModel> allProucts = await db.GetCategoryProductsAsync(CategoryID);
 			List<ProductModel> featuredProucts = new List<ProductModel>();
+			// TODO Randomize this maybe?
 			for(int i = 0; i < 8 && i < allProucts.Count; i++) {
 				featuredProucts.Add(allProucts[i]);
 			}
-			model.featuredProducts = featuredProucts;
-			return View("Browse", model);
+			CategoryBrowseViewModel viewModel = new CategoryBrowseViewModel() { Category = category, FeaturedProducts = featuredProucts };
+
+			await this.FillViewBag();
+			return View("Browse", viewModel);
 		}
 
 	}

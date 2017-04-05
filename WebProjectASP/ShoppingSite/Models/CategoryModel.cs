@@ -5,40 +5,35 @@ using System.Web;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace ShoppingSite.Models
-{
-    [Table("Categories")]
-    public class CategoryModel
-    {
+namespace ShoppingSite.Models {
+	[Table("Categories")]
+	public class CategoryModel {
 
-        [Key]
-        [Required]
-        [Display(Name = "Category ID", AutoGenerateField = true)]
-        [Column("CategoryID", TypeName = "int")]
-        [DataType(DataType.Text)]
-        public int CategoryID { get; set; }
+		[Key]
+		[Required]
+		[Display(Name = "Category ID", AutoGenerateField = true)]
+		[Column("CategoryID", TypeName = "int")]
+		[DataType(DataType.Text)]
+		public int CategoryID { get; set; }
 
-        [Required]
-        [Display(Name = "Category name")]
-        [Column("CategoryName", TypeName = "varchar")]
-        [DataType(DataType.Text)]
-        public string CategoryName { get; set; }
+		[Required]
+		[Display(Name = "Category name")]
+		[Column("CategoryName", TypeName = "varchar")]
+		[DataType(DataType.Text)]
+		public string CategoryName { get; set; }
 
-        [Required]
-        [Display(Name = "Category logo")]
-        [Column("Logo", TypeName = "varchar")]
-        [DataType(DataType.ImageUrl)]
-        public string Logo { get; set; }
+		[Required]
+		[Display(Name = "Category logo")]
+		[Column("Logo", TypeName = "varchar")]
+		[DataType(DataType.ImageUrl)]
+		public string Logo { get; set; }
 
-        public virtual ICollection<SubCategoryModel> SubCategories { get; set; }
+		public virtual ICollection<SubCategoryModel> SubCategories { get; set; }
 
-    }
+	}
 
-    public class CategoryBrowseViewModel
-    {
-        public IList<SubCategoryModel> subCategories { get; set; }
-        public IList<ProductModel> featuredProducts { get; set; }
-        public int CategoryID { get; set; }
-
-    }
+	public class CategoryBrowseViewModel {
+		public CategoryModel Category { get; set; }
+		public IList<ProductModel> FeaturedProducts { get; set; }
+	}
 }
