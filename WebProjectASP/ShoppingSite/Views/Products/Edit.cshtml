@@ -1,141 +1,151 @@
 ﻿@model ShoppingSite.Models.ProductViewModel
 
 @{
-    ViewBag.Title = "Edit product";
-    Layout = (ViewBag.LayoutFile != null) ? ViewBag.LayoutFile : Layout;
+	ViewBag.Title = "Edit product";
+	Layout = (ViewBag.LayoutFile != null) ? ViewBag.LayoutFile : Layout;
 }
 
 <h2>Edit product</h2>
 
-@using (Html.BeginForm("Edit", "Products", FormMethod.Post))
-{
-    @Html.AntiForgeryToken()
+@using(Html.BeginForm("Edit", "Products", FormMethod.Post)) {
+	@Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
-        <h4>CategoryModel</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.SKU)
+	<div class="form-horizontal">
+		<h4>CategoryModel</h4>
+		<hr />
+		@Html.ValidationSummary(false, "", new { @class = "text-danger" })
+		@Html.HiddenFor(model => model.SKU)
 
-        <div class="form-group">
-            <div class="col-md-10">
+		<div class="form-group">
+			@Html.LabelFor(model => model.ProductName, htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="col-md-10">
+				@Html.EditorFor(model => model.ProductName, new { htmlAttributes = new { @class = "form-control", @value = Model.ProductName, @required = true } })
+				@Html.ValidationMessageFor(model => model.ProductName, "", new { @class = "text-danger" })
+			</div>
+		</div>
 
-            </div>
-        </div>
+		<div class="form-group">
+			@Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="col-md-10">
+				@Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", @value = Model.Description, @required = "true" } })
+				@Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+			</div>
+		</div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.ProductName, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.ProductName, new { htmlAttributes = new { @class = "form-control", @value = Model.ProductName } })
-                @Html.ValidationMessageFor(model => model.ProductName, "", new { @class = "text-danger" })
-            </div>
-        </div>
+		<div class="form-group">
+			@Html.LabelFor(model => model.CoverPath, htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="col-md-10">
+				@Html.EditorFor(model => model.CoverPath, new { htmlAttributes = new { @class = "form-control", @value = Model.CoverPath } })
+				@Html.ValidationMessageFor(model => model.CoverPath, "", new { @class = "text-danger" })
+			</div>
+		</div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", @value = Model.Description } })
-                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
-            </div>
-        </div>
+		<div class="form-group">
+			@Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="col-md-10">
+				@Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control", @value = Model.Price } })
+				@Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
+			</div>
+		</div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.CoverPath, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.CoverPath, new { htmlAttributes = new { @class = "form-control", @value = Model.CoverPath } })
-                @Html.ValidationMessageFor(model => model.CoverPath, "", new { @class = "text-danger" })
-            </div>
-        </div>
+		<div class="form-group">
+			@Html.LabelFor(model => model.BrandID, htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="col-md-10">
+				<select name="BrandID" required>
+					@foreach(var brand in Model.AllBrand) {
+						if(brand.BrandID.Equals(Model.BrandID)) {
+							<option value="@brand.BrandID" selected>@brand.BrandName</option>
+						} else {
+							<option value="@brand.BrandID">@brand.BrandName</option>
+						}
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control", @value = Model.Price } })
-                @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
-            </div>
-        </div>
+					}
+				</select>
+			</div>
+		</div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.BrandID, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <select name="BrandID" required>
-                    @foreach (var brand in Model.AllBrand)
-                    {
-                        if (brand.BrandID.Equals(Model.BrandID))
-                        {
-                            <option value="@brand.BrandID" selected>@brand.BrandName</option>
-                        }
-                        else
-                        {
-                            <option value="@brand.BrandID">@brand.BrandName</option>
-                        }
+		<div class="form-group">
+			TODO - Decide if these should be URLs or Text, in Create and in Edit
+			Additional pictures:
+			<br />
+			@{
+				int counter = 0; // can have max 4 additional pictures
+			}
 
-                    }
-                </select>
-            </div>
-        </div>
+			@foreach(var pp in Model.ProductPictures) {
+				counter++;
+				<div class="col-md-12">
+					<input id="url@(counter)" type="url" name="ProductPictures" value="@pp" title="Invalid URL" />
+					<span id="url@(counter)Msg" class="text-danger" style="display: none">Invalid picture URL.</span>
+				</div>
+			}
+			@while(++counter <= 4) {
+				<div class="col-md-12">
+					<input id="url@(counter)" type="url" name="ProductPictures" title="Invalid URL" />
+					<span id="url@(counter)Msg" class="text-danger" style="display: none">Invalid picture URL.</span>
+				</div>
+			}
 
-        <div class="form-group">
-            Additional pictures:
-            <br />
-            @{
-                int counter = 4; // can have max 4 additional pictures
-            }
+		</div>
 
-            //TODO change back type="URL"
-            @foreach (var pp in Model.ProductPictures)
-            {
-                counter--;
-                <div class="col-md-12">
-                    <input type="text" name="ProductPictures" value="@pp" />
-                    @*@Html.ValidationMessageFor(model => model.ProductPictures, "abc", new { @class = "text-danger" })*@
-                </div>}
-            @for (int i = 0; i < counter; i++)
-            {
-                <div class="col-md-12">
-                    <input type="text" name="ProductPictures" />
-                   
-                </div>
-            }
+		<div>
+			Choose SubCategories:
+			<div class="form-group">
+				@foreach(var p in Model.RelatedSubCategories) {
+					<div class="col-md-12">
+						<input type="checkbox" checked id="@p.SubCategoryName" name="CheckedSubCategories" value="@p.SubCategoryID" />
+						<label for="@p.SubCategoryName">@p.SubCategoryName</label>
+						<br />
+					</div>
+				}
+				@foreach(var p in Model.AllSubCategories) {
+					<div class="col-md-12">
+						<input type="checkbox" id="@p.SubCategoryName" name="CheckedSubCategories" value="@p.SubCategoryID" />
+						<label for="@p.SubCategoryName">@p.SubCategoryName</label>
+						<br />
+					</div>
+				}
+			</div>
+		</div>
 
-        </div>
+		<div class="form-group">
+			<div class="col-md-10">
+				<input type="submit" value="Edit" class="btn btn-default" />
+			</div>
+		</div>
+	</div>
 
-        <div>
-            Choose SubCategories:
-            <div class="form-group">
-                @foreach (var p in Model.RelatedSubCategories)
-                {
-                    <div class="col-md-12">
-                        <input type="checkbox" checked id="@p.SubCategoryName" name="CheckedSubCategories" value="@p.SubCategoryID" />
-                        <label for="@p.SubCategoryName">@p.SubCategoryName</label>
-                        <br />
-                    </div>
-
-                }
-                @foreach (var p in Model.AllSubCategories)
-                {
-                    <div class="col-md-12">
-                        <input type="checkbox" id="@p.SubCategoryName" name="CheckedSubCategories" value="@p.SubCategoryID" />
-                        <label for="@p.SubCategoryName">@p.SubCategoryName</label>
-                        <br />
-                    </div>
-                }
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-10">
-                <input type="submit" value="Edit" class="btn btn-default" />
-            </div>
-        </div>
-
-    </div>
-                }
+				}
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+	@Html.ActionLink("Back to List", "Index")
 </div>
 
 @section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
+	@Scripts.Render("~/bundles/jqueryval")
+
+	<script type="text/javascript">
+		$("form").on("submit", function (e) {
+			if ($("#url1").valid() == true) {
+				$("#url1Msg").hide();
+			} else {
+				$("#url1Msg").show();
+			}
+			if ($("#url2").valid() == true) {
+				$("#url2Msg").hide();
+			} else {
+				$("#url2Msg").show();
+			}
+			if ($("#url3").valid() == true) {
+				$("#url3Msg").hide();
+			} else {
+				$("#url3Msg").show();
+			}
+			if ($("#url4").valid() == true) {
+				$("#url4Msg").hide();
+			} else {
+				$("#url4Msg").show();
+			}
+		});
+	</script>
 }
