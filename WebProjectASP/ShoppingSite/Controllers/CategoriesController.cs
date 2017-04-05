@@ -188,7 +188,7 @@ namespace ShoppingSite.Controllers {
 			model.subCategories = category.SubCategories.ToList();
 			IList<ProductModel> allProucts = await db.GetCategoryProductsAsync(CategoryID);
 			List<ProductModel> featuredProucts = new List<ProductModel>();
-			for(int i = 0; i < 10 && i < allProucts.Count; i++) {
+			for(int i = 0; i < 8 && i < allProucts.Count; i++) {
 				featuredProucts.Add(allProucts[i]);
 			}
 			model.featuredProducts = featuredProucts;
