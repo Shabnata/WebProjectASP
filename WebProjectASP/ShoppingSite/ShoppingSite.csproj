@@ -287,7 +287,6 @@
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\SaleDateValidator.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="TODO.txt" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
