@@ -1,71 +1,49 @@
 ﻿@model ShoppingSite.Models.SubCategoryBrowseViewModel
 
-
-
 <section>
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-3">
-                <div class="left-sidebar">
-                    <h2>SubCategories</h2>
-                    <div class="panel-group category-products" id="accordian">
-                        <!--Sub category-list-->
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-3">
+				<div class="left-sidebar">
+					<h2>SubCategories</h2>
+					<div class="panel-group category-products" id="accordian">
+						<!--Sub category-list-->
 
-                        @foreach (var SubCat in Model.subCategories) {
+						@foreach(var SubCat in Model.ParentCategory.SubCategories) {
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h4 class="panel-title"><a href="@Url.Action("BrowseByID", "SubCategories",new { SubCategoryID = SubCat.SubCategoryID, CategoryID = Model.ParentCategory.CategoryID })">@SubCat.SubCategoryName</a></h4>
+								</div>
+							</div>
+						}
 
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <h4 class="panel-title"><a href="@Url.Action("BrowseByID", "SubCategories",new {SubCategoryID=SubCat.SubCategoryID})">@SubCat.SubCategoryName</a></h4>
-                                </div>
-                            </div>
-                        }
+					</div><!--/Sub category-list-->
+				</div>
+			</div>
 
-                    </div><!--/Sub category-list-->
-                </div>
-            </div>
+			<div class="col-sm-9 padding-right">
+				<div class="features_items">
+					<!-- SubCategory items -->
+					<h2 class="title text-center">Features Items</h2>
 
+					@foreach(var product in Model.SubCategory.Products) {
+						<div class="col-sm-3">
+							<div class="product-image-wrapper">
+								<div class="single-products">
+									<div class="productinfo text-center">
+										<img src=@product.CoverPath alt=@product.ProductName width="100" />
+										<h2>@product.Price</h2>
+										<p>@product.ProductName</p>
+										<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
+										<br /><br />
+									</div>
+								</div>
+							</div>
+						</div>
+					}
 
-            <div class="col-sm-9 padding-right">
-                <div class="features_items">
-                    <!--features_items-->
-                    <h2 class="title text-center">Features Items</h2>
-
-
-                    @foreach (var product in Model.featuredProducts) {
-                        <div class="col-sm-3">
-                            <div class="product-image-wrapper">
-                                <div class="single-products">
-                                    <div class="productinfo text-center">
-                                        <img src=@product.CoverPath alt=@product.ProductName width="100" />
-                                        <h2>@product.Price</h2>
-                                        <p>@product.ProductName</p>
-                                        <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-                                        <br /><br />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    }
-
-
-
-
-
-
-                </div><!--features_items-->
-
-
-
-
-
-            </div>
-
-
-        </div>
-    </div>
-
+				</div><!-- SubCategory items -->
+			</div>
+		</div>
+	</div>
 </section>
-
-
-

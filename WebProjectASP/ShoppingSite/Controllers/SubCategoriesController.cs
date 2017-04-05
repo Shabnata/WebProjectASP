@@ -181,29 +181,13 @@ namespace ShoppingSite.Controllers {
         [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult> BrowseByID(int SubCategoryID, int CategoryID) {
-            SubCategoryModel subcategory = null;
-            try {
-                subcategory = await db.SubCategories.FindAsync(SubCategoryID);
-            } catch (SqlException ex) {
+            SubCategoryModel subCategory = await db.SubCategories.FindAsync(SubCategoryID);
+			CategoryModel category = await db.Categories.FindAsync(CategoryID);
 
-            }
-            CategoryModel category = null;
-            try {
-                category = await db.Categories.FindAsync(CategoryID);
-            } catch (SqlException ex) {
-
-            }
+			SubCategoryBrowseViewModel viewModel = new SubCategoryBrowseViewModel() { ParentCategory = category, SubCategory = subCategory};
+			
             await this.FillViewBag();
-            SubCategoryBrowseViewModel submodel = new SubCategoryBrowseViewModel();
-            CategoryBrowseViewModel model = new CategoryBrowseViewModel();
-
-            model.subCategories = category.SubCategories.ToList();
-            submodel.subCategories = category.SubCategories.ToList();
-            submodel.CategoryID = CategoryID;
-            IList<ProductModel> allSubProucts = submodel.products;
-            
-           
-            return View("Browse", submodel);
+            return View("Browse", viewModel);
         }
 
     }

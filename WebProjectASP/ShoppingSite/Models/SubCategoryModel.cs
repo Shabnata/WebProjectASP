@@ -59,9 +59,7 @@ namespace ShoppingSite.Models {
 
     public class SubCategoryBrowseViewModel {
 
-
-        public IList<SubCategoryModel> subCategories { get; set; }
-        public IList<ProductModel> products { get; set; }
-        public int CategoryID { get; set; }
+        public SubCategoryModel SubCategory { get; set; }
+        public CategoryModel ParentCategory { get; set; }
     }
 }
