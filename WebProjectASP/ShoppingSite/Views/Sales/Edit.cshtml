@@ -10,7 +10,7 @@
 	<div class="form-horizontal">
 		<h4>SaleModel</h4>
 		<hr />
-		@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+		@Html.ValidationSummary(false, "", new { @class = "text-danger" })
 		@Html.HiddenFor(model => model.SaleID)
 		<div class="form-group">
 			@Html.LabelFor(model => model.SaleName, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -40,9 +40,8 @@
 					string sDate = Model.StartDate.Year + "-" + Model.StartDate.Month.ToString().PadLeft(2, '0') + "-" + Model.StartDate.Day.ToString().PadLeft(2, '0');
 				}
 				<input type="date" class="datepicker" data-val="true" data-val-date="The field Start date must be a date." data-val-required="The Start date field is required." id="StartDate" name="StartDate" value="@sDate" />
-				@Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" , @id = "StartDateValidation"})
-				<span id="test"></span>
-				<span id="test2" class="text-danger"></span>
+				@Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
+				<span id="StartDateValMsg" class="text-danger" style="display: none">Start date must be before end date.</span>
 			</div>
 		</div>
 		<div class="form-group">
@@ -53,6 +52,7 @@
 				}
 				<input type="date" class="datepicker" data-val="true" data-val-date="The field End date must be a date." data-val-required="The End date field is required." id="EndDate" name="EndDate" value="@eDate" />
 				@Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
+				<span id="EndDateValMsg" class="text-danger" style="display: none">End date must be after start date.</span>
 			</div>
 		</div>
 
@@ -89,19 +89,25 @@
 	@Scripts.Render("~/bundles/jqueryval")
 
 	<script type="text/javascript">
+		$("document").ready(function () {
+			$(".datepicker").datepicker();
+		});
+	</script>
+
+	<script type="text/javascript">
 		$("form").on("submit", function (e) {
 
 			var sDate = new Date($("#StartDate").val());
 			var eDate = new Date($("#EndDate").val());
-			console.log("aaa");
+
 			if (sDate >= eDate) {
-				console.log("bbb");
-				$("span .text-danger").html("Start date must be before end date.").show();
-				$("span[data-valmsg-for='EndDate']").html("End date must be before start date.");
-				$("#StartDateValidation").html("aaaa");
-				$("#test2").html("bbbb");
-				//stop form submission
+				$("#StartDateValMsg").show();
+				$("#EndDateValMsg").show();
+				// Stop form submission
 				e.preventDefault();
+			} else {
+				$("#StartDateValMsg").hide();
+				$("#EndDateValMsg").hide();
 			}
 		});
 	</script>
