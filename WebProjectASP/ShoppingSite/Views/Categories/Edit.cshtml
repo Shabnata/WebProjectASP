@@ -13,7 +13,7 @@
 	<div class="form-horizontal">
 		<h4>CategoryModel</h4>
 		<hr />
-		@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+		@Html.ValidationSummary(false, "", new { @class = "text-danger" })
 		@Html.HiddenFor(model => model.CategoryID)
 
 		<div class="form-group">
