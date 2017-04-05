@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ShoppingSite.Models {
+
 	[Table("Brands")]
 	public class BrandModel {
 
@@ -49,6 +50,6 @@ namespace ShoppingSite.Models {
 		public DateTime FoundationYear { get; set; }
 
 		public virtual ICollection<ProductModel> Products { get; set; }
-        public virtual ICollection<SaleModel> Sales { get; set; }
-    }
+		public virtual ICollection<SaleModel> Sales { get; set; }
+	}
 }

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 
 namespace ShoppingSite.Models {
+
 	[Table("Products")]
 	public class ProductModel {
 
@@ -38,7 +39,7 @@ namespace ShoppingSite.Models {
 		[Display(Name = "Price")]
 		[Column("Price", TypeName = "decimal")]
 		[DataType(DataType.Currency)]
-        public decimal Price { get; set; }
+		public decimal Price { get; set; }
 
 		[Required]
 		[Display(Name = "Brand ID")]
@@ -50,18 +51,12 @@ namespace ShoppingSite.Models {
 		public virtual BrandModel Brand { get; set; }
 
 		public virtual ICollection<SubCategoryModel> ProductCategories { get; set; }
-
 		public virtual ICollection<ProductPictureModel> ProductPictures { get; set; }
-
-		//public virtual ICollection<SaleModel> Sales { get; set; }
-
 		public virtual ICollection<OrderModel> Orders { get; set; }
-        
-
-    }
+	}
 
 	public class ProductViewModel {
-		
+
 		[Required]
 		[Display(Name = "Product ID")]
 		[DataType(DataType.Text)]
@@ -92,11 +87,9 @@ namespace ShoppingSite.Models {
 		[DataType(DataType.Text)]
 		public int BrandID { get; set; }
 
-		public  IList<BrandModel> AllBrand { get; set; }
-
+		public IList<BrandModel> AllBrand { get; set; }
 		public IList<string> ProductPictures { get; set; }
-
-        public IList<SubCategoryModel> AllSubCategories { get; set; }
-        public IList<SubCategoryModel> RelatedSubCategories { get; set; }
-    }
+		public IList<SubCategoryModel> AllSubCategories { get; set; }
+		public IList<SubCategoryModel> RelatedSubCategories { get; set; }
+	}
 }

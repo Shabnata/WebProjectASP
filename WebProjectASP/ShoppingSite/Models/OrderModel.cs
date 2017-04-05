@@ -6,13 +6,14 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ShoppingSite.Models {
+
 	[Table("Orders")]
 	public class OrderModel {
 
 		[Key]
 		[Required]
 		[Display(Name = "Order ID", AutoGenerateField = true)]
-		[Column("OrderID",TypeName ="int")]
+		[Column("OrderID", TypeName = "int")]
 		[DataType(DataType.Text)]
 		public int OrderID { get; set; }
 
@@ -45,6 +46,5 @@ namespace ShoppingSite.Models {
 		public virtual ApplicationUser User { get; set; }
 
 		public virtual ICollection<OrderItemModel> OrderItems { get; set; }
-
 	}
 }

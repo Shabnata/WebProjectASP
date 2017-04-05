@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ShoppingSite.Models {
+
 	[Table("SubCategories")]
 	public class SubCategoryModel {
 
@@ -29,7 +30,6 @@ namespace ShoppingSite.Models {
 		public string SubCategoryLogo { get; set; }
 
 		public virtual ICollection<ProductModel> Products { get; set; }
-
 		public virtual ICollection<CategoryModel> ParentCategories { get; set; }
 	}
 

@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ShoppingSite.Models {
+
 	[Table("Categories")]
 	public class CategoryModel {
 
@@ -29,10 +30,10 @@ namespace ShoppingSite.Models {
 		public string Logo { get; set; }
 
 		public virtual ICollection<SubCategoryModel> SubCategories { get; set; }
-
 	}
 
 	public class CategoryBrowseViewModel {
+
 		public CategoryModel Category { get; set; }
 		public IList<ProductModel> FeaturedProducts { get; set; }
 	}

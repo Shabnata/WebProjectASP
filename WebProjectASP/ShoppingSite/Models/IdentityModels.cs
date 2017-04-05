@@ -12,6 +12,7 @@ using System;
 using System.Data.SqlClient;
 
 namespace ShoppingSite.Models {
+
 	// You can add profile data for the user by adding more properties to your ApplicationUser class, please visit http://go.microsoft.com/fwlink/?LinkID=317594 to learn more.
 	public class ApplicationUser : IdentityUser {
 
@@ -54,6 +55,7 @@ namespace ShoppingSite.Models {
 	}
 
 	public class ApplicationDbContext : IdentityDbContext<ApplicationUser> {
+
 		public ApplicationDbContext() : base("ShoppingSiteDBContext", throwIfV1Schema: false) { }
 
 		// Users
@@ -70,9 +72,9 @@ namespace ShoppingSite.Models {
 			return new ApplicationDbContext();
 		}
 
-		public async Task<IList<SaleModel>>  GetActiveSalesAsync() {
-            DateTime today = DateTime.Now;
-            List<SaleModel> activeSales = await (from s in this.Sales where s.StartDate <= today && s.EndDate >= today select s).ToListAsync();
+		public async Task<IList<SaleModel>> GetActiveSalesAsync() {
+			DateTime today = DateTime.Now;
+			List<SaleModel> activeSales = await (from s in this.Sales where s.StartDate <= today && s.EndDate >= today select s).ToListAsync();
 
 			return activeSales;
 		}
@@ -80,26 +82,26 @@ namespace ShoppingSite.Models {
 		public async Task<IList<SubCategoryModel>> GetBrandSubCategoriesAsync(int BrandID) {
 			List<SubCategoryModel> brandSubCategories = new List<SubCategoryModel>();
 			BrandModel brand = null;
-			try {
-				brand = await this.Brands.FindAsync(BrandID);
-				Boolean flag = false;
-				foreach(ProductModel pm in brand.Products) {
-					foreach(SubCategoryModel pcm in pm.ProductCategories) {
-						flag = false;
-						foreach(SubCategoryModel scm in brandSubCategories) {
-							if(pcm.SubCategoryID == scm.SubCategoryID) {
-								flag = true;
-								break;
-							}
-						}
-						if(!flag) {
-							brandSubCategories.Add(pcm);
+			//			try {
+			brand = await this.Brands.FindAsync(BrandID);
+			Boolean flag = false;
+			foreach(ProductModel pm in brand.Products) {
+				foreach(SubCategoryModel pcm in pm.ProductCategories) {
+					flag = false;
+					foreach(SubCategoryModel scm in brandSubCategories) {
+						if(pcm.SubCategoryID == scm.SubCategoryID) {
+							flag = true;
+							break;
 						}
 					}
+					if(!flag) {
+						brandSubCategories.Add(pcm);
+					}
 				}
-			}catch(SqlException ex) {
-
 			}
+			//			}catch(SqlException ex) {
+
+			//			}
 			return brandSubCategories;
 		}
 

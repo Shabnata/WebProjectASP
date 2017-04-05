@@ -6,20 +6,21 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ShoppingSite.Models {
+
 	[Table("OrderItems")]
 	public class OrderItemModel {
 
 		[Key]
 		[Required]
 		[Display(Name = "Order ID")]
-		[Column("OrderID",TypeName = "int",Order = 1)]
+		[Column("OrderID", TypeName = "int", Order = 1)]
 		[DataType(DataType.Text)]
 		public int OrderID { get; set; }
 
 		[Key]
 		[Required]
 		[Display(Name = "SKU")]
-		[Column("SKU", TypeName = "int", Order =2)]
+		[Column("SKU", TypeName = "int", Order = 2)]
 		[DataType(DataType.Text)]
 		public int SKU { get; set; }
 
@@ -32,7 +33,7 @@ namespace ShoppingSite.Models {
 
 		[Required]
 		[Display(Name = "Price")]
-		[Column("Price", TypeName ="decimal")]
+		[Column("Price", TypeName = "decimal")]
 		[DataType(DataType.Currency)]
 		public decimal Price { get; set; }
 

@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ShoppingSite.Models {
+
 	[Table("Sales")]
 	public class SaleModel {
 
@@ -41,14 +42,14 @@ namespace ShoppingSite.Models {
 		[Column("Discount", TypeName = "decimal")]
 		[DataType(DataType.Text)]
 		public decimal Discount { get; set; }
-		public virtual ICollection<BrandModel> Brands { get; set; }
-		//public virtual ICollection<ProductModel> Products { get; set; }
 
 		[Required]
 		[Display(Name = "Emblem")]
 		[Column("Emblem", TypeName = "varchar")]
 		[DataType(DataType.ImageUrl)]
 		public string Emblem { get; set; }
+
+		public virtual ICollection<BrandModel> Brands { get; set; }
 	}
 
 	public class SaleEditViewModel {
@@ -86,66 +87,52 @@ namespace ShoppingSite.Models {
 		[DataType(DataType.ImageUrl)]
 		public string Emblem { get; set; }
 
-		//public IList<ProductModel> ProductsOnSale { get; set; }
+		public IList<BrandModel> BrandsOnSale { get; set; }
+		public IList<BrandModel> AllBrands { get; set; }
+	}
+
+	public class SaleViewModel {
+
+		[Required]
+		[Display(Name = "Sale ID")]
+		[DataType(DataType.Text)]
+		public int SaleID { get; set; }
+
+		[Required]
+		[Display(Name = "Sale name")]
+		[DataType(DataType.Text)]
+		public string SaleName { get; set; }
+
+		[Required]
+		[Display(Name = "Start date")]
+		[DataType(DataType.Date)]
+		[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:u}")]
+		public DateTime StartDate { get; set; }
+
+		[Required]
+		[Display(Name = "End date")]
+		[DataType(DataType.Date)]
+		[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:u}")]
+		public DateTime EndDate { get; set; }
+
+		[Required]
+		[Display(Name = "Discount %")]
+		[DataType(DataType.Text)]
+		public decimal Discount { get; set; }
+
+		[Required]
+		[Display(Name = "Emblem")]
+		[Column("Emblem", TypeName = "varchar")]
+		[DataType(DataType.ImageUrl)]
+		public string Emblem { get; set; }
 
 		public IList<BrandModel> BrandsOnSale { get; set; }
 		public IList<BrandModel> AllBrands { get; set; }
-
-
-		//public IList<SubCategoryModel> AllSubCategories { get; set; }
-
-		//public IList<ProductModel> AllProducts { get; set; }
 	}
 
-    public class SaleViewModel {
-
-        [Required]
-        [Display(Name = "Sale ID")]
-        [DataType(DataType.Text)]
-        public int SaleID { get; set; }
-
-        [Required]
-        [Display(Name = "Sale name")]
-        [DataType(DataType.Text)]
-        public string SaleName { get; set; }
-
-        [Required]
-        [Display(Name = "Start date")]
-        [DataType(DataType.Date)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:u}")]
-        public DateTime StartDate { get; set; }
-
-        [Required]
-        [Display(Name = "End date")]
-        [DataType(DataType.Date)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:u}")]
-        public DateTime EndDate { get; set; }
-
-        [Required]
-        [Display(Name = "Discount %")]
-        [DataType(DataType.Text)]
-        public decimal Discount { get; set; }
-
-        [Required]
-        [Display(Name = "Emblem")]
-        [Column("Emblem", TypeName = "varchar")]
-        [DataType(DataType.ImageUrl)]
-        public string Emblem { get; set; }
-
-        //public IList<ProductModel> ProductsOnSale { get; set; }
-
-        public IList<BrandModel> BrandsOnSale { get; set; }
-        public IList<BrandModel> AllBrands { get; set; }
-
-
-        
-    }
-
-    public class SaleBrowseViewModel {
+	public class SaleBrowseViewModel {
 
 		public IList<SaleModel> AllActiveSales { get; set; }
 		public SaleModel ThisSale { get; set; }
 	}
-
-
 }
