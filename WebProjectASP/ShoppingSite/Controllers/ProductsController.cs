@@ -50,7 +50,14 @@ namespace ShoppingSite.Controllers {
 							ppm.Add(new ProductPictureModel { SKU = productModel.SKU, PicturePath = str, Product = productModel });
 						}
 					}
+					string[] subCategories = (Request.Form.GetValues("CheckedSubCategories") != null) ? Request.Form.GetValues("CheckedSubCategories") : new string[] { };
+					List<SubCategoryModel> scmLst = new List<SubCategoryModel>();
+					foreach(string str in subCategories) {
+						scmLst.Add(await db.SubCategories.FindAsync(Int32.Parse(str)));
+					}
+
 					productModel.ProductPictures = ppm;
+					productModel.ProductCategories = scmLst;
 					productModel.Brand = await db.Brands.FindAsync(productModel.BrandID);
 					db.Products.Add(productModel);
 					await db.SaveChangesAsync();
