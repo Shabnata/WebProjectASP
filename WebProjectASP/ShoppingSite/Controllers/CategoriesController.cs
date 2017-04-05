@@ -68,7 +68,7 @@ namespace ShoppingSite.Controllers {
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> Edit([Bind(Include = "CategoryID, CategoryName, Logo")] CategoryModel categoryModel) {
 			if(ModelState.IsValid) {
-				if(!await (from c in db.Categories where c.CategoryName.ToLower() == categoryModel.CategoryName.ToLower() select c).AnyAsync()) {
+				if(!await (from c in db.Categories where c.CategoryID != categoryModel.CategoryID && c.CategoryName.ToLower() == categoryModel.CategoryName.ToLower() select c).AnyAsync()) {
 					db.Entry(categoryModel).State = EntityState.Modified;
 					await db.SaveChangesAsync();
 					return RedirectToAction("Index");
@@ -166,7 +166,7 @@ namespace ShoppingSite.Controllers {
 			model.subCategories = category.SubCategories.ToList();
 			IList<ProductModel> allProucts = await db.GetCategoryProductsAsync(category.CategoryID);
 			List<ProductModel> featuredProucts = new List<ProductModel>();
-			for(int i = 0; i < 10 && i < allProucts.Count; i++) {
+			for(int i = 0; i < 8 && i < allProucts.Count; i++) {
 				featuredProucts.Add(allProucts[i]);
 			}
 			model.featuredProducts = featuredProucts;

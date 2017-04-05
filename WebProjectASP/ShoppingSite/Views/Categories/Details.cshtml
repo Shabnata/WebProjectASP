@@ -19,12 +19,12 @@
 	<br />
 	@Html.DisplayNameFor(model => model.CategoryName) :
 	@Html.DisplayFor(model => model.CategoryName)
-	<br />
+	<br /><br />
 	@Html.DisplayNameFor(model => model.Logo) :
-	@Html.DisplayFor(model => model.Logo)
-	<img src="@Model.Logo" alt="@Model.CategoryName" />
-	<br />
-
+    <br/>
+    <img src=@Html.DisplayFor(modelItem => Model.Logo) alt="Logo" width="60" />
+    <br /><br />
+    Subcategories:
 	<ul>
 		@foreach(var sc in Model.SubCategories) {
 			<li>
