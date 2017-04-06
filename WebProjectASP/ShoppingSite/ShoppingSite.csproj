@@ -214,6 +214,7 @@
     <Content Include="Content\categories\Womens_Health.png" />
     <Content Include="Content\icons\cart.png" />
     <Content Include="Content\icons\cart1.png" />
+    <Content Include="Content\icons\DefaultCover.png" />
     <Content Include="Content\icons\logo2.png" />
     <Content Include="Content\themes\base\accordion.css" />
     <Content Include="Content\themes\base\all.css" />
