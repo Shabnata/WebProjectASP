@@ -77,13 +77,13 @@
 			@foreach(var pp in Model.ProductPictures) {
 				counter++;
 				<div class="col-md-12">
-					<input id="url@(counter)" type="url" name="ProductPictures" value="@pp" title="Invalid URL" />
+					<input id="url@(counter)" type="text" name="ProductPictures" value="@pp" title="Invalid URL" />
 					<span id="url@(counter)Msg" class="text-danger" style="display: none">Invalid picture URL.</span>
 				</div>
 			}
 			@while(++counter <= 4) {
 				<div class="col-md-12">
-					<input id="url@(counter)" type="url" name="ProductPictures" title="Invalid URL" />
+					<input id="url@(counter)" type="text" name="ProductPictures" title="Invalid URL" />
 					<span id="url@(counter)Msg" class="text-danger" style="display: none">Invalid picture URL.</span>
 				</div>
 			}
