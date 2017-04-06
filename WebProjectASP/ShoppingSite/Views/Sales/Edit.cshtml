@@ -4,7 +4,7 @@
 	Layout = (ViewBag.LayoutFile != null) ? ViewBag.LayoutFile : Layout;
 }
 <h2>Edit Sale</h2>
-@using (Html.BeginForm("Edit", "Sales", FormMethod.Post)) {
+@using(Html.BeginForm("Edit", "Sales", FormMethod.Post)) {
 	@Html.AntiForgeryToken()
 
 	<div class="form-horizontal">
@@ -36,7 +36,7 @@
 		<div class="form-group">
 			@Html.LabelFor(model => model.StartDate, htmlAttributes: new { @class = "control-label col-md-2" })
 			<div class="col-md-10">
-                @{string sDate = Model.StartDate.Year + "-" + Model.StartDate.Month.ToString().PadLeft(2, '0') + "-" + Model.StartDate.Day.ToString().PadLeft(2, '0');
+				@{string sDate = Model.StartDate.Year + "-" + Model.StartDate.Month.ToString().PadLeft(2, '0') + "-" + Model.StartDate.Day.ToString().PadLeft(2, '0');
 				}
 				<input type="date" class="datepicker" data-val="true" data-val-date="The field Start date must be a date." data-val-required="The Start date field is required." id="StartDate" name="StartDate" value="@sDate" />
 				@Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
@@ -46,7 +46,7 @@
 		<div class="form-group">
 			@Html.LabelFor(model => model.EndDate, htmlAttributes: new { @class = "control-label col-md-2" })
 			<div class="col-md-10">
-                @{string eDate = Model.EndDate.Year + "-" + Model.EndDate.Month.ToString().PadLeft(2, '0') + "-" + Model.EndDate.Day.ToString().PadLeft(2, '0');
+				@{string eDate = Model.EndDate.Year + "-" + Model.EndDate.Month.ToString().PadLeft(2, '0') + "-" + Model.EndDate.Day.ToString().PadLeft(2, '0');
 				}
 				<input type="date" class="datepicker" data-val="true" data-val-date="The field End date must be a date." data-val-required="The End date field is required." id="EndDate" name="EndDate" value="@eDate" />
 				@Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
@@ -55,7 +55,7 @@
 		</div>
 
 		<br />
-		
+
 		Brands:
 		<div class="form-group">
 			@foreach(var b in Model.BrandsOnSale) {
@@ -65,12 +65,12 @@
 					<br />
 				</div>
 			}
-            @foreach (var b in Model.AllBrands) {
+			@foreach(var b in Model.AllBrands) {
 				<div class="col-md-12">
 					<input type="checkbox" id="@b.BrandName" name="CheckedBrandes" value="b.BrandID" />
 					<label for="@b.BrandName">@b.BrandName</label>
 					<br />
-                </div>
+				</div>
 			}
 
 		</div>
@@ -89,11 +89,13 @@
 @section Scripts {
 	@Scripts.Render("~/bundles/jqueryval")
 
-	<script type="text/javascript">
-		$("document").ready(function () {
-			$(".datepicker").datepicker();
-		});
-	</script>
+	@*
+		<script type="text/javascript">
+			$("document").ready(function () {
+				$(".datepicker").datepicker();
+			});
+		</script>
+	*@
 
 	<script type="text/javascript">
 		$("form").on("submit", function (e) {
