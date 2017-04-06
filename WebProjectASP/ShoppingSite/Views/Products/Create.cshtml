@@ -55,19 +55,19 @@
 			Additional pictures:
 			<br />
 			<div class="col-md-12">
-				<input id="url1" type="url" name="ProductPictures" title="Invalid URL" />
+				<input id="url1" type="text" name="ProductPictures" title="Invalid URL" />
 				<span id="url1Msg" class="text-danger" style="display: none">Invalid picture URL.</span>
 			</div>
 			<div class="col-md-12">
-				<input id="url2" type="url" name="ProductPictures" title="Invalid picture URL." />
+				<input id="url2" type="text" name="ProductPictures" title="Invalid picture URL." />
 				<span id="url2Msg" class="text-danger" style="display: none">Invalid picture URL.</span>
 			</div>
 			<div class="col-md-12">
-				<input id="url3" type="url" name="ProductPictures" title="Invalid picture URL." />
+				<input id="url3" type="text" name="ProductPictures" title="Invalid picture URL." />
 				<span id="url3Msg" class="text-danger" style="display: none">Invalid picture URL.</span>
 			</div>
 			<div class="col-md-12">
-				<input id="url4" type="url" name="ProductPictures" title="Invalid picture URL." />
+				<input id="url4" type="text" name="ProductPictures" title="Invalid picture URL." />
 				<span id="url4Msg" class="text-danger" style="display: none">Invalid picture URL.</span>
 			</div>
 		</div>
@@ -121,14 +121,28 @@
 			} else {
 				$("#url4Msg").show();
 			}
+			defaultCover.call($("#CoverPath").get());
 		});
 	</script>
 
+	@*
+		<script type="text/javascript">
+			$("#ProductName").on("input", {
+				url: "@Url.Action("CheckAvailability", "Products")",
+				id: -1,
+				name: "ProductName"
+			}, CheckAvailability);
+		</script>
+	*@
+
 	<script type="text/javascript">
-		$("#ProductName").on("input", {
-			url: "@Url.Action("CheckAvailability", "Products")",
-			id: -1,
-			name: "ProductName"
-		}, CheckAvailability);
+		$("#CoverPath").on("change", defaultCover);
+
+		function defaultCover() {
+			var defaultPicturePath = "@ViewBag.DefaultPicturePath";
+			if ($(this).val() === "") {
+				$(this).val(defaultPicturePath);
+			}
+		}
 	</script>
 }

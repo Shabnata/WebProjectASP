@@ -1,24 +1,19 @@
 ﻿@model IEnumerable<ShoppingSite.Models.BrandModel>
-
 @{
 	ViewBag.Title = "Index";
 	Layout = (ViewBag.LayoutFile != null) ? ViewBag.LayoutFile : Layout;
 }
-
 <h2>Brands Index</h2>
 <h3>TODO - Bootstrap this page</h3>
-
 @using(Html.BeginForm("Search", "Brands", FormMethod.Post)) {
-	<input type="search" id="BrandName" name="BrandName" placeholder="Brand name" value="@ViewBag.SearchString" path="@Url.Action("TypeSearch", "Brands")" oninput="typeSearch(this)" autocomplete="on" required />
+	<input type="search" id="BrandName" name="BrandName" placeholder="Brand name" value="@ViewBag.SearchString" path="@Url.Action("TypeSearch", "Brands")" autocomplete="on" required />
 	<input type="submit" value="Search" />
 	if(ViewBag.NotFoundError != null) {
 		<span style="background: Red;">@ViewBag.NotFoundError</span>
 		<br />
 	}
 }
-
 @Html.ActionLink("Create Brand", "Create")
-
 <table class="table">
 	<tr>
 		<th>@Html.DisplayNameFor(model => model.BrandName)</th>
@@ -28,7 +23,6 @@
 		<th>@Html.DisplayNameFor(model => model.FoundationYear)</th>
 		<th></th>
 	</tr>
-
 	@foreach(var item in Model) {
 		<tr>
 			<td>@Html.DisplayFor(modelItem => item.BrandName)</td>
@@ -43,9 +37,11 @@
 			</td>
 		</tr>
 	}
-
 </table>
 
 @section scripts{
 	@Scripts.Render("~/Scripts/AutoCompleteTypeSearch.js")
+	<script type="text/javascript">
+		$("#BrandName").on("input", typeSearch);
+	</script>
 }
