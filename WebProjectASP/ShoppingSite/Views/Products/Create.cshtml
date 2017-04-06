@@ -121,6 +121,7 @@
 			} else {
 				$("#url4Msg").show();
 			}
+			defaultCover.call($("#CoverPath").get());
 		});
 	</script>
 
@@ -133,4 +134,15 @@
 			}, CheckAvailability);
 		</script>
 	*@
+
+	<script type="text/javascript">
+		$("#CoverPath").on("change", defaultCover);
+
+		function defaultCover() {
+			var defaultPicturePath = "@ViewBag.DefaultPicturePath";
+			if ($(this).val() === "") {
+				$(this).val(defaultPicturePath);
+			}
+		}
+	</script>
 }
