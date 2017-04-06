@@ -90,14 +90,22 @@ namespace ShoppingSite.Controllers {
 		public async Task<ActionResult> Edit([Bind(Include = "SubCategoryID, SubCategoryName, SubCategoryLogo")] SubCategoryModel subCategoryModel) {
 			if(ModelState.IsValid) {
 				if(!await (from sc in db.SubCategories where sc.SubCategoryID != subCategoryModel.SubCategoryID && sc.SubCategoryName.ToLower() == subCategoryModel.SubCategoryName.ToLower() select sc).AnyAsync()) {
-					string[] selectedCategoriesStrings = Request.Form.GetValues("CheckedCategories");
+					SubCategoryModel editedModel = await db.SubCategories.FindAsync(subCategoryModel.SubCategoryID);
+					foreach(CategoryModel cm in editedModel.ParentCategories) {
+						cm.SubCategories.Remove(editedModel);
+					}
+
+					string[] selectedCategoriesStrings = (Request.Form.GetValues("CheckedCategories") != null) ? Request.Form.GetValues("CheckedCategories") : new string[] { };
 					List<CategoryModel> selectedCategoriesList = new List<CategoryModel>();
 					foreach(string str in selectedCategoriesStrings) {
-						CategoryModel cat = await (from c in db.Categories where c.CategoryID == Int32.Parse(str) select c).SingleAsync();
+						CategoryModel cat = await db.Categories.FindAsync(Int32.Parse(str));
 						selectedCategoriesList.Add(cat);
 					}
-					subCategoryModel.ParentCategories = selectedCategoriesList;
-					db.Entry(subCategoryModel).State = EntityState.Modified;
+
+					editedModel.SubCategoryLogo = subCategoryModel.SubCategoryLogo;
+					editedModel.SubCategoryName = subCategoryModel.SubCategoryName;
+					editedModel.ParentCategories = selectedCategoriesList;
+					db.Entry(editedModel).State = EntityState.Modified;
 					await db.SaveChangesAsync();
 					return RedirectToAction("Index");
 				}
