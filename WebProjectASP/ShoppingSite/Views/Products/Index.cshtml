@@ -1,23 +1,18 @@
 ﻿@model IEnumerable<ShoppingSite.Models.ProductModel>
-
 @{
 	ViewBag.Title = "Index";
 	Layout = (ViewBag.LayoutFile != null) ? ViewBag.LayoutFile : Layout;
 }
-
 <h2>Products Index</h2>
-
 @using(Html.BeginForm("Search", "Products", FormMethod.Post)) {
-	<input type="search" name="ProductName" placeholder="@Html.DisplayNameFor(model => model.ProductName)" value="@ViewBag.SearchString" path="@Url.Action("TypeSearch", "Products")" oninput="typeSearch(this)" autocomplete="on" required />
+	<input type="search" name="ProductName" placeholder="@Html.DisplayNameFor(model => model.ProductName)" value="@ViewBag.SearchString" path="@Url.Action("TypeSearch", "Products")" autocomplete="on" required />
 	<input type="submit" value="Search" />
 	if(ViewBag.NotFoundError != null) {
 		<span style="background: Red;">@ViewBag.NotFoundError</span>
 		<br />
 	}
 }
-
 @Html.ActionLink("Create Product", "Create")
-
 <table class="table">
 	<tr>
 		<th>Cover</th>
@@ -30,10 +25,9 @@
 		<th>Number of SubCategories</th>
 		<th>Actions</th>
 	</tr>
-
 	@foreach(var item in Model) {
 		<tr>
-            <td><img src=@Html.DisplayFor(modelItem => item.CoverPath) alt="Logo" width="80" /></td>
+			<td><img src=@Html.DisplayFor(modelItem => item.CoverPath) alt="Logo" width="80" /></td>
 			<td>@Html.DisplayFor(modelItem => item.SKU)</td>
 			<td>@Html.DisplayFor(modelItem => item.ProductName)</td>
 			<td>@Html.DisplayFor(modelItem => item.Price)</td>
@@ -52,4 +46,7 @@
 
 @section scripts{
 	@Scripts.Render("~/Scripts/AutoCompleteTypeSearch.js")
+	<script type="text/javascript">
+		$("#ProductName").on("input", typeSearch);
+	</script>
 }
