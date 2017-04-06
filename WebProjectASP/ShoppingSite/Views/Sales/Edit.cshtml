@@ -55,27 +55,31 @@
 		</div>
 
 		<br />
-		//TODO
+		
 		Brands:
 		<div class="form-group">
-            @foreach (var p in Model.AllBrands) {
+			@foreach(var b in Model.BrandsOnSale) {
 				<div class="col-md-12">
-					<input type="checkbox" checked id="@p.BrandName" name="CheckedBrandes" value="@p.BrandID" />
-					<label for="@p.BrandName">@p.BrandName</label>
+					<input type="checkbox" checked id="@b.BrandName" name="CheckedBrandes" value="@b.BrandID" />
+					<label for="@b.BrandName">@b.BrandName</label>
 					<br />
-                </div>}
+				</div>
+			}
+            @foreach (var b in Model.AllBrands) {
+				<div class="col-md-12">
+					<input type="checkbox" id="@b.BrandName" name="CheckedBrandes" value="b.BrandID" />
+					<label for="@b.BrandName">@b.BrandName</label>
+					<br />
+                </div>
+			}
 
 		</div>
-
-
-
 
 		<div class="form-group">
 			<div class="col-md-10">
 				<input type="submit" value="Edit" class="btn btn-default" />
 			</div>
 		</div>
-
 	</div>
 					}
 <div>

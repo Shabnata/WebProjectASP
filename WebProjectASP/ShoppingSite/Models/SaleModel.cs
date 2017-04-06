@@ -49,7 +49,7 @@ namespace ShoppingSite.Models {
 		[DataType(DataType.ImageUrl)]
 		public string Emblem { get; set; }
 
-		public virtual ICollection<BrandModel> Brands { get; set; }
+		public virtual ICollection<BrandModel> BrandsOnSale { get; set; }
 	}
 
 	public class SaleEditViewModel {

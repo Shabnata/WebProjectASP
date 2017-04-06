@@ -1,77 +1,76 @@
 ﻿@model ShoppingSite.Models.SaleViewModel
 @{
-    ViewBag.Title = "Create Sale";
-    Layout = (ViewBag.LayoutFile != null) ? ViewBag.LayoutFile : Layout;
+	ViewBag.Title = "Create Sale";
+	Layout = (ViewBag.LayoutFile != null) ? ViewBag.LayoutFile : Layout;
 }
 <h2>Create Sale</h2>
-@using (Html.BeginForm("Create", "Sales", FormMethod.Post)) {
-    @Html.AntiForgeryToken()
-    <div class="form-horizontal">
-        <h4>SaleModel</h4>
-        <hr />
-        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.LabelFor(model => model.SaleName, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.SaleName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.SaleName, "", new { @class = "text-danger" })
-            </div>
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(model => model.StartDate, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "datepicker" } })
-                @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
-            </div>
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(model => model.EndDate, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                //TODO check EndDate>StartDate via JS
-                @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "datepicker"} })
-                @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
-            </div>
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(model => model.Discount, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Discount, new { htmlAttributes = new { type = "number", min = "0", step = "1", max = "100", @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Discount, "", new { @class = "text-danger" })
-            </div>
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(model => model.Emblem, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Emblem, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Emblem, "", new { @class = "text-danger" })
-            </div>
-        </div>
+@using(Html.BeginForm("Create", "Sales", FormMethod.Post)) {
+	@Html.AntiForgeryToken()
+	<div class="form-horizontal">
+		<h4>SaleModel</h4>
+		<hr />
+		@Html.ValidationSummary(false, "", new { @class = "text-danger" })
+		<div class="form-group">
+			@Html.LabelFor(model => model.SaleName, htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="col-md-10">
+				@Html.EditorFor(model => model.SaleName, new { htmlAttributes = new { @class = "form-control" } })
+				@Html.ValidationMessageFor(model => model.SaleName, "", new { @class = "text-danger" })
+			</div>
+		</div>
+		<div class="form-group">
+			@Html.LabelFor(model => model.StartDate, htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="col-md-10">
+				@Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "datepicker" } })
+				@Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
+			</div>
+		</div>
+		<div class="form-group">
+			@Html.LabelFor(model => model.EndDate, htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="col-md-10">
+				@Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "datepicker" } })
+				@Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
+			</div>
+		</div>
+		<div class="form-group">
+			@Html.LabelFor(model => model.Discount, htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="col-md-10">
+				@Html.EditorFor(model => model.Discount, new { htmlAttributes = new { type = "number", min = "0", step = "1", max = "100", @class = "form-control" } })
+				@Html.ValidationMessageFor(model => model.Discount, "", new { @class = "text-danger" })
+			</div>
+		</div>
+		<div class="form-group">
+			@Html.LabelFor(model => model.Emblem, htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="col-md-10">
+				@Html.EditorFor(model => model.Emblem, new { htmlAttributes = new { @class = "form-control" } })
+				@Html.ValidationMessageFor(model => model.Emblem, "", new { @class = "text-danger" })
+			</div>
+		</div>
 
-        Choose Brands for Sale:
-        <div class="form-group">
+		Choose Brands for Sale:
+		<div class="form-group">
+			@foreach(var br in Model.AllBrands) {
+				<div class="col-md-12">
+					<input type="checkbox" id="@br.BrandName" name="CheckedBrands" value="@br.BrandID" />
+					<label for="@br.BrandName">@br.BrandName</label>
+					<br />
+				</div>
+			}
+		</div>
 
-            @foreach (var br in Model.AllBrands) {
-                <div class="col-md-12">
-                    <input type="checkbox" id="@br.BrandName" name="CheckedSubCategories" value="@br.BrandID" />
-                    <label for="@br.BrandName">@br.BrandName</label>
-                    <br />
-                </div>
-            }
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
-        </div>
-    </div>
+		<div class="form-group">
+			<div class="col-md-offset-2 col-md-10">
+				<input type="submit" value="Create" class="btn btn-default" />
+			</div>
+		</div>
+	</div>
 }
+
 <div>
-    @Html.ActionLink("Back to List", "Index")
+	@Html.ActionLink("Back to List", "Index")
 </div>
 
 @section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
+	@Scripts.Render("~/bundles/jqueryval")
 	<script type="text/javascript">
 		$("document").ready(function () {
 			$(".datepicker").datepicker();
