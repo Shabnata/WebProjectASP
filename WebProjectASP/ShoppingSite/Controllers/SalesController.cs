@@ -42,6 +42,13 @@ namespace ShoppingSite.Controllers {
 		public async Task<ActionResult> Create([Bind(Include = "SaleName, StartDate, EndDate, Discount, Emblem")] SaleModel saleModel) {
 			if(ModelState.IsValid) {
 				if(!await (from s in db.Sales where s.SaleName.ToLower() == saleModel.SaleName.ToLower() && !(s.StartDate >= saleModel.EndDate || s.EndDate <= saleModel.StartDate) select s).AnyAsync()) {
+					List<BrandModel> brandsOnSale = new List<BrandModel>();
+					string[] selectedBrands = (Request.Form.GetValues("CheckedBrands") != null) ? Request.Form.GetValues("CheckedBrands") : new string[] { };
+					foreach(string id in selectedBrands) {
+						BrandModel b = await db.Brands.FindAsync(Int32.Parse(id));
+						brandsOnSale.Add(b);
+					}
+					saleModel.BrandsOnSale = brandsOnSale;
 					db.Sales.Add(saleModel);
 					await db.SaveChangesAsync();
 					return RedirectToAction("Index");
@@ -62,7 +69,7 @@ namespace ShoppingSite.Controllers {
 			}
 
 			SaleEditViewModel viewModel = new SaleEditViewModel();
-			//viewModel.AllSubCategories = await db.SubCategories.ToListAsync();
+
 			viewModel.Discount = saleModel.Discount;
 			viewModel.Emblem = saleModel.Emblem;
 			viewModel.StartDate = saleModel.StartDate;
@@ -70,15 +77,8 @@ namespace ShoppingSite.Controllers {
 			viewModel.SaleID = saleModel.SaleID;
 			viewModel.SaleName = saleModel.SaleName;
 
-			//viewModel.ProductsOnSale = saleModel.Products.ToList();
-			viewModel.BrandsOnSale = saleModel.Brands.ToList();
+			viewModel.BrandsOnSale = saleModel.BrandsOnSale.ToList();
 			viewModel.AllBrands = (await db.Brands.ToListAsync()).Except(viewModel.BrandsOnSale).ToList();
-
-			//viewModel.AllProducts = (await db.Products.ToListAsync()).Except(viewModel.ProductsOnSale).ToList();
-			//viewModel.AllProducts = await (db.Products).ToListAsync();
-			//foreach(ProductModel pm in viewModel.ProductsOnSale) {
-			//	viewModel.AllProducts.Remove(pm);
-			//}
 
 			await this.FillViewBag();
 			return View(viewModel);
