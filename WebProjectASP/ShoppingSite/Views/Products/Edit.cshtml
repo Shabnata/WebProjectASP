@@ -152,11 +152,13 @@
 		});
 	</script>
 
-	<script type="text/javascript">
-		$("#ProductName").on("input", {
-			url: "@Url.Action("CheckAvailability", "Products")",
-			id: $("#SKU").val(),
-			name: "ProductName"
-		}, CheckAvailability);
-	</script>
+	@*
+		<script type="text/javascript">
+			$("#ProductName").on("input", {
+				url: "@Url.Action("CheckAvailability", "Products")",
+				id: $("#SKU").val(),
+				name: "ProductName"
+			}, CheckAvailability);
+		</script>
+	*@
 }
