@@ -3,41 +3,55 @@
 	ViewBag.Title = "Index";
 	Layout = (ViewBag.LayoutFile != null) ? ViewBag.LayoutFile : Layout;
 }
-<h2>Categories Index</h2>
-<h3>TODO - Bootstrap this page</h3>
-@* BeginForm(string actionName, string controllerName, FormMethod method) *@
-@using(Html.BeginForm("Search", "Categories", FormMethod.Post)) {
-	<input type="search" id="CategoryName" name="CategoryName" value="@ViewBag.SearchString" placeholder="Category name" path="@Url.Action("TypeSearch", "Categories")" autocomplete="on" required />
-	<input type="submit" value="Search" />
-	if(ViewBag.NotFoundError != null) {
-		<span style="background: Red;">@ViewBag.NotFoundError</span>
-		<br />
+
+<div class="col-md-12 debug-border">
+	<h2>Categories Index</h2>
+	<hr />
+</div>
+
+<div class="container debug-border">
+	@* BeginForm(string actionName, string controllerName, FormMethod method) *@
+	@using(Html.BeginForm("Search", "Categories", FormMethod.Post)) {
+		<div class="form-inline debug-border">
+			<div class="form-group debug-border">
+				<input type="search" id="CategoryName" name="CategoryName" class="form-control" value="@ViewBag.SearchString" placeholder="Category name" path="@Url.Action("TypeSearch", "Categories")" autocomplete="on" required />
+			</div>
+			<input type="submit" value="Search" class="btn btn-default" />
+			<div class="form-group debug-border">
+				<span class="debug-border text-danger">@ViewBag.NotFoundError</span>
+			</div>
+		</div>	
 	}
-}
-@Html.ActionLink("Create Category", "Create")
-<table class="table">
-	<tr>
-		<th>@Html.DisplayNameFor(model => model.Logo)</th>
-		<th>@Html.DisplayNameFor(model => model.CategoryID)</th>
-		<th>@Html.DisplayNameFor(model => model.CategoryName)</th>
-		<th>Number of SubCategories</th>
-		<th>Actions</th>
-	</tr>
-	@foreach(var item in Model) {
+</div>
+
+<div class="col-md-12 debug-border">
+	@Html.ActionLink("Create Category", "Create")
+</div>
+<div class="col-md-12 debug-border">
+	<table class="table debug-border" >
 		<tr>
-			<td><img src=@Html.DisplayFor(modelItem => item.Logo) alt="@item.CategoryName" height="30" /></td>
-			<td>@Html.DisplayFor(modelItem => item.CategoryID)</td>
-			<td>@Html.DisplayFor(modelItem => item.CategoryName)</td>
-			<td>@item.SubCategories.Count</td>
-			<td>
-				@* Html.ActionLink(Link text, Controller Action, Action parameters) *@
-				@Html.ActionLink("Edit", "Edit", new { CategoryID = item.CategoryID }) |
-				@Html.ActionLink("Details", "Details", new { CategoryID = item.CategoryID }) |
-				@Html.ActionLink("Delete", "Delete", new { CategoryID = item.CategoryID })
-			</td>
+			<th>@Html.DisplayNameFor(model => model.Logo)</th>
+			<th>@Html.DisplayNameFor(model => model.CategoryID)</th>
+			<th>@Html.DisplayNameFor(model => model.CategoryName)</th>
+			<th>Number of SubCategories</th>
+			<th>Actions</th>
 		</tr>
-	}
-</table>
+		@foreach(var item in Model) {
+			<tr>
+				<td><img src=@Html.DisplayFor(modelItem => item.Logo) alt="@item.CategoryName" style="max-height: 50px;  max-width: 150px;" /></td>
+				<td>@Html.DisplayFor(modelItem => item.CategoryID)</td>
+				<td>@Html.DisplayFor(modelItem => item.CategoryName)</td>
+				<td>@item.SubCategories.Count</td>
+				<td>
+					@* Html.ActionLink(Link text, Controller Action, Action parameters) *@
+					@Html.ActionLink("Edit", "Edit", new { CategoryID = item.CategoryID }) |
+					@Html.ActionLink("Details", "Details", new { CategoryID = item.CategoryID }) |
+					@Html.ActionLink("Delete", "Delete", new { CategoryID = item.CategoryID })
+				</td>
+			</tr>
+		}
+	</table>
+</div>
 
 @section scripts{
 	@Scripts.Render("~/Scripts/AutoCompleteTypeSearch.js")
