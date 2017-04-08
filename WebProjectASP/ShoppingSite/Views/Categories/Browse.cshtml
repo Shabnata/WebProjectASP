@@ -12,7 +12,7 @@
 						@foreach(var SubCat in Model.Category.SubCategories) {
 							<div class="panel panel-default">
 								<div class="panel-heading">
-									<h4 class="panel-title"><a href="@Url.Action("BrowseByID", "SubCategories",new { SubCategoryID = SubCat.SubCategoryID, CategoryID = Model.Category })" >@SubCat.SubCategoryName</a></h4>
+									<h4 class="panel-title"><a href="@Url.Action("BrowseByID", "SubCategories",new { SubCategoryID = SubCat.SubCategoryID, CategoryID = Model.Category.CategoryID })" >@SubCat.SubCategoryName</a></h4>
 								</div>
 							</div>
 						}
