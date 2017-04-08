@@ -92,11 +92,9 @@ namespace ShoppingSite.Controllers {
 			if(ModelState.IsValid) {
 				if(!await (from sc in db.SubCategories where sc.SubCategoryID != subCategoryModel.SubCategoryID && sc.SubCategoryName.ToLower() == subCategoryModel.SubCategoryName.ToLower() select sc).AnyAsync()) {
 					SubCategoryModel editedModel = await db.SubCategories.FindAsync(subCategoryModel.SubCategoryID);
-					foreach(CategoryModel cm in editedModel.ParentCategories) {
-						cm.SubCategories.Remove(editedModel);
-					}
+					editedModel.ParentCategories.Clear();
 
-					string[] selectedCategoriesStrings = (Request.Form.GetValues("CheckedCategories") != null) ? Request.Form.GetValues("CheckedCategories") : new string[] { };
+					string[] selectedCategoriesStrings = Request.Form.GetValues("CheckedCategories") ?? new string[] { };
 					List<CategoryModel> selectedCategoriesList = new List<CategoryModel>();
 					foreach(string str in selectedCategoriesStrings) {
 						CategoryModel cat = await db.Categories.FindAsync(Int32.Parse(str));

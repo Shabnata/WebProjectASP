@@ -44,7 +44,7 @@ namespace ShoppingSite.Controllers {
 			await this.FillViewBag();
 			if(ModelState.IsValid) {
 				if(!await (from p in db.Products where p.ProductName.ToLower() == productModel.ProductName.ToLower() && p.BrandID == productModel.BrandID select p).AnyAsync()) {
-					string[] pictures = Request.Form.GetValues("ProductPictures");
+					string[] pictures = Request.Form.GetValues("ProductPictures") ?? new string[] { };
 					for(int i = 0; i < pictures.Length; i++) {
 						for(int j = i + 1; j < pictures.Length; j++) {
 							if(pictures[i].Equals(pictures[j])) {
@@ -58,7 +58,7 @@ namespace ShoppingSite.Controllers {
 							ppm.Add(new ProductPictureModel { SKU = productModel.SKU, PicturePath = str, Product = productModel });
 						}
 					}
-					string[] subCategories = (Request.Form.GetValues("CheckedSubCategories") != null) ? Request.Form.GetValues("CheckedSubCategories") : new string[] { };
+					string[] subCategories = Request.Form.GetValues("CheckedSubCategories") ?? new string[] { };
 					List<SubCategoryModel> scmLst = new List<SubCategoryModel>();
 					foreach(string str in subCategories) {
 						scmLst.Add(await db.SubCategories.FindAsync(Int32.Parse(str)));
@@ -120,7 +120,7 @@ namespace ShoppingSite.Controllers {
 			if(ModelState.IsValid) {
 				if(!await (from p in db.Products where p.ProductName.ToLower() == productModel.ProductName.ToLower() && p.BrandID == productModel.BrandID && p.SKU != productModel.SKU select p).AnyAsync()) {
 					ProductModel editedProduct = await db.Products.FindAsync(productModel.SKU);
-					string[] pictures = (Request.Form.GetValues("ProductPictures") != null) ? Request.Form.GetValues("ProductPictures") : new string[] { };
+					string[] pictures = Request.Form.GetValues("ProductPictures") ?? new string[] { };
 					for(int i = 0; i < pictures.Length; i++) {
 						for(int j = i + 1; j < pictures.Length; j++) {
 							if(pictures[i].Equals(pictures[j])) {
@@ -135,20 +135,15 @@ namespace ShoppingSite.Controllers {
 						}
 					}
 
-					if(editedProduct.ProductPictures != null && editedProduct.ProductPictures.Count != 0) {
-						db.ProductPictures.RemoveRange(editedProduct.ProductPictures);
-					}
+					//foreach(ProductPictureModel ppm in editedProduct.ProductPictures) {
+					//	db.Entry(ppm).State = EntityState.Deleted;
+					//}
 
-					foreach(ProductPictureModel ppm in editedProduct.ProductPictures) {
-						db.Entry(ppm).State = EntityState.Deleted;
-					}
+					editedProduct.ProductPictures.Clear();
 
-					ICollection<SubCategoryModel> scmLst = editedProduct.ProductCategories;
-					foreach(SubCategoryModel scm in scmLst) {
-						scm.Products.Remove(editedProduct);
-					}
+					editedProduct.ProductCategories.Clear();
 
-					string[] selectedSubCategoriesStrings = (Request.Form.GetValues("CheckedSubCategories") != null) ? Request.Form.GetValues("CheckedSubCategories") : new string[] { };
+					string[] selectedSubCategoriesStrings = Request.Form.GetValues("CheckedSubCategories") ?? new string[] { };
 					List<SubCategoryModel> selectedSubCategoriesList = new List<SubCategoryModel>();
 					foreach(string str in selectedSubCategoriesStrings) {
 						SubCategoryModel subCat = await db.SubCategories.FindAsync(Int32.Parse(str));
