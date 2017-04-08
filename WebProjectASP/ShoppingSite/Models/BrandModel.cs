@@ -52,4 +52,11 @@ namespace ShoppingSite.Models {
 		public virtual ICollection<ProductModel> Products { get; set; }
 		public virtual ICollection<SaleModel> Sales { get; set; }
 	}
+
+	public class BrandBrowseViewModel {
+
+		public BrandModel Brand { get; set; }
+		public IList<SubCategoryModel> SubCategories { get; set; }
+		public IList<ProductModel> FeaturedProducts { get; set; }
+	}
 }

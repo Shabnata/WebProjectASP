@@ -156,14 +156,25 @@ namespace ShoppingSite.Controllers {
 		[HttpGet]
 		public async Task<ActionResult> BrowseByID(int BrandID) {
 
-			IList<SubCategoryModel> subCat = null;
-			try {
-				subCat = await db.GetBrandSubCategoriesAsync(BrandID);
-			} catch(SqlException ex) {
-
+			BrandModel brand = await db.Brands.FindAsync(BrandID);
+			IList<SubCategoryModel> subCat = await db.GetBrandSubCategoriesAsync(BrandID);
+			List<ProductModel> featuredProducts = new List<ProductModel>();
+			int maxProducts = 8;
+			foreach(SubCategoryModel scm in subCat) {
+				foreach(ProductModel pm in scm.Products) {
+					featuredProducts.Add(pm);
+					maxProducts--;
+					if(maxProducts == 0) {
+						goto EnoughProduct;
+					}
+				}
 			}
+		EnoughProduct:
+
+			BrandBrowseViewModel viewModel = new BrandBrowseViewModel() { Brand = brand, SubCategories = subCat, FeaturedProducts = featuredProducts };
+
 			await this.FillViewBag();
-			return View("Browse", subCat);
+			return View("Browse", viewModel);
 		}
 	}
 }

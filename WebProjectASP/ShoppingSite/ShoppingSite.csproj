@@ -353,7 +353,8 @@
     <Content Include="Views\Sales\Details.cshtml" />
     <Content Include="Views\Sales\Browse.cshtml" />
     <Content Include="Views\Sales\Delete.cshtml" />
-    <Content Include="Views\SubCategories\Browse.cshtml" />
+    <Content Include="Views\SubCategories\BrowseFromCategory.cshtml" />
+    <Content Include="Views\SubCategories\BrowseFromBrand.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

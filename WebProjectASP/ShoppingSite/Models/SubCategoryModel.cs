@@ -61,5 +61,6 @@ namespace ShoppingSite.Models {
 
         public SubCategoryModel SubCategory { get; set; }
         public CategoryModel ParentCategory { get; set; }
+		public BrandModel ParentBrand { get; set; }
     }
 }
