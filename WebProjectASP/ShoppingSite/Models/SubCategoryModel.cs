@@ -57,10 +57,16 @@ namespace ShoppingSite.Models {
 		public IList<CategoryModel> AllCategories { get; set; }
 	}
 
-    public class SubCategoryBrowseViewModel {
+    public class SubCategoryBrowseFromCategoryViewModel {
 
         public SubCategoryModel SubCategory { get; set; }
-        public CategoryModel ParentCategory { get; set; }
-		public BrandModel ParentBrand { get; set; }
+        public CategoryModel ParentCategory { get; set; }	
     }
+
+	public class SubCategoryBrowseFromBrandViewModel {
+
+		public SubCategoryModel SubCategory { get; set; }
+		public BrandModel ParentBrand { get; set; }
+		public IList<SubCategoryModel> SisterSubCategories { get; set; }
+	}
 }

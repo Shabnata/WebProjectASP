@@ -1,4 +1,4 @@
-﻿@model ShoppingSite.Models.SubCategoryBrowseViewModel
+﻿@model ShoppingSite.Models.SubCategoryBrowseFromBrandViewModel
 
 <section>
 	<div class="container">
@@ -9,7 +9,7 @@
 					<div class="panel-group category-products" id="accordian">
 						<!--Sub category-list-->
 
-						@foreach(var SubCat in Model.ParentCategory.SubCategories) {
+						@foreach(var SubCat in Model.SisterSubCategories) {
 							<div class="panel panel-default">
 								<div class="panel-heading">
 									<h4 class="panel-title"><a href="@Url.Action("BrowseByIDFromBrand", "SubCategories",new { SubCategoryID = SubCat.SubCategoryID, BrandID = Model.ParentBrand.BrandID })">@SubCat.SubCategoryName</a></h4>

@@ -196,7 +196,7 @@ namespace ShoppingSite.Controllers {
 			SubCategoryModel subCategory = await db.SubCategories.FindAsync(SubCategoryID);
 			CategoryModel category = await db.Categories.FindAsync(CategoryID);
 
-			SubCategoryBrowseViewModel viewModel = new SubCategoryBrowseViewModel() { ParentCategory = category, SubCategory = subCategory };
+			SubCategoryBrowseFromCategoryViewModel viewModel = new SubCategoryBrowseFromCategoryViewModel() { ParentCategory = category, SubCategory = subCategory };
 
 			await this.FillViewBag();
 			return View("BrowseFromCategory", viewModel);
@@ -208,10 +208,10 @@ namespace ShoppingSite.Controllers {
 			SubCategoryModel subCategory = await db.SubCategories.FindAsync(SubCategoryID);
 			BrandModel brand = await db.Brands.FindAsync(BrandID);
 
-			SubCategoryBrowseViewModel viewModel = new SubCategoryBrowseViewModel() { ParentBrand = brand, SubCategory = subCategory };
+			SubCategoryBrowseFromBrandViewModel viewModel = new SubCategoryBrowseFromBrandViewModel() { ParentBrand = brand, SubCategory = subCategory, SisterSubCategories = await db.GetBrandSubCategoriesAsync(brand.BrandID) };
 
 			await this.FillViewBag();
-			return View("BrowseFromCategory", viewModel);
+			return View("BrowseFromBrand", viewModel);
 		}
 	}
 }
