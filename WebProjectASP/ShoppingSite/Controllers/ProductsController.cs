@@ -45,6 +45,13 @@ namespace ShoppingSite.Controllers {
 			if(ModelState.IsValid) {
 				if(!await (from p in db.Products where p.ProductName.ToLower() == productModel.ProductName.ToLower() && p.BrandID == productModel.BrandID select p).AnyAsync()) {
 					string[] pictures = Request.Form.GetValues("ProductPictures");
+					for(int i = 0; i < pictures.Length; i++) {
+						for(int j = i + 1; j < pictures.Length; j++) {
+							if(pictures[i].Equals(pictures[j])) {
+								pictures[j] = "";
+							}
+						}
+					}
 					List<ProductPictureModel> ppm = new List<ProductPictureModel>();
 					foreach(string str in pictures) {
 						if(!str.Equals("")) {
@@ -114,6 +121,13 @@ namespace ShoppingSite.Controllers {
 				if(!await (from p in db.Products where p.ProductName.ToLower() == productModel.ProductName.ToLower() && p.BrandID == productModel.BrandID && p.SKU != productModel.SKU select p).AnyAsync()) {
 					ProductModel editedProduct = await db.Products.FindAsync(productModel.SKU);
 					string[] pictures = (Request.Form.GetValues("ProductPictures") != null) ? Request.Form.GetValues("ProductPictures") : new string[] { };
+					for(int i = 0; i < pictures.Length; i++) {
+						for(int j = i + 1; j < pictures.Length; j++) {
+							if(pictures[i].Equals(pictures[j])) {
+								pictures[j] = "";
+							}
+						}
+					}
 					List<ProductPictureModel> ppmLst = new List<ProductPictureModel>();
 					foreach(string str in pictures) {
 						if(!str.Equals("")) {
