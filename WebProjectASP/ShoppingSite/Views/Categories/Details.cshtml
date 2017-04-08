@@ -5,23 +5,23 @@
 	Layout = (ViewBag.LayoutFile != null) ? ViewBag.LayoutFile : Layout;
 }
 
-<div class="col-md-12" style="border: 1px dashed">
+<div class="col-md-12 debug-border">
 	<h2>Category details</h2>
 	<hr />
 </div>
 
-<div class="container" style="border: 1px dashed">
-	<div class="col-md-10" style="border: 1px dashed">
-		<div class="row" style="border: 1px dashed">
+<div class="container debug-border">
+	<div class="col-md-10 debug-border">
+		<div class="row debug-border">
 			@Html.DisplayNameFor(Model => Model.CategoryID) :
 			@Html.DisplayFor(Model => Model.CategoryID)
 		</div> <!-- row -->
-		<div class="row" style="border: 1px dashed">
+		<div class="row debug-border">
 			@Html.DisplayNameFor(Model => Model.CategoryName) :
 			@Html.DisplayFor(Model => Model.CategoryName)
 		</div> <!-- row -->
 
-		<div class="row" style="border: 1px dashed">
+		<div class="row debug-border">
 			@{
 				decimal itemsPerTab = 10;
 				decimal subcategoriesCount = Model.SubCategories.Count;
@@ -46,13 +46,15 @@
 				}
 			</div> <!-- tabs -->
 		</div> <!-- row -->
-	</div>
-	<div class="col-md-2" style="border: 1px dashed">
-		<img src=@Html.DisplayFor(Model => Model.Logo) alt="@Model.CategoryName" style="max-height: 100%; max-width:100%; border: 1px solid;" />
-	</div>
-</div>
+	</div> <!-- left column -->
 
-<div class="col-md-12" style="border: 1px dashed">
+	<div class="col-md-2 debug-border">
+		<img src=@Html.DisplayFor(Model => Model.Logo) alt="@Model.CategoryName" style="max-height: 100%; max-width:100%; border: 1px solid;" />
+	</div> <!-- right column -->
+
+</div> <!-- container -->
+
+<div class="col-md-12 debug-border">
 	@Html.ActionLink("Delete", "Delete", new { CategoryID = Model.CategoryID }) |
 	@Html.ActionLink("Edit", "Edit", new { CategoryID = Model.CategoryID }) |
 	@Html.ActionLink("Back to List", "Index")
