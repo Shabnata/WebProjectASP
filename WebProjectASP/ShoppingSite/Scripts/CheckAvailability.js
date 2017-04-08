@@ -1,8 +1,8 @@
 ﻿function CheckAvailability(e) {
 
-	if ($(this).val() == "") {
+	if ($(this).val().length == 0) {
 		$(".glyphicon-ok").hide();
-		$(".glyphicon-remove").show();
+		$(".glyphicon-remove").hide();
 	} else {
 		$.ajax({
 			type: "POST",
