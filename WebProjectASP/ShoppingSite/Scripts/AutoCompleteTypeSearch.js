@@ -1,25 +1,30 @@
 ﻿function typeSearch(elm) {
 	var url = $(this).attr("path");
 	console.log(url);
-	$.ajax({
-		type: "POST",
-		url: url,
-		caller: $(this).attr("id"),
-		data: {
-			SearchString: $(this).val()
-		},
-		success: function (data, status) {
-			var responseJSON = eval(data);
-			$("#" + this.caller).autocomplete({ source: responseJSON });
-		},
-		error: function (xmlHttpRequest, statusText, errorThrown) {
-			alert(
-			'Your form submission failed.\n\n'
-			+ 'XML Http Request: ' + JSON.stringify(xmlHttpRequest)
-			+ ',\nStatus Text: ' + statusText
-			+ ',\nError Thrown: ' + errorThrown);
-		}
-	});
+	if ($(this).val().length != 0) {
+		console.log($(this).val().length)
+		$.ajax({
+			type: "POST",
+			url: url,
+			caller: $(this).attr("id"),
+			data: {
+				SearchString: $(this).val()
+			},
+			success: function (data, status) {
+				var responseJSON = eval(data);
+				console.log(responseJSON);
+				$("#" + this.caller).autocomplete({ source: responseJSON });
+			},
+			error: function (xmlHttpRequest, statusText, errorThrown) {
+				alert(
+				'Your form submission failed.\n\n'
+				+ 'XML Http Request: ' + JSON.stringify(xmlHttpRequest)
+				+ ',\nStatus Text: ' + statusText
+				+ ',\nError Thrown: ' + errorThrown);
+			}
+		});
+	}
+
 }
 
 /*
