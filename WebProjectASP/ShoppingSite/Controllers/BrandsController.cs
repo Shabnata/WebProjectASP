@@ -38,7 +38,7 @@ namespace ShoppingSite.Controllers {
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> Create([Bind(Include = "BrandID, BrandName, Logo, Country, Description")] BrandModel brandModel, int FoundationYear) {
-			brandModel.FoundationYear = new DateTime(FoundationYear, 0, 1);
+			brandModel.FoundationYear = new DateTime(FoundationYear, 1, 1);
 			if(ModelState.IsValid) {
 				if(!await (from b in db.Brands where b.BrandName.ToLower() == brandModel.BrandName.ToLower() select b).AnyAsync()) {
 					db.Brands.Add(brandModel);
