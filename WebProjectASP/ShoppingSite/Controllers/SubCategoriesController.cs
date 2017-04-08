@@ -42,7 +42,8 @@ namespace ShoppingSite.Controllers {
 			if(ModelState.IsValid) {
 				if(!await (from sc in db.SubCategories where sc.SubCategoryName.ToLower() == subCategoryModel.SubCategoryName.ToLower() select sc).AnyAsync()) {
 					subCategoryModel.ParentCategories = new List<CategoryModel>();
-					foreach(string c in Request.Form.GetValues("SelectedCategories")) {
+					string[] selectedCategories = Request.Form.GetValues("SelectedCategories") ?? new string[] { };
+					foreach(string c in selectedCategories) {
 						subCategoryModel.ParentCategories.Add(await db.Categories.FindAsync(Int32.Parse(c)));
 					}
 					db.SubCategories.Add(subCategoryModel);
