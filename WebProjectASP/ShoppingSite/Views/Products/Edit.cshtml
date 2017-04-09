@@ -2,124 +2,116 @@
 
 @{
 	ViewBag.Title = "Edit product";
-	Layout = (ViewBag.LayoutFile != null) ? ViewBag.LayoutFile : Layout;
+	Layout = ViewBag.LayoutFile ?? Layout;
 }
 
-<h2>Edit product</h2>
+<div class="col-md-12">
+	<h2>Edit product</h2>
+	<hr />
+</div>
 
-@using(Html.BeginForm("Edit", "Products", FormMethod.Post)) {
-	@Html.AntiForgeryToken()
+<div class="container">
+	@using(Html.BeginForm("Edit", "Products", FormMethod.Post, htmlAttributes: new { @class = "form-horizontal col-md-10" })) {
+		@Html.AntiForgeryToken()
 
-	<div class="form-horizontal">
-		<h4>CategoryModel</h4>
-		<hr />
 		@Html.ValidationSummary(false, "", new { @class = "text-danger" })
 		@Html.HiddenFor(model => model.SKU)
 
 		<div class="form-group">
 			@Html.LabelFor(model => model.ProductName, htmlAttributes: new { @class = "control-label col-md-2" })
 			<div class="col-md-10">
-				@Html.EditorFor(model => model.ProductName, new { htmlAttributes = new { @class = "form-control", @value = Model.ProductName, @required = true } })
-				@Html.ValidationMessageFor(model => model.ProductName, "", new { @class = "text-danger" })
+				@Html.EditorFor(model => model.ProductName, new { htmlAttributes = new { @class = "form-control", @required = true } })
 				<span class="glyphicon glyphicon-ok" style="display: none; color: #28A828"></span>
 				<span class="glyphicon glyphicon-remove" style="display: none; color: #D8000C; background-color: #FFBABA; border: 1px solid; margin: 5px 0px; padding: 2px 5px 10px 2px;">Product already exists.</span>
+				@Html.ValidationMessageFor(model => model.ProductName, "", new { @class = "text-danger" })
 			</div>
 		</div>
-
-		<div class="form-group">
-			@Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
-			<div class="col-md-10">
-				@Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", @value = Model.Description, @required = "true" } })
-				@Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
-			</div>
-		</div>
-
 		<div class="form-group">
 			@Html.LabelFor(model => model.CoverPath, htmlAttributes: new { @class = "control-label col-md-2" })
 			<div class="col-md-10">
-				@Html.EditorFor(model => model.CoverPath, new { htmlAttributes = new { @class = "form-control", @value = Model.CoverPath } })
+				@Html.EditorFor(model => model.CoverPath, new { htmlAttributes = new { @class = "form-control" } })
 				@Html.ValidationMessageFor(model => model.CoverPath, "", new { @class = "text-danger" })
 			</div>
 		</div>
-
 		<div class="form-group">
 			@Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "control-label col-md-2" })
 			<div class="col-md-10">
-				@Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control", @value = Model.Price } })
+				@Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control" } })
 				@Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
+			</div>
+		</div>
+		<div class="form-group">
+			@Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="col-md-10">
+				@Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", @required = "true", @rows = "5" } })
+				@Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
 			</div>
 		</div>
 
 		<div class="form-group">
 			@Html.LabelFor(model => model.BrandID, htmlAttributes: new { @class = "control-label col-md-2" })
 			<div class="col-md-10">
-				<select name="BrandID" required>
+				<select name="BrandID" class="form-control" required>
 					@foreach(var brand in Model.AllBrand) {
-						if(brand.BrandID.Equals(Model.BrandID)) {
+					if(brand.BrandID.Equals(Model.BrandID)) {
 							<option value="@brand.BrandID" selected>@brand.BrandName</option>
-						} else {
+					} else {
 							<option value="@brand.BrandID">@brand.BrandName</option>
-						}
-
 					}
+				}
 				</select>
 			</div>
 		</div>
 
 		<div class="form-group">
-			TODO - Decide if these should be URLs or Text, in Create and in Edit
-			Additional pictures:
-			<br />
+			@Html.Label("Additional pictures:", htmlAttributes: new { @class = "control-label col-md-2" })
 			@{
 				int counter = 0; // can have max 4 additional pictures
 			}
-
-			@foreach(var pp in Model.ProductPictures) {
-				counter++;
-				<div class="col-md-12">
-					<input id="url@(counter)" type="text" name="ProductPictures" value="@pp" title="Invalid URL" />
+			<div class="col-md-10">
+				@foreach(var pp in Model.ProductPictures) {
+					counter++;
+					<input id="url@(counter)" type="text" name="ProductPictures" value="@pp" class="form-control" />
 					<span id="url@(counter)Msg" class="text-danger" style="display: none">Invalid picture URL.</span>
-				</div>
-			}
-			@while(++counter <= 4) {
-				<div class="col-md-12">
-					<input id="url@(counter)" type="text" name="ProductPictures" title="Invalid URL" />
-					<span id="url@(counter)Msg" class="text-danger" style="display: none">Invalid picture URL.</span>
-				</div>
-			}
-
-		</div>
-
-		<div>
-			Choose SubCategories:
-			<div class="form-group">
-				@foreach(var p in Model.RelatedSubCategories) {
-					<div class="col-md-12">
-						<input type="checkbox" checked id="@p.SubCategoryName" name="CheckedSubCategories" value="@p.SubCategoryID" />
-						<label for="@p.SubCategoryName">@p.SubCategoryName</label>
-						<br />
-					</div>
 				}
-				@foreach(var p in Model.AllSubCategories) {
-					<div class="col-md-12">
-						<input type="checkbox" id="@p.SubCategoryName" name="CheckedSubCategories" value="@p.SubCategoryID" />
-						<label for="@p.SubCategoryName">@p.SubCategoryName</label>
-						<br />
-					</div>
+				@while(++counter <= 4) {
+					<input id="url@(counter)" type="text" name="ProductPictures" class="form-control" />
+					<span id="url@(counter)Msg" class="text-danger" style="display: none">Invalid picture URL.</span>
 				}
 			</div>
 		</div>
 
 		<div class="form-group">
+			@Html.Label("Choose SubCategories:", htmlAttributes: new { @class = "control-label col-md-2" })
 			<div class="col-md-10">
-				<input type="submit" value="Edit" class="btn btn-default" />
+				@foreach(var p in Model.RelatedSubCategories) {
+					<div class="checkbox">
+						<label><input type="checkbox" checked id="@p.SubCategoryName" name="CheckedSubCategories" value="@p.SubCategoryID" />@p.SubCategoryName</label>
+					</div>
+				}
+				@foreach(var p in Model.AllSubCategories) {
+					<div class="checkbox">
+						<label><input type="checkbox" id="@p.SubCategoryName" name="CheckedSubCategories" value="@p.SubCategoryID" />@p.SubCategoryName</label>
+					</div>
+				}
 			</div>
 		</div>
-	</div>
+
+		<div class="form-actions no-color col-md-offset-2 col-md-10">
+			<input type="submit" value="Edit" class="btn btn-default" />
+		</div>
 
 				}
+	<!-- form-horizontal -->
+	<!-- left column -->
 
-<div>
+	<div class="col-md-2">
+		<img src=@Html.DisplayFor(Model => Model.CoverPath) alt="@Model.ProductName" style="max-height: 100%; max-width:100%; border: 1px solid;" />
+	</div> <!-- right column -->
+
+</div> <!-- container -->
+
+<div class="col-md-12">
 	@Html.ActionLink("Back to List", "Index")
 </div>
 
@@ -128,23 +120,23 @@
 	@Scripts.Render("~/Scripts/CheckAvailability.js")
 
 	<script type="text/javascript">
-		$("form").on("submit", function (e) {
-			if ($("#url1").valid() == true) {
+		$("form").on("submit", function(e) {
+			if($("#url1").valid() == true) {
 				$("#url1Msg").hide();
 			} else {
 				$("#url1Msg").show();
 			}
-			if ($("#url2").valid() == true) {
+			if($("#url2").valid() == true) {
 				$("#url2Msg").hide();
 			} else {
 				$("#url2Msg").show();
 			}
-			if ($("#url3").valid() == true) {
+			if($("#url3").valid() == true) {
 				$("#url3Msg").hide();
 			} else {
 				$("#url3Msg").show();
 			}
-			if ($("#url4").valid() == true) {
+			if($("#url4").valid() == true) {
 				$("#url4Msg").hide();
 			} else {
 				$("#url4Msg").show();
@@ -168,7 +160,7 @@
 
 		function defaultCover() {
 			var defaultPicturePath = "@ViewBag.DefaultPicturePath";
-			if ($(this).val() === "") {
+			if($(this).val() === "") {
 				$(this).val(defaultPicturePath);
 			}
 		}

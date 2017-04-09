@@ -30,7 +30,7 @@
 
 	@foreach(var item in Model) {
 		<tr>
-			<td>@Html.DisplayFor(modelItem => item.SubCategoryLogo)</td>
+			<td><img src=@Html.DisplayFor(modelItem => item.SubCategoryLogo) alt="@item.SubCategoryName" style="max-height: 50px;  max-width: 150px;" /></td>
 			<td>@Html.DisplayFor(modelItem => item.SubCategoryID)</td>
 			<td>@Html.DisplayFor(modelItem => item.SubCategoryName)</td>
 			<td>@item.Products.Count</td>

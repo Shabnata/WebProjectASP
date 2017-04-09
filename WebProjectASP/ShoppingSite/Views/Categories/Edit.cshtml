@@ -21,7 +21,7 @@
 				<div class="form-group debug-border">
 					@Html.LabelFor(model => model.CategoryName, htmlAttributes: new { @class = "control-label col-md-2 debug-border" })
 					<div class="col-md-10 debug-border">
-						@Html.EditorFor(model => model.CategoryName, new { htmlAttributes = new { @class = "form-control", @value = Model.CategoryName } })
+						@Html.EditorFor(model => model.CategoryName, new { htmlAttributes = new { @class = "form-control" } })
 						<span class="glyphicon glyphicon-ok debug-border" style="display: none; color: #28A828"></span>
 						<span class="glyphicon glyphicon-remove debug-border" style="display: none; color: #D8000C; background-color: #FFBABA; border: 1px solid; margin: 5px 0px; padding: 2px 5px 10px 2px;">Category already exists.</span>
 						@Html.ValidationMessageFor(model => model.CategoryName, "", new { @class = "text-danger debug-border" })
@@ -30,11 +30,11 @@
 				<div class="form-group debug-border">
 					@Html.LabelFor(model => model.Logo, htmlAttributes: new { @class = "control-label col-md-2 debug-border" })
 					<div class="col-md-10 debug-borde1r">
-						@Html.EditorFor(model => model.Logo, new { htmlAttributes = new { @class = "form-control", @value = Model.Logo } })
+						@Html.EditorFor(model => model.Logo, new { htmlAttributes = new { @class = "form-control" } })
 						@Html.ValidationMessageFor(model => model.Logo, "", new { @class = "text-danger debug-border" })
 					</div>
 				</div>
-				<div class="form-actions no-color col-md-offset-2 col-md-8 debug-border">
+				<div class="form-actions no-color col-md-offset-2 col-md-10 debug-border">
 					<input type="submit" value="Edit" class="btn btn-default" />
 				</div>
 			</div> <!-- left column -->

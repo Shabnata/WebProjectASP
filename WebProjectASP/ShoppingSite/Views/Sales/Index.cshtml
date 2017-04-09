@@ -29,7 +29,7 @@
         <tr>
             <td>@Html.DisplayFor(modelItem => item.SaleID)</td>
             <td>@Html.DisplayFor(modelItem => item.SaleName)</td>
-            <td><img src="@Html.DisplayFor(modelItem => item.Emblem)" alt="Logo" width="60" /></td>
+            <td><img src="@Html.DisplayFor(modelItem => item.Emblem)" alt="Logo" style="max-height: 50px;  max-width: 150px;" /></td>
             <td>@item.StartDate.ToShortDateString()</td>
             <td>@item.EndDate.ToShortDateString()</td>
             <td>@Html.DisplayFor(modelItem => item.Discount)</td>

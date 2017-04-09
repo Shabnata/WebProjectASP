@@ -3,41 +3,56 @@
 	ViewBag.Title = "Index";
 	Layout = (ViewBag.LayoutFile != null) ? ViewBag.LayoutFile : Layout;
 }
-<h2>Brands Index</h2>
-<h3>TODO - Bootstrap this page</h3>
-@using(Html.BeginForm("Search", "Brands", FormMethod.Post)) {
-	<input type="search" id="BrandName" name="BrandName" placeholder="Brand name" value="@ViewBag.SearchString" path="@Url.Action("TypeSearch", "Brands")" autocomplete="on" required />
-	<input type="submit" value="Search" />
-	if(ViewBag.NotFoundError != null) {
-		<span style="background: Red;">@ViewBag.NotFoundError</span>
-		<br />
+
+<div class="col-md-12">
+	<h2>Brands Index</h2>
+	<hr />
+</div>
+
+<div class="container">
+	@using(Html.BeginForm("Search", "Brands", FormMethod.Post)) {
+		<div class="form-inline">
+			<div class="form-group">
+				<input type="search" id="BrandName" name="BrandName" class="form-control" value="@ViewBag.SearchString" placeholder="Brand name" path="@Url.Action("TypeSearch", "Brands")" autocomplete="on" required />
+			</div>
+			<input type="submit" value="Search" class="btn btn-default" />
+			<div class="form-group">
+				<span class="text-danger">@ViewBag.NotFoundError</span>
+			</div>
+		</div>
 	}
-}
-@Html.ActionLink("Create Brand", "Create")
-<table class="table">
-	<tr>
-		<th>@Html.DisplayNameFor(model => model.BrandName)</th>
-		<th>@Html.DisplayNameFor(model => model.Logo)</th>
-		<th>@Html.DisplayNameFor(model => model.Country)</th>
-		<th>@Html.DisplayNameFor(model => model.Description)</th>
-		<th>@Html.DisplayNameFor(model => model.FoundationYear)</th>
-		<th></th>
-	</tr>
-	@foreach(var item in Model) {
+</div>
+
+<div class="col-md-12">
+	@Html.ActionLink("Create Brand", "Create")
+</div>
+
+<div class="col-md-12">
+	<table class="table">
 		<tr>
-			<td>@Html.DisplayFor(modelItem => item.BrandName)</td>
-			<td><img src=@Html.DisplayFor(modelItem => item.Logo) alt="Logo" width="300" /></td>
-			<td>@Html.DisplayFor(modelItem => item.Country)</td>
-			<td>@Html.DisplayFor(modelItem => item.Description)</td>
-			<td>@Html.DisplayFor(modelItem => item.FoundationYear.Year)</td>
-			<td>
-				@Html.ActionLink("Edit", "Edit", new { BrandID = item.BrandID }) |
-				@Html.ActionLink("Details", "Details", new { BrandID = item.BrandID }) |
-				@Html.ActionLink("Delete", "Delete", new { BrandID = item.BrandID })
-			</td>
+			<th>@Html.DisplayNameFor(model => model.Logo)</th>
+			<th>@Html.DisplayNameFor(model => model.BrandID)</th>
+			<th>@Html.DisplayNameFor(model => model.BrandName)</th>
+			<th>Number of Products</th>
+			<th>Actions</th>
 		</tr>
-	}
-</table>
+		@foreach(var item in Model) {
+			<tr>
+				<td><img src=@Html.DisplayFor(modelItem => item.Logo) alt="@item.BrandName" style="max-height: 50px;  max-width: 150px;" /></td>
+				<td>@Html.DisplayFor(modelItem => item.BrandID)</td>
+				<td>@Html.DisplayFor(modelItem => item.BrandName)</td>
+				<td>@item.Products.Count</td>
+
+				<td>
+					@Html.ActionLink("Edit", "Edit", new { BrandID = item.BrandID }) |
+					@Html.ActionLink("Details", "Details", new { BrandID = item.BrandID }) |
+					@Html.ActionLink("Delete", "Delete", new { BrandID = item.BrandID })
+				</td>
+			</tr>
+		}
+
+	</table>
+</div>
 
 @section scripts{
 	@Scripts.Render("~/Scripts/AutoCompleteTypeSearch.js")

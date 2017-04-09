@@ -51,23 +51,22 @@
 			</div>
 		</div>
 		<div class="form-group">
-			TODO - Decide if these should be URLs or Text, in Create and in Edit
 			Additional pictures:
 			<br />
 			<div class="col-md-12">
-				<input id="url1" type="text" name="ProductPictures" title="Invalid URL" />
+				<input id="url1" type="text" name="ProductPictures" />
 				<span id="url1Msg" class="text-danger" style="display: none">Invalid picture URL.</span>
 			</div>
 			<div class="col-md-12">
-				<input id="url2" type="text" name="ProductPictures" title="Invalid picture URL." />
+				<input id="url2" type="text" name="ProductPictures" />
 				<span id="url2Msg" class="text-danger" style="display: none">Invalid picture URL.</span>
 			</div>
 			<div class="col-md-12">
-				<input id="url3" type="text" name="ProductPictures" title="Invalid picture URL." />
+				<input id="url3" type="text" name="ProductPictures" />
 				<span id="url3Msg" class="text-danger" style="display: none">Invalid picture URL.</span>
 			</div>
 			<div class="col-md-12">
-				<input id="url4" type="text" name="ProductPictures" title="Invalid picture URL." />
+				<input id="url4" type="text" name="ProductPictures" />
 				<span id="url4Msg" class="text-danger" style="display: none">Invalid picture URL.</span>
 			</div>
 		</div>
@@ -140,7 +139,7 @@
 
 		function defaultCover() {
 			var defaultPicturePath = "@ViewBag.DefaultPicturePath";
-			if ($(this).val() === "") {
+			if ($(this).val().length == 0) {
 				$(this).val(defaultPicturePath);
 			}
 		}
