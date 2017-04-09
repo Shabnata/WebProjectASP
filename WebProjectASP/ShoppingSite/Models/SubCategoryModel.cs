@@ -61,6 +61,7 @@ namespace ShoppingSite.Models {
 
         public SubCategoryModel SubCategory { get; set; }
         public CategoryModel ParentCategory { get; set; }	
+		public IList<ProductModel> ProductsPage { get; set; }
     }
 
 	public class SubCategoryBrowseFromBrandViewModel {
@@ -68,5 +69,6 @@ namespace ShoppingSite.Models {
 		public SubCategoryModel SubCategory { get; set; }
 		public BrandModel ParentBrand { get; set; }
 		public IList<SubCategoryModel> SisterSubCategories { get; set; }
+		public IList<ProductModel> ProductsPage { get; set; }
 	}
 }

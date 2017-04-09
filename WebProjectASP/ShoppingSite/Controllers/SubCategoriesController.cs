@@ -190,11 +190,20 @@ namespace ShoppingSite.Controllers {
 
 		[AllowAnonymous]
 		[HttpGet]
-		public async Task<ActionResult> BrowseByIDFromCategory(int SubCategoryID, int CategoryID) {
+		public async Task<ActionResult> BrowseByIDFromCategory(int SubCategoryID, int CategoryID, int? Page) {
 			SubCategoryModel subCategory = await db.SubCategories.FindAsync(SubCategoryID);
 			CategoryModel category = await db.Categories.FindAsync(CategoryID);
 
-			SubCategoryBrowseFromCategoryViewModel viewModel = new SubCategoryBrowseFromCategoryViewModel() { ParentCategory = category, SubCategory = subCategory };
+			int maxRows = 4;
+			int maxCols = 4;
+			int maxPages = decimal.ToInt32(decimal.Ceiling((decimal)subCategory.Products.Count / (decimal)(maxRows * maxCols)));
+			IList<ProductModel> productPage = (from p in subCategory.Products select p).Skip((maxRows * maxCols) * ((Page ?? 1) - 1)).Take(maxRows * maxCols).ToList();
+
+			SubCategoryBrowseFromCategoryViewModel viewModel = new SubCategoryBrowseFromCategoryViewModel() { ParentCategory = category, SubCategory = subCategory, ProductsPage = productPage };
+			ViewBag.MaxRows = maxRows;
+			ViewBag.MaxCols = maxCols;
+			ViewBag.Page = Page ?? 1;
+			ViewBag.MaxPages = maxPages;
 
 			await this.FillViewBag();
 			return View("BrowseFromCategory", viewModel);
@@ -202,11 +211,20 @@ namespace ShoppingSite.Controllers {
 
 		[AllowAnonymous]
 		[HttpGet]
-		public async Task<ActionResult> BrowseByIDFromBrand(int SubCategoryID, int BrandID) {
+		public async Task<ActionResult> BrowseByIDFromBrand(int SubCategoryID, int BrandID, int? Page) {
 			SubCategoryModel subCategory = await db.SubCategories.FindAsync(SubCategoryID);
 			BrandModel brand = await db.Brands.FindAsync(BrandID);
 
-			SubCategoryBrowseFromBrandViewModel viewModel = new SubCategoryBrowseFromBrandViewModel() { ParentBrand = brand, SubCategory = subCategory, SisterSubCategories = await db.GetBrandSubCategoriesAsync(brand.BrandID) };
+			int maxRows = 4;
+			int maxCols = 4;
+			int maxPages = decimal.ToInt32(decimal.Ceiling((decimal)subCategory.Products.Count / (decimal)(maxRows * maxCols)));
+			IList<ProductModel> productPage = (from p in subCategory.Products select p).Skip((maxRows * maxCols) * ((Page ?? 1) - 1)).Take(maxRows * maxCols).ToList();
+
+			SubCategoryBrowseFromBrandViewModel viewModel = new SubCategoryBrowseFromBrandViewModel() { ParentBrand = brand, SubCategory = subCategory, SisterSubCategories = await db.GetBrandSubCategoriesAsync(brand.BrandID),ProductsPage = productPage };
+			ViewBag.MaxRows = maxRows;
+			ViewBag.MaxCols = maxCols;
+			ViewBag.Page = Page ?? 1;
+			ViewBag.MaxPages = maxPages;
 
 			await this.FillViewBag();
 			return View("BrowseFromBrand", viewModel);

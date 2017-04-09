@@ -22,28 +22,57 @@
 			</div>
 
 			<div class="col-sm-9 padding-right">
-				<div class="features_items">
-					<!-- SubCategory items -->
-					<h2 class="title text-center">Features Items</h2>
-
-					@foreach(var product in Model.SubCategory.Products) {
-						<div class="col-sm-3">
-							<div class="product-image-wrapper">
-								<div class="single-products">
-									<div class="productinfo text-center">
-										<img src=@product.CoverPath alt=@product.ProductName width="100" />
-										<h2>@product.Price</h2>
-										<p>@product.ProductName</p>
-										<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-										<br /><br />
-									</div>
-								</div>
+				<div class="row">
+					<h2 class="title text-center">Featured Items</h2>
+				</div>
+				@{
+					int maxRows = ViewBag.MaxRows ?? 4;
+					int maxCols = ViewBag.MaxCols ?? 4;
+					IEnumerator<ShoppingSite.Models.ProductModel> productPage = Model.ProductsPage.GetEnumerator();
+				}
+				@for(int i = 0; i < maxRows; i++) {
+					<div class="row">
+						@for(int j = 0; j < maxCols; j++) {
+							<div class="col-sm-3 product-image-wrapper single-products productinfo text-center">
+								@if(productPage.MoveNext()) {
+									<img src=@productPage.Current.CoverPath alt=@productPage.Current.ProductName width="100" />
+									<h2>@productPage.Current.Price</h2>
+									<p>@productPage.Current.ProductName</p>
+									<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
+								}
 							</div>
-						</div>
+						}
+					</div>
+				}
+				<nav>
+					@{
+						int maxPages = ViewBag.MaxPages ?? 1;
+						int currentPage = ViewBag.Page ?? 1;
+						int prev = currentPage - 1 > 0 ? currentPage - 1 : 1;
+						int next = currentPage + 1 <= maxPages ? currentPage + 1 : maxPages;
+						string prevClass = currentPage - 1 > 0 ? "" : "disabled";
+						string nextClass = currentPage + 1 <= maxPages ? "" : "disabled";
 					}
 
-				</div><!-- SubCategory items -->
+					<ul class="pagination">
+						<li class="@prevClass">
+							<a href="@Url.Action("BrowseByIDFromBrand", "SubCategories",new { SubCategoryID = Model.SubCategory.SubCategoryID, BrandID = Model.ParentBrand.BrandID, Page = prev })">&laquo;</a>
+						</li>
+						@for(int i = 1; i <= maxPages; i++) {
+							string currentClass = i == currentPage ? "active" : "";
+
+							<li class="@currentClass">
+								<a href="@Url.Action("BrowseByIDFromBrand", "SubCategories",new { SubCategoryID = Model.SubCategory.SubCategoryID, BrandID = Model.ParentBrand.BrandID, Page = i })">@i</a>
+							</li>
+						}
+
+						<li class="@nextClass">
+							<a href="@Url.Action("BrowseByIDFromBrand", "SubCategories",new { SubCategoryID = Model.SubCategory.SubCategoryID, BrandID = Model.ParentBrand.BrandID, Page = next })">&raquo;</a>
+						</li>
+					</ul>
+				</nav>
 			</div>
+
 		</div>
 	</div>
 </section>
