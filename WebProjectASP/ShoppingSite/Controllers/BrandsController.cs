@@ -162,10 +162,12 @@ namespace ShoppingSite.Controllers {
 			int maxProducts = 8;
 			foreach(SubCategoryModel scm in subCat) {
 				foreach(ProductModel pm in scm.Products) {
-					featuredProducts.Add(pm);
-					maxProducts--;
-					if(maxProducts == 0) {
-						goto EnoughProduct;
+					if(pm.BrandID == brand.BrandID) {
+						featuredProducts.Add(pm);
+						maxProducts--;
+						if(maxProducts == 0) {
+							goto EnoughProduct;
+						}
 					}
 				}
 			}
