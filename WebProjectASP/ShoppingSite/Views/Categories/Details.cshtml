@@ -1,68 +1,84 @@
-﻿@model ShoppingSite.Models.CategoryModel
+﻿﻿
+@model ShoppingSite.Models.CategoryModel
 
 @{
 	ViewBag.Title = "Category details";
-	Layout = (ViewBag.LayoutFile != null) ? ViewBag.LayoutFile : Layout;
+	Layout = ViewBag.LayoutFile ?? Layout;
 }
 
-<div class="col-md-12 debug-border">
+<div class="page-header">
 	<h2>Category details</h2>
-	<hr />
 </div>
 
-<div class="container debug-border">
-	<div class="col-md-10 debug-border">
-		<div class="row debug-border">
-			@Html.DisplayNameFor(Model => Model.CategoryID) :
-			@Html.DisplayFor(Model => Model.CategoryID)
-		</div> <!-- row -->
-		<div class="row debug-border">
-			@Html.DisplayNameFor(Model => Model.CategoryName) :
-			@Html.DisplayFor(Model => Model.CategoryName)
-		</div> <!-- row -->
+<div class="row">
+	<div class="col-md-10 ">
+		<div class="row">
+			@Html.LabelFor(model => model.CategoryID, htmlAttributes: new { @class = "col-md-2" })
+			<div class="col-md-6">
+				@Html.DisplayFor(Model => Model.CategoryID)
+			</div>
+			<div class="col-md-4">
+				<!-- To hold the layout -->
+			</div>
+		</div>
 
-		<div class="row debug-border">
+		<div class="row">
+			@Html.LabelFor(model => model.CategoryName, htmlAttributes: new { @class = "col-md-2" })
+			<div class="col-md-6">
+				@Html.DisplayFor(Model => Model.CategoryName)
+			</div>
+			<div class="col-md-4">
+				<!-- To hold the layout -->
+			</div>
+		</div>
+
+		<div class="row">
 			@{
 				decimal itemsPerTab = 10;
 				decimal subcategoriesCount = Model.SubCategories.Count;
 				ShoppingSite.Models.SubCategoryModel[] subcategories = Model.SubCategories.ToArray();
 				decimal numberOfTabs = decimal.Ceiling(subcategoriesCount / itemsPerTab);
 			}
-			Subcategories: <br />
-			<div id="tabs">
-				<ul>
-					@for(ushort tab = 1; tab <= numberOfTabs; tab++) {
-						<li><a href="#tabs-@tab">Page: @tab</a></li>
+			@Html.Label("Subcategories", "Subcategories", htmlAttributes: new { @class = "col-md-2" })
+
+			<div class="col-md-6">
+				<div id="tabs">
+					<ul>
+						@for(ushort tab = 1; tab <= numberOfTabs; tab++) {
+							<li><a href="#tabs-@tab">Page: @tab</a></li>
+						}
+					</ul>
+					@for(ushort tab = 0; tab < numberOfTabs; tab++) {
+						<div id="tabs-@tab">
+							<ul>
+								@for(ushort item = 0; item < itemsPerTab && (subcategoriesCount > ((tab * itemsPerTab) + item)); item++) {
+									<li>@subcategories[decimal.ToInt16((tab * itemsPerTab) + item)].SubCategoryName</li>
+								}
+							</ul>
+						</div>
 					}
-				</ul>
-				@for(ushort tab = 0; tab < numberOfTabs; tab++) {
-					<div id="tabs-@tab">
-						<ul>
-							@for(ushort item = 0; item < itemsPerTab && (subcategoriesCount > ((tab * itemsPerTab) + item)); item++) {
-								<li>@subcategories[decimal.ToInt16((tab * itemsPerTab) + item)].SubCategoryName</li>
-							}
-						</ul>
-					</div>
-				}
-			</div> <!-- tabs -->
+				</div> <!-- tabs -->
+			</div>
+			<div class="col-md-4">
+				<!-- To hold the layout -->
+			</div>
 		</div> <!-- row -->
+
+		<div class="btn-group">
+			@Html.ActionLink("Back to Index", "Index", null, htmlAttributes: new { @class = "btn btn-default" })
+			@Html.ActionLink("Delete", "Delete", new { CategoryID = Model.CategoryID }, htmlAttributes: new { @class = "btn btn-default" })
+			@Html.ActionLink("Edit", "Edit", new { CategoryID = Model.CategoryID }, htmlAttributes: new { @class = "btn btn-default" })		
+		</div>
+
 	</div> <!-- left column -->
-
-	<div class="col-md-2 debug-border">
-		<img src=@Html.DisplayFor(Model => Model.Logo) alt="@Model.CategoryName" style="max-height: 100%; max-width:100%; border: 1px solid;" />
+	<div class="col-md-2">
+		<img src="@Html.DisplayFor(Model => Model.Logo)" alt="@Model.CategoryName" style="max-height: 100%; max-width:100%; border: 1px solid;" />
 	</div> <!-- right column -->
+</div> <!-- row -->
 
-</div> <!-- container -->
-
-<div class="col-md-12 debug-border">
-	@Html.ActionLink("Delete", "Delete", new { CategoryID = Model.CategoryID }) |
-	@Html.ActionLink("Edit", "Edit", new { CategoryID = Model.CategoryID }) |
-	@Html.ActionLink("Back to List", "Index")
-</div>
-
-@section Scripts{
+@section scripts{
 	<script type="text/javascript">
-		$(function () {
+		$(function() {
 			$("#tabs").tabs();
 		});
 	</script>

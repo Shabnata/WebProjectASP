@@ -1,60 +1,58 @@
-﻿@model ShoppingSite.Models.CategoryModel
+﻿﻿@model ShoppingSite.Models.CategoryModel
 @{
 	ViewBag.Title = "Edit category";
-	Layout = (ViewBag.LayoutFile != null) ? ViewBag.LayoutFile : Layout;
+	Layout = ViewBag.LayoutFile ?? Layout;
 }
 
-<div class="col-md-12 debug-border">
+<div class="page-header">
 	<h2>Edit category</h2>
-	<hr />
 </div>
+<div class="row">
+	<div class="col-md-10 ">
+		@* BeginForm(string actionName, string controllerName, FormMethod method) *@
+		@using(Html.BeginForm("Edit", "Categories", FormMethod.Post, htmlAttributes: new { @class = "form-horizontal" })) {
+			@Html.AntiForgeryToken()
+			@Html.ValidationSummary(false, "", new { @class = "text-danger" })
+			@Html.HiddenFor(model => model.CategoryID)
 
-@using(Html.BeginForm("Edit", "Categories", FormMethod.Post)) {
-	@Html.AntiForgeryToken()
-
-	<div class="form-horizontal debug-border">
-		@Html.ValidationSummary(false, "", new { @class = "text-danger" })
-		@Html.HiddenFor(model => model.CategoryID)
-
-		<div class="container debug-border">
-			<div class="col-md-10 debug-border">
-				<div class="form-group debug-border">
-					@Html.LabelFor(model => model.CategoryName, htmlAttributes: new { @class = "control-label col-md-2 debug-border" })
-					<div class="col-md-10 debug-border">
-						@Html.EditorFor(model => model.CategoryName, new { htmlAttributes = new { @class = "form-control" } })
-						<span class="glyphicon glyphicon-ok debug-border" style="display: none; color: #28A828"></span>
-						<span class="glyphicon glyphicon-remove debug-border" style="display: none; color: #D8000C; background-color: #FFBABA; border: 1px solid; margin: 5px 0px; padding: 2px 5px 10px 2px;">Category already exists.</span>
-						@Html.ValidationMessageFor(model => model.CategoryName, "", new { @class = "text-danger debug-border" })
-					</div>
+			<div class="form-group row">
+				@Html.LabelFor(model => model.CategoryName, htmlAttributes: new { @class = "col-md-2 col-form-label" })
+				<div class="col-md-6">
+					@Html.EditorFor(model => model.CategoryName, new { htmlAttributes = new { @class = "form-control", @placeholder = Html.DisplayNameFor(model => model.CategoryName) } })
+					@Html.ValidationMessageFor(model => model.CategoryName, "", new { @class = "text-danger" })
 				</div>
-				<div class="form-group debug-border">
-					@Html.LabelFor(model => model.Logo, htmlAttributes: new { @class = "control-label col-md-2 debug-border" })
-					<div class="col-md-10 debug-borde1r">
-						@Html.EditorFor(model => model.Logo, new { htmlAttributes = new { @class = "form-control" } })
-						@Html.ValidationMessageFor(model => model.Logo, "", new { @class = "text-danger debug-border" })
-					</div>
+				<div class="col-md-4">
+					<span class="glyphicon glyphicon-ok" style="display: none; color: #28A828; margin: 10px 0px;"></span>
+					<span class="glyphicon glyphicon-remove" style="display: none; color: #D8000C; background-color: #FFBABA; border: 1px solid; margin: 0px 0px; padding: 10px 0px 10px 5px;">Category already exists.</span>
 				</div>
-				<div class="form-actions no-color col-md-offset-2 col-md-10 debug-border">
-					<input type="submit" value="Edit" class="btn btn-default" />
+			</div>
+
+			<div class="form-group row">
+				@Html.LabelFor(model => model.Logo, htmlAttributes: new { @class = "col-md-2 col-form-label" })
+				<div class="col-md-6">
+					@Html.EditorFor(model => model.Logo, new { htmlAttributes = new { @class = "form-control", @placeholder = Html.DisplayNameFor(model => model.Logo) } })
+					@Html.ValidationMessageFor(model => model.Logo, "", new { @class = "text-danger" })
 				</div>
-			</div> <!-- left column -->
+				<div class="col-md-4">
+					<!-- To hold the layout -->
+				</div>
+			</div>
 
-			<div class="col-md-2 debug-border">
-				<img src=@Html.DisplayFor(Model => Model.Logo) alt="@Model.CategoryName" style="max-height: 100%; max-width:100%; border: 1px solid;" />
-			</div> <!-- right column -->
+			<div class="btn-group">
+				@Html.ActionLink("Back to Index", "Index", null, htmlAttributes: new { @class = "btn btn-default" })
+				<button type="submit" class="btn btn-primary">Edit</button>				
+			</div>
 
-		</div> <!-- container -->
-	</div> <!-- form-horizontal -->
-}
+		}
+	</div> <!-- left column -->
+	<div class="col-md-2">
+		<img src="@Html.DisplayFor(Model => Model.Logo)" alt="@Model.CategoryName" style="max-height: 100%; max-width:100%; border: 1px solid;" />
+	</div> <!-- right column -->
+</div> <!-- row -->
 
-<div class="col-md-12 debug-border">
-	@Html.ActionLink("Back to List", "Index")
-</div>
-
-@section Scripts {
+@section scripts {
 	@Scripts.Render("~/bundles/jqueryval")
 	@Scripts.Render("~/Scripts/CheckAvailability.js")
-
 	<script type="text/javascript">
 		$("#CategoryName").on("input", {
 			url: "@Url.Action("CheckAvailability", "Categories")",

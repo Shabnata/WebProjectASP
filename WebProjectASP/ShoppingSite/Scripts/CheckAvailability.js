@@ -1,6 +1,6 @@
 ﻿function CheckAvailability(e) {
 
-	if ($(this).val().length == 0) {
+	if($(this).val().length == 0) {
 		$(".glyphicon-ok").hide();
 		$(".glyphicon-remove").hide();
 	} else {
@@ -11,19 +11,21 @@
 				Name: $("#" + e.data.name).val(),
 				ID: e.data.id
 			}
-		}).done(function (data, status) {
+		}).done(function(data, status) {
 			console.log(data);
 			var responseJSON = eval(data);
-			if (responseJSON == true) {
+			if(responseJSON == true) {
 				$(".glyphicon-ok").show();
 				$(".glyphicon-remove").hide();
 				$("input[type='submit']").attr("disabled", false);
+				$("button[type='submit']").attr("disabled", false);
 			} else {
 				$(".glyphicon-ok").hide();
 				$(".glyphicon-remove").show();
 				$("input[type='submit']").attr("disabled", true);
+				$("button[type='submit']").attr("disabled", true);
 			}
-		}).fail(function (xmlHttpRequest, statusText, errorThrown) {
+		}).fail(function(xmlHttpRequest, statusText, errorThrown) {
 			alert(
 			'Your form submission failed.\n\n'
 			+ 'XML Http Request: ' + JSON.stringify(xmlHttpRequest)
