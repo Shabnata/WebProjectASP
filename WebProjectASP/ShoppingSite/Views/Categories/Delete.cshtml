@@ -33,25 +33,22 @@
 
 		<div class="row">
 			@{
-				decimal itemsPerTab = 10;
-				decimal subcategoriesCount = Model.SubCategories.Count;
 				ShoppingSite.Models.SubCategoryModel[] subcategories = Model.SubCategories.ToArray();
-				decimal numberOfTabs = decimal.Ceiling(subcategoriesCount / itemsPerTab);
 			}
 			@Html.Label("Subcategories", "Subcategories", htmlAttributes: new { @class = "col-md-2" })
 
 			<div class="col-md-6">
 				<div id="tabs">
 					<ul>
-						@for(ushort tab = 1; tab <= numberOfTabs; tab++) {
+						@for(int tab = 1; tab <= ViewBag.NumberOfTabs; tab++) {
 							<li><a href="#tabs-@tab">Page: @tab</a></li>
 						}
 					</ul>
-					@for(ushort tab = 0; tab < numberOfTabs; tab++) {
+					@for(int tab = 0; tab < ViewBag.NumberOfTabs; tab++) {
 						<div id="tabs-@tab">
 							<ul>
-								@for(ushort item = 0; item < itemsPerTab && (subcategoriesCount > ((tab * itemsPerTab) + item)); item++) {
-									<li>@subcategories[decimal.ToInt16((tab * itemsPerTab) + item)].SubCategoryName</li>
+								@for(int item = 0; item < ViewBag.ItemsPerTab && (ViewBag.SubCategoriesCount > ((tab * ViewBag.ItemsPerTab) + item)); item++) {
+									<li>@subcategories[((tab * ViewBag.ItemsPerTab) + item)].SubCategoryName</li>
 								}
 							</ul>
 						</div>

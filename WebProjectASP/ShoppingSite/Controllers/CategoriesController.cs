@@ -87,6 +87,14 @@ namespace ShoppingSite.Controllers {
 			if(categoryModel == null) {
 				return HttpNotFound();
 			}
+
+			int itemsPerTab = 10;
+			int subcategoriesCount = categoryModel.SubCategories.Count;
+			int numberOfTabs = decimal.ToInt32(decimal.Ceiling((decimal)subcategoriesCount / (decimal)itemsPerTab));
+			ViewBag.ItemsPerTab = itemsPerTab;
+			ViewBag.SubCategoriesCount = subcategoriesCount;
+			ViewBag.NumberOfTabs = numberOfTabs;
+
 			await this.FillViewBag();
 			return View(categoryModel);
 		}
@@ -100,6 +108,14 @@ namespace ShoppingSite.Controllers {
 			if(categoryModel == null) {
 				return HttpNotFound();
 			}
+
+			int itemsPerTab = 10;
+			int subcategoriesCount = categoryModel.SubCategories.Count;
+			int numberOfTabs = decimal.ToInt32(decimal.Ceiling((decimal)subcategoriesCount / (decimal)itemsPerTab));
+			ViewBag.ItemsPerTab = itemsPerTab;
+			ViewBag.SubCategoriesCount = subcategoriesCount;
+			ViewBag.NumberOfTabs = numberOfTabs;
+
 			await this.FillViewBag();
 			return View(categoryModel);
 		}
