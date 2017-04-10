@@ -218,7 +218,7 @@ namespace ShoppingSite.Controllers {
 			int maxRows = 4;
 			int maxCols = 4;
 			int maxPages = decimal.ToInt32(decimal.Ceiling((decimal)subCategory.Products.Count / (decimal)(maxRows * maxCols)));
-			IList<ProductModel> productPage = (from p in subCategory.Products select p).Skip((maxRows * maxCols) * ((Page ?? 1) - 1)).Take(maxRows * maxCols).ToList();
+			IList<ProductModel> productPage = (from p in subCategory.Products where p.BrandID == brand.BrandID select p).Skip((maxRows * maxCols) * ((Page ?? 1) - 1)).Take(maxRows * maxCols).ToList();
 
 			SubCategoryBrowseFromBrandViewModel viewModel = new SubCategoryBrowseFromBrandViewModel() { ParentBrand = brand, SubCategory = subCategory, SisterSubCategories = await db.GetBrandSubCategoriesAsync(brand.BrandID),ProductsPage = productPage };
 			ViewBag.MaxRows = maxRows;
