@@ -82,7 +82,7 @@ namespace ShoppingSite.Models {
 		public async Task<IList<SubCategoryModel>> GetBrandSubCategoriesAsync(int BrandID) {
 			List<SubCategoryModel> brandSubCategories = new List<SubCategoryModel>();
 			BrandModel brand = null;
-			//			try {
+
 			brand = await this.Brands.FindAsync(BrandID);
 			Boolean flag = false;
 			foreach(ProductModel pm in brand.Products) {
@@ -99,9 +99,8 @@ namespace ShoppingSite.Models {
 					}
 				}
 			}
-			//			}catch(SqlException ex) {
 
-			//			}
+			brandSubCategories.Sort((SubCategoryModel x, SubCategoryModel y) => { return x.SubCategoryName.CompareTo(y.SubCategoryName); });
 			return brandSubCategories;
 		}
 
@@ -124,6 +123,8 @@ namespace ShoppingSite.Models {
 					}
 				}
 			}
+
+			categoryProducts.Sort((ProductModel x, ProductModel y) => { return x.ProductName.CompareTo(y.ProductName); });
 			return categoryProducts;
 		}
 	}
