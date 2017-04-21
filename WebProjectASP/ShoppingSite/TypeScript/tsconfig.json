@@ -5,14 +5,14 @@
 		"removeComments": false,
 		"sourceMap": true,
 		"target": "es5",
-		"outDir": "./Scripts/"
+		"outDir": "../Scripts/TypeScript/"
 	},
 	"exclude": [
 		"node_modules",
 		"wwwroot"
 	],
 	"files": [
-		"./TypeScript/CheckAvail.ts",
+		"./CheckAvail.ts"
 	],
 	"compileOnSave": true
 }
