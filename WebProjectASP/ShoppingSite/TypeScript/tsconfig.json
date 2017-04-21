@@ -1,0 +1,18 @@
+{
+	"compilerOptions": {
+		"noImplicitAny": false,
+		"noEmitOnError": true,
+		"removeComments": false,
+		"sourceMap": true,
+		"target": "es5",
+		"outDir": "./Scripts/"
+	},
+	"exclude": [
+		"node_modules",
+		"wwwroot"
+	],
+	"files": [
+		"./TypeScript/CheckAvail.ts",
+	],
+	"compileOnSave": true
+}
