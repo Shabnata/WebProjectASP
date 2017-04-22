@@ -252,16 +252,16 @@ namespace ShoppingSite.Controllers {
 
 		[AllowAnonymous]
 		[HttpPost, ActionName("BrowseFromNav")]
-		public async Task<ActionResult> BrowseFromNav(string SearchString, int? Page) {
+		public async Task<ActionResult> BrowseFromNav(string NavSearch, int? Page) {
 
-			IList<ProductModel> products = await (from p in db.Products where p.ProductName.ToLower().Contains(SearchString.ToLower()) select p).ToListAsync();
+			IList<ProductModel> products = await (from p in db.Products where p.ProductName.ToLower().Contains(NavSearch.ToLower()) select p).ToListAsync();
 
 			int maxRows = 4;
 			int maxCols = 4;
 			int maxPages = decimal.ToInt32(decimal.Ceiling((decimal)products.Count / (decimal)(maxRows * maxCols)));
 			IList<ProductModel> productPage = (from p in products select p).Skip((maxRows * maxCols) * ((Page ?? 1) - 1)).Take(maxRows * maxCols).ToList();
 			
-			ProductBrowseFromNavViewModel viewModel = new ProductBrowseFromNavViewModel() { ProductsPage = productPage, SearchString = SearchString, AllCategories = await db.Categories.ToListAsync()};
+			ProductBrowseFromNavViewModel viewModel = new ProductBrowseFromNavViewModel() { ProductsPage = productPage, SearchString = NavSearch, AllCategories = await db.Categories.ToListAsync()};
 
 			ViewBag.MaxRows = maxRows;
 			ViewBag.MaxCols = maxCols;
