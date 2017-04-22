@@ -250,5 +250,30 @@ namespace ShoppingSite.Controllers {
 			return Json(products);
 		}
 
+		[AllowAnonymous]
+		[HttpPost, ActionName("BrowseFromNav")]
+		public async Task<ActionResult> BrowseFromNav(string SearchString, int? Page) {
+
+			IList<ProductModel> products = await (from p in db.Products where p.ProductName.ToLower().Contains(SearchString.ToLower()) select p).ToListAsync();
+
+			int maxRows = 4;
+			int maxCols = 4;
+			int maxPages = decimal.ToInt32(decimal.Ceiling((decimal)products.Count / (decimal)(maxRows * maxCols)));
+			IList<ProductModel> productPage = (from p in products select p).Skip((maxRows * maxCols) * ((Page ?? 1) - 1)).Take(maxRows * maxCols).ToList();
+			
+			ProductBrowseFromNavViewModel viewModel = new ProductBrowseFromNavViewModel() { ProductsPage = productPage, SearchString = SearchString, AllCategories = await db.Categories.ToListAsync()};
+
+			ViewBag.MaxRows = maxRows;
+			ViewBag.MaxCols = maxCols;
+			ViewBag.Page = Page ?? 1;
+			ViewBag.MaxPages = maxPages;
+
+			await this.FillViewBag();
+			
+			ViewBag.NotFoundError = (products.Count == 0) ? "Product not found" : null;
+
+			return View("BrowseFromNav", viewModel);
+		}
+
 	}
 }

@@ -354,6 +354,7 @@
     <Content Include="Views\SubCategories\BrowseFromBrand.cshtml" />
     <Content Include="TypeScript\tsconfig.json" />
     <Content Include="Scripts\TypeScript\CheckAvail.js.map" />
+    <Content Include="Views\Products\BrowseFromNav.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
