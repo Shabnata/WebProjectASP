@@ -20,12 +20,12 @@
 			<div class="form-group row">
 				@Html.LabelFor(model => model.CategoryName, htmlAttributes: new { @class = "col-md-2 col-form-label" })
 				<div class="col-md-6">
-					@Html.EditorFor(model => model.CategoryName, new { htmlAttributes = new { @class = "form-control", @placeholder = Html.DisplayNameFor(model => model.CategoryName) } })
+					@Html.EditorFor(model => model.CategoryName, new { htmlAttributes = new { @class = "form-control", @placeholder = Html.DisplayNameFor(model => model.CategoryName), @oninput = "checkAvailability('" + Url.Action("CheckAvailability", "Categories") + "', -1, 'CategoryName')" } })
 					@Html.ValidationMessageFor(model => model.CategoryName, "", new { @class = "text-danger" })
 				</div>
 				<div class="col-md-4">
-					<span class="glyphicon glyphicon-ok" style="display: none; color: #28A828; margin: 10px 0px;"></span>
-					<span class="glyphicon glyphicon-remove" style="display: none; color: #D8000C; background-color: #FFBABA; border: 1px solid; margin: 0px 0px; padding: 10px 0px 10px 5px;">Category already exists.</span>
+					<span id="glyphiconOK" class="glyphicon glyphicon-ok" style="display: none; color: #28A828; margin: 10px 0px;"></span>
+					<span id="glyphiconRem" class="glyphicon glyphicon-remove" style="display: none; color: #D8000C; background-color: #FFBABA; border: 1px solid; margin: 0px 0px; padding: 10px 0px 10px 5px;">Category already exists.</span>
 				</div>
 			</div>
 
@@ -42,7 +42,7 @@
 
 			<div class="btn-group">
 				@Html.ActionLink("Back to Index", "Index", null, htmlAttributes: new { @class = "btn btn-default" })
-				<button type="submit" class="btn btn-primary">Create</button>			
+				<button id="submitButton" type="submit" class="btn btn-primary">Create</button>			
 			</div>
 
 		}
@@ -54,12 +54,6 @@
 
 @section scripts {
 	@Scripts.Render("~/bundles/jqueryval")
-	@Scripts.Render("~/Scripts/CheckAvailability.js")
-	<script type="text/javascript">
-		$("#CategoryName").on("input", {
-			url: "@Url.Action("CheckAvailability", "Categories")",
-			id: -1,
-			name: "CategoryName"
-		}, CheckAvailability);
-	</script>
+	@Scripts.Render("~/Scripts/TypeScript/CheckAvail.js")
+
 }

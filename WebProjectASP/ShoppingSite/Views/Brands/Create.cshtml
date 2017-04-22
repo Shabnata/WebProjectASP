@@ -21,9 +21,9 @@
 				<div class="form-group">
 					@Html.LabelFor(model => model.BrandName, htmlAttributes: new { @class = "control-label col-md-2" })
 					<div class="col-md-10">
-						@Html.EditorFor(model => model.BrandName, new { htmlAttributes = new { @class = "form-control" } })
-						<span class="glyphicon glyphicon-ok" style="display: none; color: #28A828"></span>
-						<span class="glyphicon glyphicon-remove" style="display: none; color: #D8000C; background-color: #FFBABA; border: 1px solid; margin: 5px 0px; padding: 2px 5px 10px 2px;">Brand already exists.</span>
+						@Html.EditorFor(model => model.BrandName, new { htmlAttributes = new { @class = "form-control", @oninput = "checkAvailability('" + Url.Action("CheckAvailability", "Brands") + "', -1, 'BrandName')" } })
+						<span id="glyphiconOK" class="glyphicon glyphicon-ok" style="display: none; color: #28A828"></span>
+						<span id="glyphiconRem" class="glyphicon glyphicon-remove" style="display: none; color: #D8000C; background-color: #FFBABA; border: 1px solid; margin: 5px 0px; padding: 2px 5px 10px 2px;">Brand already exists.</span>
 						@Html.ValidationMessageFor(model => model.BrandName, "", new { @class = "text-danger" })
 					</div>
 				</div>
@@ -57,7 +57,7 @@
 				</div>
 
 				<div class="form-actions no-color col-md-offset-2 col-md-10">
-					<input type="submit" value="Create" class="btn btn-default" />
+					<button id="submitButton" type="submit" class="btn btn-primary">Create</button>
 				</div>
 			</div> <!-- left column -->
 			<div class="col-md-2">
@@ -73,7 +73,7 @@
 
 @section Scripts {
 	@Scripts.Render("~/bundles/jqueryval")
-	@Scripts.Render("~/Scripts/CheckAvailability.js")
+	@Scripts.Render("~/Scripts/TypeScript/CheckAvail.js")
 
 	<script type="text/javascript">
 		$("document").ready(function () {
@@ -81,11 +81,4 @@
 		});
 	</script>
 
-	<script type="text/javascript">
-		$("#BrandName").on("input", {
-			url: "@Url.Action("CheckAvailability", "Brands")",
-			id: -1,
-			name: "BrandName"
-		}, CheckAvailability);
-	</script>
 }

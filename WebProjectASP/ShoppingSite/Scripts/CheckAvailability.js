@@ -1,4 +1,5 @@
-﻿function CheckAvailability(e) {
+﻿/* This function was replaced with a TypeScript script
+function CheckAvailability(e) {
 
 	if($(this).val().length == 0) {
 		$(".glyphicon-ok").hide();
@@ -34,3 +35,4 @@
 		});
 	}
 }
+*/
