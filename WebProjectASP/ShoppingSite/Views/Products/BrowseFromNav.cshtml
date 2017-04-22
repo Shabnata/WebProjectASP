@@ -1,0 +1,68 @@
+﻿
+@model ShoppingSite.Models.ProductBrowseFromNavViewModel
+
+<section>
+	<div class="row">
+		<div class="col-sm-3">
+			<!-- Categories list -->
+			<h2>Categories</h2>
+			<ul>
+				@foreach(var item in Model.AllCategories) {
+					<li><a href="@Url.Action("BrowseByID", "Categories",new {CategoryID=item.CategoryID})">@item.CategoryName</a></li>
+				}
+			</ul>
+		</div> <!-- Categories list -->
+
+		<div class="col-md-9 padding-right">
+			<div class="row">
+				<h2 class="title text-center">@(ViewBag.NotFoundError ?? "Search Results")</h2>
+			</div>
+			@{
+				int maxRows = ViewBag.MaxRows ?? 4;
+				int maxCols = ViewBag.MaxCols ?? 4;
+				IEnumerator<ShoppingSite.Models.ProductModel> productPage = Model.ProductsPage.GetEnumerator();
+			}
+			@for(int i = 0; i < maxRows; i++) {
+				<div class="row">
+					@for(int j = 0; j < maxCols; j++) {
+						<div class="col-sm-3 product-image-wrapper single-products productinfo text-center">
+							@if(productPage.MoveNext()) {
+								<img src=@productPage.Current.CoverPath alt=@productPage.Current.ProductName width="100" />
+								<h2>@productPage.Current.Price</h2>
+									<p>@productPage.Current.ProductName</p>
+									<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
+							}
+						</div>
+					}
+				</div>
+			}
+			<nav>
+				@{
+					int maxPages = ViewBag.MaxPages ?? 1;
+					int currentPage = ViewBag.Page ?? 1;
+					int prev = currentPage - 1 > 0 ? currentPage - 1 : 1;
+					int next = currentPage + 1 <= maxPages ? currentPage + 1 : maxPages;
+					string prevClass = currentPage - 1 > 0 ? "" : "disabled";
+					string nextClass = currentPage + 1 <= maxPages ? "" : "disabled";
+				}
+
+				<ul class="pagination">
+					<li class="@prevClass">
+						<a href="@Url.Action("BrowseFromNav", "Products",new { SearchString = Model.SearchString, Page = prev })">&laquo;</a>
+					</li>
+					@for(int i = 1; i <= maxPages; i++) {
+						string currentClass = i == currentPage ? "active" : "";
+
+						<li class="@currentClass">
+							<a href="@Url.Action("BrowseFromNav", "Products",new {SearchString = Model.SearchString, Page = i })">@i</a>
+						</li>
+					}
+
+					<li class="@nextClass">
+						<a href="@Url.Action("BrowseFromNav", "Products",new { SearchString = Model.SearchString, Page = next })">&raquo;</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+</section>

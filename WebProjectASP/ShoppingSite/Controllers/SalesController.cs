@@ -158,7 +158,6 @@ namespace ShoppingSite.Controllers {
 			base.Dispose(disposing);
 		}
 
-		[AllowAnonymous]
 		[HttpPost, ActionName("Search")]
 		public async Task<ActionResult> Search(string SaleName) {
 

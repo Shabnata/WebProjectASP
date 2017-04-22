@@ -218,7 +218,6 @@ namespace ShoppingSite.Controllers {
 			base.Dispose(disposing);
 		}
 
-		[AllowAnonymous]
 		[HttpPost, ActionName("Search")]
 		public async Task<ActionResult> Search(string ProductName) {
 
@@ -249,6 +248,31 @@ namespace ShoppingSite.Controllers {
 			}
 			ICollection<string> products = await (from p in db.Products where p.ProductName.ToLower().StartsWith(SearchString.ToLower()) select p.ProductName).ToListAsync();
 			return Json(products);
+		}
+
+		[AllowAnonymous]
+		[HttpPost, ActionName("BrowseFromNav")]
+		public async Task<ActionResult> BrowseFromNav(string NavSearch, int? Page) {
+
+			IList<ProductModel> products = await (from p in db.Products where p.ProductName.ToLower().Contains(NavSearch.ToLower()) select p).ToListAsync();
+
+			int maxRows = 4;
+			int maxCols = 4;
+			int maxPages = decimal.ToInt32(decimal.Ceiling((decimal)products.Count / (decimal)(maxRows * maxCols)));
+			IList<ProductModel> productPage = (from p in products select p).Skip((maxRows * maxCols) * ((Page ?? 1) - 1)).Take(maxRows * maxCols).ToList();
+			
+			ProductBrowseFromNavViewModel viewModel = new ProductBrowseFromNavViewModel() { ProductsPage = productPage, SearchString = NavSearch, AllCategories = await db.Categories.ToListAsync()};
+
+			ViewBag.MaxRows = maxRows;
+			ViewBag.MaxCols = maxCols;
+			ViewBag.Page = Page ?? 1;
+			ViewBag.MaxPages = maxPages;
+
+			await this.FillViewBag();
+			
+			ViewBag.NotFoundError = (products.Count == 0) ? "Product not found" : null;
+
+			return View("BrowseFromNav", viewModel);
 		}
 
 	}

@@ -92,4 +92,11 @@ namespace ShoppingSite.Models {
 		public IList<SubCategoryModel> AllSubCategories { get; set; }
 		public IList<SubCategoryModel> RelatedSubCategories { get; set; }
 	}
+
+	public class ProductBrowseFromNavViewModel {
+
+		public IList<CategoryModel> AllCategories { get; set; }
+		public IList<ProductModel> ProductsPage { get; set; }
+		public string SearchString { get; set; }
+	}
 }
