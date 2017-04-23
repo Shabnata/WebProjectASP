@@ -11,7 +11,7 @@
 </div>
 
 <h3>Are you sure you want to delete this?</h3>
-<div class="container">
+<div class="row">
 	<div class="col-md-10">
 		<div class="row">
 			@Html.DisplayNameFor(Model => Model.BrandID) :
@@ -74,7 +74,7 @@
 	<div class="col-md-2 ">
 		<img src=@Html.DisplayFor(Model => Model.Logo) alt="@Model.BrandName" style="max-height: 100%; max-width:100%; border: 1px solid;" />
 	</div> <!-- right column -->
-</div> <!-- container -->
+</div> <!-- row -->
 
 <div class="col-md-12">
 	@Html.ActionLink("Back to List", "Index")

@@ -7,7 +7,7 @@
 	<h2>Brand details</h2>
 	<hr />
 </div>
-<div class="container">
+<div class="row">
 	<div class="col-md-10">
 		<div class="row">
 			@Html.DisplayNameFor(Model => Model.BrandID) :
@@ -62,7 +62,7 @@
 		<img src=@Html.DisplayFor(Model => Model.Logo) alt="@Model.BrandName" style="max-height: 100%; max-width:100%; border: 1px solid;" />
 	</div> <!-- right column -->
 
-</div> <!-- container -->
+</div> <!-- row -->
 <div class="col-md-12">
 	@Html.ActionLink("Delete", "Delete", new { BrandID = Model.BrandID }) |
 	@Html.ActionLink("Edit", "Edit", new { BrandID = Model.BrandID }) |

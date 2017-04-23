@@ -17,7 +17,7 @@
 		@Html.ValidationSummary(false, "", new { @class = "text-danger" })
 		@Html.HiddenFor(model => model.BrandID)
 
-		<div class="container">
+		<div class="row">
 			<div class="col-md-10">
 				<div class="form-group">
 					@Html.LabelFor(model => model.BrandName, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -64,7 +64,7 @@
 			<div class="col-md-2">
 				<img src=@Html.DisplayFor(Model => Model.Logo) alt="@Model.BrandName" style="max-height: 100%; max-width:100%; border: 1px solid;" />
 			</div> <!-- right column -->
-		</div> <!-- container -->
+		</div> <!-- row -->
 	</div> <!-- form-horizontal -->
 }
 
