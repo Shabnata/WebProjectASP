@@ -1,0 +1,15 @@
+﻿@model ShoppingSite.Models.ProductModel
+
+@{
+	ViewBag.Title = "Error page";
+	Layout = (ViewBag.LayoutFile != null) ? ViewBag.LayoutFile : Layout;
+}
+
+<h1>Error creating / editing product.</h1>
+
+Product named @ViewBag.ProductName already exists for brand @ViewBag.BrandName .
+
+<br/>
+<div class="btn-group">
+	@Html.ActionLink("Back to Index", "Index", null, htmlAttributes: new { @class = "btn btn-default" })
+</div>

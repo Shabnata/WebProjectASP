@@ -360,6 +360,7 @@
     <Content Include="TypeScript\tsconfig.json" />
     <Content Include="Scripts\TypeScript\CheckAvail.js.map" />
     <Content Include="Views\Products\BrowseFromNav.cshtml" />
+    <Content Include="Views\Products\Error.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

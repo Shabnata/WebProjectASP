@@ -73,7 +73,10 @@ namespace ShoppingSite.Controllers {
 				}
 			}
 
-			return View("Error");
+			ProductModel model = await (from p in db.Products where p.ProductName.ToLower() == productModel.ProductName.ToLower() && p.BrandID == productModel.BrandID select p).FirstAsync();
+			ViewBag.ProductName = productModel.ProductName;
+			ViewBag.BrandName = model.Brand.BrandName;
+			return View("Error", model);
 		}
 
 		[HttpGet]
@@ -171,7 +174,10 @@ namespace ShoppingSite.Controllers {
 				}
 			}
 			await this.FillViewBag();
-			return View("Error");
+			ProductModel model = await (from p in db.Products where p.ProductName.ToLower() == productModel.ProductName.ToLower() && p.BrandID == productModel.BrandID select p).FirstAsync();
+			ViewBag.ProductName = productModel.ProductName;
+			ViewBag.BrandName = model.Brand.BrandName;
+			return View("Error", model);
 		}
 
 		[HttpGet]
