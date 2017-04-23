@@ -1,7 +1,6 @@
 ﻿@model ShoppingSite.Models.SubCategoryBrowseFromCategoryViewModel
 
 <section>
-	<div class="container">
 		<div class="row">
 			<div class="col-sm-3">
 				<div class="left-sidebar">
@@ -35,7 +34,7 @@
 						@for(int j = 0; j < maxCols; j++) {
 							<div class="col-sm-3 product-image-wrapper single-products productinfo text-center">
 								@if(productPage.MoveNext()) {
-									<img src=@productPage.Current.CoverPath alt=@productPage.Current.ProductName width="100" />
+									<img src=@productPage.Current.CoverPath alt=@productPage.Current.ProductName style="max-height: 100px;  max-width: 100px;" />
 									<h2>@productPage.Current.Price</h2>
 									<p>@productPage.Current.ProductName</p>
 									<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
@@ -74,5 +73,4 @@
 			</div>
 
 		</div>
-	</div>
 </section>

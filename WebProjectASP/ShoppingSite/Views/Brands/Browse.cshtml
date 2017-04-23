@@ -1,7 +1,6 @@
 ﻿@model ShoppingSite.Models.BrandBrowseViewModel
 
 <section>
-	
 		<div class="row">
 			<div class="col-sm-3">
 				<div class="left-sidebar">
@@ -22,28 +21,28 @@
 			</div>
 
 			<div class="col-sm-9 padding-right">
-				<div class="features_items">
-					<!--features_items-->
-					<h2 class="title text-center">Features Items</h2>
-
-					@foreach(var product in Model.FeaturedProducts) {
-						<div class="col-sm-3">
-							<div class="product-image-wrapper">
-								<div class="single-products">
-									<div class="productinfo text-center">
-										<img src=@product.CoverPath alt=@product.ProductName width="100" />
-										<h2>@product.Price</h2>
-										<p>@product.ProductName</p>
-										<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-										<br /><br />
-									</div>
-								</div>
+				<div class="row">
+					<h2 class="title text-center">Featured Items</h2>
+				</div>
+				@{
+					int maxRows = ViewBag.MaxRows ?? 4;
+					int maxCols = ViewBag.MaxCols ?? 4;
+					IEnumerator<ShoppingSite.Models.ProductModel> productPage = Model.FeaturedProducts.GetEnumerator();
+				}
+				@for(int i = 0; i < maxRows; i++) {
+					<div class="row">
+						@for(int j = 0; j < maxCols; j++) {
+							<div class="col-sm-3 product-image-wrapper single-products productinfo text-center">
+								@if(productPage.MoveNext()) {
+									<img src=@productPage.Current.CoverPath alt=@productPage.Current.ProductName style="max-height: 100px;  max-width: 100px;" />
+									<h2>@productPage.Current.Price</h2>
+									<p>@productPage.Current.ProductName</p>
+									<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
+								}
 							</div>
-						</div>
-					}
-
-				</div><!--features_items-->
+						}
+					</div>
+				}
 			</div>
 		</div>
-
 </section>
