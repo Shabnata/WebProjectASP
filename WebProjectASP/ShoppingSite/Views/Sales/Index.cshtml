@@ -7,7 +7,7 @@
 <h3>TODO - Bootstrap this page</h3>
 @* BeginForm(string actionName, string controllerName, FormMethod method) *@
 @using (Html.BeginForm("Search", "Sales", FormMethod.Post)) {
-    <input type="search" name="SaleName" value="@ViewBag.SearchString" placeholder="Sale name" path="@Url.Action("TypeSearch", "Sales")" autocomplete="on" required />
+    <input type="search" id="SaleName" name="SaleName" value="@ViewBag.SearchString" placeholder="Sale name" path="@Url.Action("TypeSearch", "Sales")" autocomplete="on" required />
     <input type="submit" value="Search" />
     if (ViewBag.NotFoundError != null) {
         <span style="background: Red;">@ViewBag.NotFoundError</span>
