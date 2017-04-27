@@ -10,7 +10,7 @@ namespace ShoppingSite.Models {
 	[Table("Carts")]
 	public class CartModel {
 
-		[Key]
+		[Key, ForeignKey("User")]
 		[Required]
 		[Display(Name = "Cart ID")]
 		[Column("CartID", TypeName = "nvarchar")]
