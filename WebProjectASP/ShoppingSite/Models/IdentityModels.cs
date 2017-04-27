@@ -67,6 +67,8 @@ namespace ShoppingSite.Models {
 		public virtual DbSet<ProductModel> Products { get; set; }
 		public virtual DbSet<ProductPictureModel> ProductPictures { get; set; }
 		public virtual DbSet<SaleModel> Sales { get; set; }
+		public virtual DbSet<CartModel> Carts { get; set; }
+		public virtual DbSet<CartItemModel> CartItems { get; set; }
 
 		public static ApplicationDbContext Create() {
 			return new ApplicationDbContext();
