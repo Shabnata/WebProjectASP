@@ -83,6 +83,18 @@ namespace ShoppingSite.Models {
 			return activeSales;
 		}
 
+		public async Task<SaleModel> GetProductBestActiveSale(int SKU) {
+			DateTime today = DateTime.Now;
+			ProductModel product = await this.Products.FindAsync(SKU);
+			if(product.Brand.Sales != null && product.Brand.Sales.Count != 0) {
+					//SaleModel bestSale = (await (from sale in this.Sales where sale.StartDate <= today && sale.EndDate >= today && sale.BrandsOnSale.Contains(product.Brand) select sale).ToListAsync()).OrderByDescending((SaleModel a) => { return a.Discount; }).First();
+					SaleModel bestSale = (from s in product.Brand.Sales where s.StartDate <= today && s.EndDate >= today select s).OrderByDescending((SaleModel a) => { return a.Discount; }).First();
+					return bestSale;
+			}
+
+			return null;
+		}
+
 		public async Task<IList<SubCategoryModel>> GetBrandSubCategoriesAsync(int BrandID) {
 			List<SubCategoryModel> brandSubCategories = new List<SubCategoryModel>();
 			BrandModel brand = null;
