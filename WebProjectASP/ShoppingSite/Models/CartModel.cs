@@ -7,32 +7,23 @@ using System.Web;
 
 namespace ShoppingSite.Models {
 
-	[Table("Carts")]
-	public class CartModel {
+	public class CartViewModel {
 
-		[Key, ForeignKey("User")]
-		[Required]
-		[Display(Name = "Cart ID")]
-		[Column("CartID", TypeName = "nvarchar")]
-		[DataType(DataType.Text)]
-		public string CartID { get; set; } // CartID == ApplicationUser.ID
-
-		[ForeignKey("CartID")]
-		public virtual ApplicationUser User { get; set; }
-
-		public virtual ICollection<CartItemModel> CartItems { get; set; }
+		public ApplicationUser User { get; set; }
+		public ICollection<CartItemModel> CartItems { get; set; }
+		public decimal TotalPrice { get; set; }
 	}
 
 	[Table("CartItems")]
 	public class CartItemModel {
 
-		[Key]
+		[Key, ForeignKey("Customer")]
 		[Required]
-		[Column("CartID", TypeName = "nvarchar", Order = 1)]
+		[Column("ApplicationUserID", TypeName = "nvarchar", Order = 1)]
 		[DataType(DataType.Text)]
-		public string CartID { get; set; }
+		public string ApplicationUserID { get; set; }
 
-		[Key]
+		[Key, ForeignKey("Product")]
 		[Required]
 		[Display(Name = "SKU")]
 		[Column("SKU", TypeName = "int", Order = 2)]
@@ -49,7 +40,9 @@ namespace ShoppingSite.Models {
 		[ForeignKey("SKU")]
 		public virtual ProductModel Product { get; set; }
 
-		[ForeignKey("CartID")]
-		public virtual CartModel Cart { get; set; }
+		[ForeignKey("ApplicationUserID")]
+		public virtual ApplicationUser Customer { get; set; }
+
 	}
+
 }

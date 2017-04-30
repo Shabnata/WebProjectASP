@@ -45,8 +45,7 @@ namespace ShoppingSite.Models {
 
 		public virtual ICollection<OrderModel> Orders { get; set; }
 
-		[ForeignKey("Id")]
-		public virtual CartModel UserCart { get; set; }
+		public virtual ICollection<CartItemModel> CartItems { get; set; }
 
 		public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager) {
 			// Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
@@ -70,7 +69,7 @@ namespace ShoppingSite.Models {
 		public virtual DbSet<ProductModel> Products { get; set; }
 		public virtual DbSet<ProductPictureModel> ProductPictures { get; set; }
 		public virtual DbSet<SaleModel> Sales { get; set; }
-		public virtual DbSet<CartModel> Carts { get; set; }
+//		public virtual DbSet<CartModel> Carts { get; set; }
 		public virtual DbSet<CartItemModel> CartItems { get; set; }
 
 		public static ApplicationDbContext Create() {
