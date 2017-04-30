@@ -32,6 +32,8 @@
 				<div class="col-md-6">
 					@Html.EditorFor(model => model.Logo, new { htmlAttributes = new { @class = "form-control", @placeholder = Html.DisplayNameFor(model => model.Logo) } })
 					@Html.ValidationMessageFor(model => model.Logo, "", new { @class = "text-danger" })
+                    <br/>
+                    <img src="@Html.DisplayFor(Model => Model.Logo)" alt="@Model.CategoryName" style="max-height: 30%; max-width:30%; border: 0px solid;" />
 				</div>
 				<div class="col-md-4">
 					<!-- To hold the layout -->
@@ -46,7 +48,7 @@
 		}
 	</div> <!-- left column -->
 	<div class="col-md-2">
-		<img src="@Html.DisplayFor(Model => Model.Logo)" alt="@Model.CategoryName" style="max-height: 100%; max-width:100%; border: 1px solid;" />
+		@*<img src="@Html.DisplayFor(Model => Model.Logo)" alt="@Model.CategoryName" style="max-height: 100%; max-width:100%; border: 1px solid;" />*@
 	</div> <!-- right column -->
 </div> <!-- row -->
 

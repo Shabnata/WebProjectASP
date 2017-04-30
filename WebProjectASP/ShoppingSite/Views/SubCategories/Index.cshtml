@@ -5,21 +5,31 @@
 	Layout = (ViewBag.LayoutFile != null) ? ViewBag.LayoutFile : Layout;
 }
 
-<h2>SubCategories Index</h2>
-<h3>TODO - Bootstrap this page</h3>
+<div class="page-header">
+    <h2>SubCategories Index</h2>
+</div>
 
-@using(Html.BeginForm("Search", "SubCategories", FormMethod.Post)) {
-	<input type="search" name="SubCategoryName" placeholder="@Html.DisplayNameFor(model => model.SubCategoryName)" value="@ViewBag.SearchString" path="@Url.Action("TypeSearch", "SubCategories")" autocomplete="on" required />
-	<input type="submit" value="Search" />
-	if(ViewBag.NotFoundError != null) {
-		<span style="background: Red;">@ViewBag.NotFoundError</span>
-		<br />
-	}
+@using (Html.BeginForm("Search", "SubCategories", FormMethod.Post)) {
+    <div class="form-inline">
+        <div class="form-group">
+            <input type="search" id="SubCategoryName" name="SubCategoryName" class="form-control" value="@ViewBag.SearchString" placeholder="SubCategory name" path="@Url.Action("TypeSearch", "SubCategories")" autocomplete="on" required />
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+        <div class="form-group">
+            <span class="text-danger">@ViewBag.NotFoundError</span>
+        </div>
+    </div>
 }
 
-@Html.ActionLink("Create SubCategory", "Create")
+<br />
+<div class="btn-group">
+    @Html.ActionLink("Create SubCategory", "Create", null, htmlAttributes: new { @class = "btn btn-default" })
+</div>
+<br /><br />
 
-<table class="table">
+<table class="table table-striped">
 	<tr>
 		<th>@Html.DisplayNameFor(model => model.SubCategoryLogo)</th>
 		<th>@Html.DisplayNameFor(model => model.SubCategoryID)</th>
@@ -30,15 +40,19 @@
 
 	@foreach(var item in Model) {
 		<tr>
-			<td><img src=@Html.DisplayFor(modelItem => item.SubCategoryLogo) alt="@item.SubCategoryName" style="max-height: 50px;  max-width: 150px;" /></td>
-			<td>@Html.DisplayFor(modelItem => item.SubCategoryID)</td>
-			<td>@Html.DisplayFor(modelItem => item.SubCategoryName)</td>
-			<td>@item.Products.Count</td>
-			<td>
-				@Html.ActionLink("Edit", "Edit", new { SubCategoryID = item.SubCategoryID }) |
-				@Html.ActionLink("Details", "Details", new { SubCategoryID = item.SubCategoryID }) |
-				@Html.ActionLink("Delete", "Delete", new { SubCategoryID = item.SubCategoryID })
-			</td>
+			<th><img src=@Html.DisplayFor(modelItem => item.SubCategoryLogo) alt="@item.SubCategoryName" style="max-height: 50px;  max-width: 150px;" /></th>
+			<th>@Html.DisplayFor(modelItem => item.SubCategoryID)</th>
+			<th>@Html.DisplayFor(modelItem => item.SubCategoryName)</th>
+			<th>@item.Products.Count</th>
+            <th>
+                @* Html.ActionLink(Link text, Controller Action, Action parameters) *@
+                <div class="btn-group">
+                    @Html.ActionLink("Edit", "Edit", new { SubCategoryID = item.SubCategoryID }, htmlAttributes: new { @class = "btn btn-default" })
+                    @Html.ActionLink("Details", "Details", new { SubCategoryID = item.SubCategoryID }, htmlAttributes: new { @class = "btn btn-default" })
+                    @Html.ActionLink("Delete", "Delete", new { SubCategoryID = item.SubCategoryID }, htmlAttributes: new { @class = "btn btn-default" })
+                </div>
+
+            </th>
 		</tr>
 	}
 </table>

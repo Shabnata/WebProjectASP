@@ -22,13 +22,13 @@
 			<span class="text-danger">@ViewBag.NotFoundError</span>
 		</div>
 }
-
+<br/>
 <div class="btn-group">
 	@Html.ActionLink("Create Category", "Create", null, htmlAttributes: new { @class = "btn btn-default" })
 </div>
-
+<br /><br />
 <table class="table table-striped">
-	<thead>
+
 		<tr>
 			<th>@Html.DisplayNameFor(model => model.Logo)</th>
 			<th>@Html.DisplayNameFor(model => model.CategoryID)</th>
@@ -36,7 +36,7 @@
 			<th>Number of SubCategories</th>
 			<th>Actions</th>
 		</tr>
-	</thead>
+
 
 	@foreach(var item in Model) {
 		<tr>

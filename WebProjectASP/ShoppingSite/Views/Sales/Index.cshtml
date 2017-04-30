@@ -3,18 +3,31 @@
     ViewBag.Title = "Index";
     Layout = (ViewBag.LayoutFile != null) ? ViewBag.LayoutFile : Layout;
 }
-<h2>Sales Index</h2>
-<h3>TODO - Bootstrap this page</h3>
-@* BeginForm(string actionName, string controllerName, FormMethod method) *@
+
+<div class="page-header">
+    <h2>Sales Index</h2>
+</div>
+
 @using (Html.BeginForm("Search", "Sales", FormMethod.Post)) {
-    <input type="search" id="SaleName" name="SaleName" value="@ViewBag.SearchString" placeholder="Sale name" path="@Url.Action("TypeSearch", "Sales")" autocomplete="on" required />
-    <input type="submit" value="Search" />
-    if (ViewBag.NotFoundError != null) {
-        <span style="background: Red;">@ViewBag.NotFoundError</span>
-        <br />      }
+    <div class="form-inline">
+        <div class="form-group">
+            <input type="search" id="SaleName" name="SaleName" class="form-control" value="@ViewBag.SearchString" placeholder="Sale name" path="@Url.Action("TypeSearch", "Sales")" autocomplete="on" required />
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+        <div class="form-group">
+            <span class="text-danger">@ViewBag.NotFoundError</span>
+        </div>
+    </div>
 }
-@Html.ActionLink("Create Sale", "Create")
-<table class="table">
+
+<br />
+<div class="btn-group">
+    @Html.ActionLink("Create Sale", "Create", null, htmlAttributes: new { @class = "btn btn-default" })
+</div>
+<br /><br />
+<table class="table table-striped">
     <tr>
         <th>@Html.DisplayNameFor(model => model.SaleID)</th>
         <th>@Html.DisplayNameFor(model => model.SaleName)</th>
@@ -32,13 +45,16 @@
             <td><img src="@Html.DisplayFor(modelItem => item.Emblem)" alt="Logo" style="max-height: 50px;  max-width: 150px;" /></td>
             <td>@item.StartDate.ToShortDateString()</td>
             <td>@item.EndDate.ToShortDateString()</td>
-            <td>@Html.DisplayFor(modelItem => item.Discount)</td>
+            <td>@item.Discount.ToString("0")</td>
 
             <td>
+
                 @* Html.ActionLink(Link text, Controller Action, Action parameters) *@
-                @Html.ActionLink("Edit", "Edit", new { SaleID = item.SaleID }) |
-                @Html.ActionLink("Details", "Details", new { SaleID = item.SaleID }) |
-                @Html.ActionLink("Delete", "Delete", new { SaleID = item.SaleID })
+                <div class="btn-group">
+                    @Html.ActionLink("Edit", "Edit", new { SaleID = item.SaleID }, htmlAttributes: new { @class = "btn btn-default" })
+                    @Html.ActionLink("Details", "Details", new { SaleID = item.SaleID }, htmlAttributes: new { @class = "btn btn-default" })
+                    @Html.ActionLink("Delete", "Delete", new { SaleID = item.SaleID }, htmlAttributes: new { @class = "btn btn-default" })
+                </div>
             </td>
         </tr>
     }

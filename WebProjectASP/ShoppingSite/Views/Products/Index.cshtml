@@ -1,75 +1,67 @@
 ﻿@model IEnumerable<ShoppingSite.Models.ProductModel>
 @{
-	ViewBag.Title = "Index";
-	Layout = (ViewBag.LayoutFile != null) ? ViewBag.LayoutFile : Layout;
+    ViewBag.Title = "Index";
+    Layout = (ViewBag.LayoutFile != null) ? ViewBag.LayoutFile : Layout;
 }
-
-<div class="col-md-12">
-	<h2>Products Index</h2>
-	<hr />
+<div class="page-header">
+    <h2>Products Index</h2>
 </div>
 
-<div class="row">
-	@using(Html.BeginForm("Search", "Products", FormMethod.Post)) {
-		<div class="form-inline">
-			<div class="form-group">
-				<input type="search" id="ProductName" name="ProductName" class="form-control" value="@ViewBag.SearchString"
-					   placeholder="@Html.DisplayNameFor(model => model.ProductName)" path="@Url.Action("TypeSearch", "Products")" autocomplete="on" required />
-			</div>
-			<input type="submit" value="Search" class="btn btn-default" />
-			<div class="form-group">
-				<span class="text-danger">@ViewBag.NotFoundError</span>
-			</div>
-		</div>
-	}
+@using (Html.BeginForm("Search", "Products", FormMethod.Post)) {
+    <div class="form-inline">
+        <div class="form-group">
+            <input type="search" id="ProductName" name="ProductName" class="form-control" value="@ViewBag.SearchString"
+                   placeholder="@Html.DisplayNameFor(model => model.ProductName)" path="@Url.Action("TypeSearch", "Products")" autocomplete="on" required />
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+        <div class="form-group">
+            <span class="text-danger">@ViewBag.NotFoundError</span>
+        </div>
+    </div>
+}
+<br />
+<div class="btn-group">
+    @Html.ActionLink("Create Product", "Create", null, htmlAttributes: new { @class = "btn btn-default" })
 </div>
+<br /><br />
+<table class="table table-striped">
 
-<div class="col-md-12">
-	@Html.ActionLink("Create Product", "Create")
-</div>
+    <tr>
+        <th>@Html.DisplayNameFor(model => model.CoverPath)</th>
+        <th>@Html.DisplayNameFor(model => model.SKU)</th>
+        <th>@Html.DisplayNameFor(model => model.ProductName)</th>
+        <th>@Html.DisplayNameFor(model => model.Price)</th>
+        <th>@Html.DisplayNameFor(model => model.Brand)</th>
+        <th>SubCategories</th>
+        <th>Pictures</th>
+        <th>Actions</th>
+    </tr>
 
-<div class="col-md-12">
-	<table class="table">
-		<tr>
-			<th>@Html.DisplayNameFor(model => model.CoverPath)</th>
-			<th>@Html.DisplayNameFor(model => model.SKU)</th>
-			<th>@Html.DisplayNameFor(model => model.ProductName)</th>
-			<th>@Html.DisplayNameFor(model => model.Price)</th>
-			<th>@Html.DisplayNameFor(model => model.Brand)</th>
-			<th>Number of SubCategories</th>
-			<th>Number of additional pictures</th>
-			<th>Actions</th>
-		</tr>
-		@foreach(var item in Model) {
-			<tr>
-				<td><img src=@Html.DisplayFor(modelItem => item.CoverPath) alt="@item.ProductName" style="max-height: 50px;  max-width: 150px;" /></td>
-				<td>@Html.DisplayFor(modelItem => item.SKU)</td>
-				<td>@Html.DisplayFor(modelItem => item.ProductName)</td>
-				<td>@Html.DisplayFor(modelItem => item.Price)</td>
-				<td>@Html.DisplayFor(modelItem => item.Brand.BrandName)</td>
-				<td>@item.ProductCategories.Count</td>
-				<td>@item.ProductPictures.Count</td>
-
-				<td>
-					@Html.ActionLink("Edit", "Edit", new {
-				   SKU = item.SKU
-			   }) |
-					@Html.ActionLink("Details", "Details", new {
-				   SKU = item.SKU
-			   }) |
-					@Html.ActionLink("Delete", "Delete", new {
-				   SKU = item.SKU
-			   })
-				</td>
-			</tr>
-		}
-
-	</table>
-</div>
+    @foreach (var item in Model) {
+        <tr>
+            <td><img src=@Html.DisplayFor(modelItem => item.CoverPath) alt="@item.ProductName" style="max-height: 50px;  max-width: 150px;" /></td>
+            <td>@Html.DisplayFor(modelItem => item.SKU)</td>
+            <td style="max-width:250px;">@Html.DisplayFor(modelItem => item.ProductName)</td>
+            <td>@Html.DisplayFor(modelItem => item.Price)</td>
+            <td>@Html.DisplayFor(modelItem => item.Brand.BrandName)</td>
+            <td>@item.ProductCategories.Count</td>
+            <td>@item.ProductPictures.Count</td>
+            <td>
+                @* Html.ActionLink(Link text, Controller Action, Action parameters) *@
+                <div class="btn-group">
+                    @Html.ActionLink("Edit", "Edit", new { SKU = item.SKU }, htmlAttributes: new { @class = "btn btn-default" })
+                    @Html.ActionLink("Details", "Details", new { SKU = item.SKU }, htmlAttributes: new { @class = "btn btn-default" })
+                    @Html.ActionLink("Delete", "Delete", new { CSKU = item.SKU }, htmlAttributes: new { @class = "btn btn-default" })
+                </div>
+            </td>
+        </tr>   }
+</table>
 
 @section scripts{
-	@Scripts.Render("~/Scripts/AutoCompleteTypeSearch.js")
-	<script type="text/javascript">
-		$("#ProductName").on("input", typeSearch);
-	</script>
+    @Scripts.Render("~/Scripts/AutoCompleteTypeSearch.js")
+    <script type="text/javascript">
+        $("#ProductName").on("input", typeSearch);
+    </script>
 }

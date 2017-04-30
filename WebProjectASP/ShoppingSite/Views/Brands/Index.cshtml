@@ -4,31 +4,33 @@
 	Layout = (ViewBag.LayoutFile != null) ? ViewBag.LayoutFile : Layout;
 }
 
-<div class="col-md-12">
-	<h2>Brands Index</h2>
-	<hr />
+<div class="page-header">
+    <h2>Brands Index</h2>
 </div>
 
-<div class="row">
+
 	@using(Html.BeginForm("Search", "Brands", FormMethod.Post)) {
 		<div class="form-inline">
 			<div class="form-group">
 				<input type="search" id="BrandName" name="BrandName" class="form-control" value="@ViewBag.SearchString" placeholder="Brand name" path="@Url.Action("TypeSearch", "Brands")" autocomplete="on" required />
 			</div>
-			<input type="submit" value="Search" class="btn btn-default" />
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </div>
 			<div class="form-group">
 				<span class="text-danger">@ViewBag.NotFoundError</span>
 			</div>
 		</div>
 	}
-</div>
 
-<div class="col-md-12">
-	@Html.ActionLink("Create Brand", "Create")
-</div>
 
-<div class="col-md-12">
-	<table class="table">
+<br />
+<div class="btn-group">
+    @Html.ActionLink("Create Brand", "Create", null, htmlAttributes: new { @class = "btn btn-default" })
+</div>
+<br /><br />
+
+	<table class="table table-striped">
 		<tr>
 			<th>@Html.DisplayNameFor(model => model.Logo)</th>
 			<th>@Html.DisplayNameFor(model => model.BrandID)</th>
@@ -44,15 +46,18 @@
 				<td>@item.Products.Count</td>
 
 				<td>
-					@Html.ActionLink("Edit", "Edit", new { BrandID = item.BrandID }) |
-					@Html.ActionLink("Details", "Details", new { BrandID = item.BrandID }) |
-					@Html.ActionLink("Delete", "Delete", new { BrandID = item.BrandID })
+                    @* Html.ActionLink(Link text, Controller Action, Action parameters) *@
+                    <div class="btn-group">
+                        @Html.ActionLink("Edit", "Edit", new { BrandID = item.BrandID }, htmlAttributes: new { @class = "btn btn-default" })
+                        @Html.ActionLink("Details", "Details", new { BrandID = item.BrandID }, htmlAttributes: new { @class = "btn btn-default" })
+                        @Html.ActionLink("Delete", "Delete", new { BrandID = item.BrandID }, htmlAttributes: new { @class = "btn btn-default" })
+                    </div>
 				</td>
 			</tr>
 		}
 
 	</table>
-</div>
+
 
 @section scripts{
 	@Scripts.Render("~/Scripts/AutoCompleteTypeSearch.js")

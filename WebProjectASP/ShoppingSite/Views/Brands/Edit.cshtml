@@ -1,86 +1,79 @@
 ﻿@model ShoppingSite.Models.BrandModel
-
 @{
-	ViewBag.Title = "Edit brand";
-	Layout = (ViewBag.LayoutFile != null) ? ViewBag.LayoutFile : Layout;
+    ViewBag.Title = "Edit brand";
+    Layout = (ViewBag.LayoutFile != null) ? ViewBag.LayoutFile : Layout;
 }
-
-<div class="col-md-12r">
-	<h2>Edit brand</h2>
-	<hr />
+<div class="page-header">
+    <h2>Edit Brand</h2>
 </div>
+@using (Html.BeginForm("Edit", "Brands", FormMethod.Post)) {
+    @Html.AntiForgeryToken()
 
-@using(Html.BeginForm("Edit", "Brands", FormMethod.Post)) {
-	@Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.BrandID)
+        <div class="row">
+            <div class="col-md-10">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.BrandName, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.BrandName, new { htmlAttributes = new { @class = "form-control", @oninput = "checkAvailability('" + Url.Action("CheckAvailability", "Brands") + "', " + Model.BrandID + ", 'BrandName')" } })
+                        <span id="glyphiconOK" class="glyphicon glyphicon-ok" style="display: none; color: #28A828"></span>
+                        <span id="glyphiconRem" class="glyphicon glyphicon-remove" style="display: none; color: #D8000C; background-color: #FFBABA; border: 1px solid; margin: 5px 0px; padding: 2px 5px 10px 2px;">Brand already exists.</span>
+                        @Html.ValidationMessageFor(model => model.BrandName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Logo, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Logo, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Logo, "", new { @class = "text-danger" })
+                        <br/>
+                        <img src=@Html.DisplayFor(Model => Model.Logo) alt="@Model.BrandName" style="max-height: 50%; max-width:50%; border: 0px solid;" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Country, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Country, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Country, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.FoundationYear, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(model => model.FoundationYear, new { @type = "number", @min = "1800", @step = "1", @max = "2030", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.FoundationYear, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="btn-group">
+                    @Html.ActionLink("Back to Index", "Index", null, htmlAttributes: new { @class = "btn btn-default" })
+                    <button id="submitButton" type="submit" class="btn btn-primary">Edit</button>
+                </div>
+            </div> <!-- left column -->
+           
 
-	<div class="form-horizontal">
-		@Html.ValidationSummary(false, "", new { @class = "text-danger" })
-		@Html.HiddenFor(model => model.BrandID)
-
-		<div class="row">
-			<div class="col-md-10">
-				<div class="form-group">
-					@Html.LabelFor(model => model.BrandName, htmlAttributes: new { @class = "control-label col-md-2" })
-					<div class="col-md-10">
-						@Html.EditorFor(model => model.BrandName, new { htmlAttributes = new { @class = "form-control", @oninput = "checkAvailability('" + Url.Action("CheckAvailability", "Brands") + "', "+ Model.BrandID + ", 'BrandName')" } })
-						<span id="glyphiconOK" class="glyphicon glyphicon-ok" style="display: none; color: #28A828"></span>
-						<span id="glyphiconRem" class="glyphicon glyphicon-remove" style="display: none; color: #D8000C; background-color: #FFBABA; border: 1px solid; margin: 5px 0px; padding: 2px 5px 10px 2px;">Brand already exists.</span>
-						@Html.ValidationMessageFor(model => model.BrandName, "", new { @class = "text-danger" })
-					</div>
-				</div>
-				<div class="form-group">
-					@Html.LabelFor(model => model.Logo, htmlAttributes: new { @class = "control-label col-md-2" })
-					<div class="col-md-10">
-						@Html.EditorFor(model => model.Logo, new { htmlAttributes = new { @class = "form-control" } })
-						@Html.ValidationMessageFor(model => model.Logo, "", new { @class = "text-danger" })
-					</div>
-				</div>
-				<div class="form-group">
-					@Html.LabelFor(model => model.Country, htmlAttributes: new { @class = "control-label col-md-2" })
-					<div class="col-md-10">
-						@Html.EditorFor(model => model.Country, new { htmlAttributes = new { @class = "form-control" } })
-						@Html.ValidationMessageFor(model => model.Country, "", new { @class = "text-danger" })
-					</div>
-				</div>
-				<div class="form-group">
-					@Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
-					<div class="col-md-10">
-						@Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
-						@Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
-					</div>
-				</div>
-				<div class="form-group">
-					@Html.LabelFor(model => model.FoundationYear, htmlAttributes: new { @class = "control-label col-md-2" })
-					<div class="col-md-10">
-						@Html.TextBoxFor(model => model.FoundationYear, new { @type = "number", @min = "1800", @step = "1", @max = "2030", @class = "form-control" })
-						@Html.ValidationMessageFor(model => model.FoundationYear, "", new { @class = "text-danger" })
-					</div>
-				</div>
-
-				<div class="form-actions no-color col-md-offset-2 col-md-10">
-					<button id="submitButton" type="submit" class="btn btn-primary">Edit</button>
-				</div>
-			</div> <!-- left column -->
-			<div class="col-md-2">
-				<img src=@Html.DisplayFor(Model => Model.Logo) alt="@Model.BrandName" style="max-height: 100%; max-width:100%; border: 1px solid;" />
-			</div> <!-- right column -->
-		</div> <!-- row -->
-	</div> <!-- form-horizontal -->
+            <div class="col-md-2">
+               
+            </div> <!-- right column -->
+        </div> <!-- row -->
+    </div> <!-- form-horizontal -->
 }
-
-<div class="col-md-12">
-	@Html.ActionLink("Back to List", "Index")
-</div>
 
 @section Scripts {
-	@Scripts.Render("~/bundles/jqueryval")
-	@Scripts.Render("~/Scripts/TypeScript/CheckAvail.js")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/Scripts/TypeScript/CheckAvail.js")
+    <script type="text/javascript">
+        $("document").ready(function () {
 
-	<script type="text/javascript">
-		$("document").ready(function () {
-
-			$("#FoundationYear").val(@Model.FoundationYear.Year);
-		});
-	</script>
-
+            $("#FoundationYear").val(@Model.FoundationYear.Year);
+        });
+    </script>
 }
