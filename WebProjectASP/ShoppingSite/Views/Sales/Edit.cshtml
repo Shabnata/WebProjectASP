@@ -3,39 +3,43 @@
 	ViewBag.Title = "Edit Sale";
 	Layout = (ViewBag.LayoutFile != null) ? ViewBag.LayoutFile : Layout;
 }
-<h2>Edit Sale</h2>
+<div class="page-header">
+    <h2>Edit Sale</h2>
+</div>
 @using(Html.BeginForm("Edit", "Sales", FormMethod.Post)) {
 	@Html.AntiForgeryToken()
 
 	<div class="form-horizontal">
-		<h4>SaleModel</h4>
-		<hr />
+		
 		@Html.ValidationSummary(false, "", new { @class = "text-danger" })
 		@Html.HiddenFor(model => model.SaleID)
 		<div class="form-group">
-			@Html.LabelFor(model => model.SaleName, htmlAttributes: new { @class = "control-label col-md-2" })
-			<div class="col-md-10">
-				@Html.EditorFor(model => model.SaleName, new { htmlAttributes = new { @class = "form-control", @value = Model.SaleName } })
+			<div class="col-md-12">
+                @Html.LabelFor(model => model.SaleName, htmlAttributes: new { @class = "control-label col-md-2", style = "text-align: left" })
+				@Html.EditorFor(model => model.SaleName, new { htmlAttributes = new { @class = "form-control col-md-10", @value = Model.SaleName } })
 				@Html.ValidationMessageFor(model => model.SaleName, "", new { @class = "text-danger" })
 			</div>
 		</div>
 		<div class="form-group">
-			@Html.LabelFor(model => model.Emblem, htmlAttributes: new { @class = "control-label col-md-2" })
-			<div class="col-md-10">
+			
+			<div class="col-md-12">
+                @Html.LabelFor(model => model.Emblem, htmlAttributes: new { @class = "control-label col-md-2", style = "text-align: left" })
 				@Html.EditorFor(model => model.Emblem, new { htmlAttributes = new { @class = "form-control", @value = Model.Emblem } })
 				@Html.ValidationMessageFor(model => model.Emblem, "", new { @class = "text-danger" })
 			</div>
 		</div>
 		<div class="form-group">
-			@Html.LabelFor(model => model.Discount, htmlAttributes: new { @class = "control-label col-md-2" })
-			<div class="col-md-10">
+			
+			<div class="col-md-12">
+                @Html.LabelFor(model => model.Discount, htmlAttributes: new { @class = "control-label col-md-2", style = "text-align: left" })
 				@Html.EditorFor(model => model.Discount, new { htmlAttributes = new { type = "number", min = "0", step = "1", max = "100", @class = "form-control", @value = decimal.ToInt32(Model.Discount) } })
 				@Html.ValidationMessageFor(model => model.Discount, "", new { @class = "text-danger" })
 			</div>
 		</div>
 		<div class="form-group">
-			@Html.LabelFor(model => model.StartDate, htmlAttributes: new { @class = "control-label col-md-2" })
-			<div class="col-md-10">
+			
+			<div class="col-md-12">
+                @Html.LabelFor(model => model.StartDate, htmlAttributes: new { @class = "control-label col-md-2", style = "text-align: left" })
 				@{string sDate = Model.StartDate.Year + "-" + Model.StartDate.Month.ToString().PadLeft(2, '0') + "-" + Model.StartDate.Day.ToString().PadLeft(2, '0');
 				}
 				<input type="date" class="datepicker" data-val="true" data-val-date="The field Start date must be a date." data-val-required="The Start date field is required." id="StartDate" name="StartDate" value="@sDate" />
@@ -44,8 +48,8 @@
 			</div>
 		</div>
 		<div class="form-group">
-			@Html.LabelFor(model => model.EndDate, htmlAttributes: new { @class = "control-label col-md-2" })
-			<div class="col-md-10">
+			<div class="col-md-12">
+                @Html.LabelFor(model => model.EndDate, htmlAttributes: new { @class = "control-label col-md-2", style = "text-align: left" })
 				@{string eDate = Model.EndDate.Year + "-" + Model.EndDate.Month.ToString().PadLeft(2, '0') + "-" + Model.EndDate.Day.ToString().PadLeft(2, '0');
 				}
 				<input type="date" class="datepicker" data-val="true" data-val-date="The field End date must be a date." data-val-required="The End date field is required." id="EndDate" name="EndDate" value="@eDate" />
@@ -56,7 +60,8 @@
 
 		<br />
 
-		Brands:
+        <h3>Brands on Sale:</h3>
+		
 		<div class="form-group">
 			@foreach(var b in Model.BrandsOnSale) {
 				<div class="col-md-12">
@@ -75,16 +80,12 @@
 
 		</div>
 
-		<div class="form-group">
-			<div class="col-md-10">
-				<input type="submit" value="Edit" class="btn btn-default" />
-			</div>
-		</div>
+        <div class="btn-group">
+            @Html.ActionLink("Back to Index", "Index", null, htmlAttributes: new { @class = "btn btn-default" })
+            <button id="submitButton" type="submit" class="btn btn-primary">Edit</button>
+        </div>
 	</div>
 					}
-<div>
-	@Html.ActionLink("Back to List", "Index")
-</div>
 
 @section Scripts {
 	@Scripts.Render("~/bundles/jqueryval")
