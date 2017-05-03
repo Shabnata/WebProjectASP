@@ -47,7 +47,7 @@ namespace ShoppingSite.Controllers {
 		}
 
 		public async Task<ActionResult> Update(int SKU, int Quantity = 1) {
-			// TODO Finish this
+			
 			CartViewModel model = new CartViewModel();
 
 			if(User.Identity.IsAuthenticated) { // User logged in
@@ -60,7 +60,7 @@ namespace ShoppingSite.Controllers {
 			}
 
 			CartItemModel updateModel = model.CartItems.SingleOrDefault((CartItemModel a) => { return a.SKU == SKU; });
-
+			
 			if(updateModel.SKU != SKU) { // New item
 				updateModel.Product = await db.Products.FindAsync(SKU);
 				updateModel.SKU = SKU;
@@ -75,23 +75,13 @@ namespace ShoppingSite.Controllers {
 				}
 
 			} else { // Existing item
-				if(model.User != null) {
-					updateModel.Quantity = Quantity;
-				}
+				updateModel.Quantity = Quantity;
 				if(updateModel.Quantity <= 0) {
 					model.User.CartItems.Remove(updateModel);
 				}
 			}
 
-			if(model.User != null) {
-				if(updateModel.Quantity <= 0) {
-					model.User.CartItems.Remove(updateModel);
-				}
-			} else { // Guest
-
-			}
-
-			return View("ViewCart");
+			return View("ViewCart", model);
 		}
 
 		public async Task<ActionResult> Clear() {
