@@ -47,20 +47,20 @@ namespace ShoppingSite.Controllers {
 		}
 
 		public async Task<ActionResult> Update(int SKU, int Quantity = 1) {
-			
+
 			CartViewModel model = new CartViewModel();
 
 			if(User.Identity.IsAuthenticated) { // User logged in
 				model.User = db.Users.Find(User.Identity.GetUserId());
 				model.CartItems = model.User.CartItems;
-				
+
 			} else { // Guest
 				model.User = null; // Display name with model.User.Name ?? "Guest"
 				model.CartItems = Session["GuestCartItems"] as IList<CartItemModel> ?? new List<CartItemModel>();
 			}
 
 			CartItemModel updateModel = model.CartItems.SingleOrDefault((CartItemModel a) => { return a.SKU == SKU; });
-			
+
 			if(updateModel.SKU != SKU) { // New item
 				updateModel.Product = await db.Products.FindAsync(SKU);
 				updateModel.SKU = SKU;
@@ -69,7 +69,7 @@ namespace ShoppingSite.Controllers {
 					updateModel.ApplicationUserID = model.User.Id;
 					updateModel.Customer = model.User;
 					model.User.CartItems.Add(updateModel);
-					await db.SaveChangesAsync();
+
 				} else {
 					(Session["GuestCartItems"] as IList<CartItemModel>).Add(updateModel);
 				}
@@ -79,6 +79,9 @@ namespace ShoppingSite.Controllers {
 				if(updateModel.Quantity <= 0) {
 					model.User.CartItems.Remove(updateModel);
 				}
+			}
+			if(model.User != null) {
+				await db.SaveChangesAsync();
 			}
 
 			return View("ViewCart", model);
