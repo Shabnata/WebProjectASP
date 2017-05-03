@@ -45,6 +45,8 @@ namespace ShoppingSite.Models {
 
 		public virtual ICollection<OrderModel> Orders { get; set; }
 
+		public virtual ICollection<CartItemModel> CartItems { get; set; }
+
 		public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager) {
 			// Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
 			var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
@@ -67,6 +69,8 @@ namespace ShoppingSite.Models {
 		public virtual DbSet<ProductModel> Products { get; set; }
 		public virtual DbSet<ProductPictureModel> ProductPictures { get; set; }
 		public virtual DbSet<SaleModel> Sales { get; set; }
+//		public virtual DbSet<CartModel> Carts { get; set; }
+		public virtual DbSet<CartItemModel> CartItems { get; set; }
 
 		public static ApplicationDbContext Create() {
 			return new ApplicationDbContext();
@@ -77,6 +81,18 @@ namespace ShoppingSite.Models {
 			List<SaleModel> activeSales = await (from s in this.Sales where s.StartDate <= today && s.EndDate >= today select s).ToListAsync();
 
 			return activeSales;
+		}
+
+		public async Task<SaleModel> GetProductBestActiveSale(int SKU) {
+			DateTime today = DateTime.Now;
+			ProductModel product = await this.Products.FindAsync(SKU);
+			if(product.Brand.Sales != null && product.Brand.Sales.Count != 0) {
+					//SaleModel bestSale = (await (from sale in this.Sales where sale.StartDate <= today && sale.EndDate >= today && sale.BrandsOnSale.Contains(product.Brand) select sale).ToListAsync()).OrderByDescending((SaleModel a) => { return a.Discount; }).First();
+					SaleModel bestSale = (from s in product.Brand.Sales where s.StartDate <= today && s.EndDate >= today select s).OrderByDescending((SaleModel a) => { return a.Discount; }).First();
+					return bestSale;
+			}
+
+			return null;
 		}
 
 		public async Task<IList<SubCategoryModel>> GetBrandSubCategoriesAsync(int BrandID) {
