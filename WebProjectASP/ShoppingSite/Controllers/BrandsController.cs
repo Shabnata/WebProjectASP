@@ -65,8 +65,8 @@ namespace ShoppingSite.Controllers {
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<ActionResult> Edit([Bind(Include = "BrandID, BrandName, Logo, Country, Description, FoundationYear")] BrandModel brandModel) {
-			await this.FillViewBag();
+		public async Task<ActionResult> Edit([Bind(Include = "BrandID, BrandName, Logo, Country, Description")] BrandModel brandModel, int FoundationYear) {
+			brandModel.FoundationYear = new DateTime(FoundationYear, 1, 1);		
 			if(ModelState.IsValid) {
 				if(!await (from b in db.Brands where b.BrandID != brandModel.BrandID && b.BrandName.ToLower() == brandModel.BrandName.ToLower() select b).AnyAsync()) {
 					db.Entry(brandModel).State = EntityState.Modified;
@@ -74,6 +74,7 @@ namespace ShoppingSite.Controllers {
 					return RedirectToAction("Index");
 				}
 			}
+			await this.FillViewBag();
 			return View(brandModel);
 		}
 
