@@ -2,81 +2,68 @@
 @model ShoppingSite.Models.CategoryModel
 
 @{
-	ViewBag.Title = "Category details";
-	Layout = ViewBag.LayoutFile ?? Layout;
+    ViewBag.Title = "Category details";
+    Layout = ViewBag.LayoutFile ?? Layout;
 }
 
 <div class="page-header">
-	<h2>Category details</h2>
+    <h2>Category details</h2>
 </div>
 
 <div class="row">
-	<div class="col-md-10 ">
-		<div class="row">
-			@Html.LabelFor(model => model.CategoryID, htmlAttributes: new { @class = "col-md-2" })
-			<div class="col-md-6">
-				@Html.DisplayFor(Model => Model.CategoryID)
-			</div>
-			<div class="col-md-4">
-				<!-- To hold the layout -->
-			</div>
-		</div>
+    <div class="col-md-6 ">
+        <div class="row">
+            @Html.LabelFor(model => model.CategoryID, htmlAttributes: new { @class = "col-md-3" })
+            <div class="col-md-3">
+                @Html.DisplayFor(Model => Model.CategoryID)
+            </div>
 
-		<div class="row">
-			@Html.LabelFor(model => model.CategoryName, htmlAttributes: new { @class = "col-md-2" })
-			<div class="col-md-6">
-				@Html.DisplayFor(Model => Model.CategoryName)
-			</div>
-			<div class="col-md-4">
-				<!-- To hold the layout -->
-			</div>
-		</div>
+        </div>
 
-		<div class="row">
-			@{
-				ShoppingSite.Models.SubCategoryModel[] subcategories = Model.SubCategories.ToArray();	
-			}
-			@Html.Label("Subcategories", "Subcategories", htmlAttributes: new { @class = "col-md-2" })
+        <div class="row">
+            @Html.LabelFor(model => model.CategoryName, htmlAttributes: new { @class = "col-md-3" })
+            <div class="col-md-3">
+                @Html.DisplayFor(Model => Model.CategoryName)
+            </div>
 
-			<div class="col-md-6">
-				<div id="tabs">
-					<ul>
-						@for(int tab = 1; tab <= ViewBag.NumberOfTabs; tab++) {
-							<li><a href="#tabs-@tab">Page: @tab</a></li>
-						}
-					</ul>
-					@for(int tab = 0; tab < ViewBag.NumberOfTabs; tab++) {
-						<div id="tabs-@tab">
-							<ul>
-								@for(int item = 0; item < ViewBag.ItemsPerTab && (ViewBag.SubCategoriesCount > ((tab * ViewBag.ItemsPerTab) + item)); item++) {
-									<li>@subcategories[((tab * ViewBag.ItemsPerTab) + item)].SubCategoryName</li>
-								}
-							</ul>
-						</div>
-					}
-				</div> <!-- tabs -->
-			</div>
-			<div class="col-md-4">
-				<!-- To hold the layout -->
-			</div>
-		</div> <!-- row -->
+        </div>
 
-		<div class="btn-group">
-			@Html.ActionLink("Back to Index", "Index", null, htmlAttributes: new { @class = "btn btn-default" })
-			@Html.ActionLink("Delete", "Delete", new { CategoryID = Model.CategoryID }, htmlAttributes: new { @class = "btn btn-default" })
-			@Html.ActionLink("Edit", "Edit", new { CategoryID = Model.CategoryID }, htmlAttributes: new { @class = "btn btn-default" })		
-		</div>
+        <div class="row">
+            @{ShoppingSite.Models.SubCategoryModel[] subcategories = Model.SubCategories.ToArray();
+            }
+            @Html.Label("Subcategories", "Subcategories", htmlAttributes: new { @class = "col-md-3" })
 
-	</div> <!-- left column -->
-	<div class="col-md-2">
-		<img src="@Html.DisplayFor(Model => Model.Logo)" alt="@Model.CategoryName" style="max-height: 100%; max-width:100%; border: 1px solid;" />
-	</div> <!-- right column -->
+            <div class="col-md-4">
+                <ul>
+                    @for (int item = 0; item < subcategories.Count(); item++) {
+                        <li>@subcategories[item].SubCategoryName</li>
+                    }
+                </ul>
+
+            </div>
+
+        </div> <!-- row -->
+
+        <div class="btn-group">
+            @Html.ActionLink("Back to Index", "Index", null, htmlAttributes: new { @class = "btn btn-default" })
+            @Html.ActionLink("Delete", "Delete", new { CategoryID = Model.CategoryID }, htmlAttributes: new { @class = "btn btn-default" })
+            @Html.ActionLink("Edit", "Edit", new { CategoryID = Model.CategoryID }, htmlAttributes: new { @class = "btn btn-default" })
+        </div>
+
+    </div> <!-- left column -->
+    <div class="col-md-6">
+        @Html.Label("Logo:", htmlAttributes: new { @class = "control-label col-md-3" })
+        <div class="col-md-3">
+            <img src="@Html.DisplayFor(Model => Model.Logo)" alt="@Model.CategoryName" style="max-height: 200px; max-width:200px; border: 0px solid;" />
+        </div>
+    </div> <!-- right column -->
+
 </div> <!-- row -->
 
 @section scripts{
-	<script type="text/javascript">
-		$(function() {
-			$("#tabs").tabs();
-		});
-	</script>
+    <script type="text/javascript">
+        $(function () {
+            $("#tabs").tabs();
+        });
+    </script>
 }

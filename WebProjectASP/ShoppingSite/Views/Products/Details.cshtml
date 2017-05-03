@@ -1,41 +1,69 @@
 ﻿@model ShoppingSite.Models.ProductModel
-
 @{
-	ViewBag.Title = "Product details";
-	Layout = (ViewBag.LayoutFile != null) ? ViewBag.LayoutFile : Layout;
+    ViewBag.Title = "Product details";
+    Layout = (ViewBag.LayoutFile != null) ? ViewBag.LayoutFile : Layout;
 }
 
-<h2>Product details</h2>
 
-<div>
-	<h4>ProductModel</h4>
-	<hr />
-
-	@Html.DisplayNameFor(model => model.SKU) :
-	@Html.DisplayFor(model => model.SKU)
-	<br />
-	@Html.DisplayNameFor(model => model.ProductName) :
-	@Html.DisplayFor(model => model.ProductName)
-	<br />
-	@Html.DisplayNameFor(model => model.Description) :
-	@Html.DisplayFor(model => model.Description)
-	<br />
-	@Html.DisplayNameFor(model => model.CoverPath) :
-	@Html.DisplayFor(model => model.CoverPath)
-	<br />
-	@Html.DisplayNameFor(model => model.Price) :
-	@Html.DisplayFor(model => model.Price)
-	<br />
-	@Html.DisplayNameFor(model => model.Brand.BrandName) :
-	@Html.DisplayFor(model => model.Brand.BrandName)
-	<br />
-	Additional pictures:
-	<br />
-	@foreach(var p in Model.ProductPictures) {
-		<img src="@p.PicturePath" alt="@Model.ProductName" />
-	}
+<div class="page-header">
+    <h2>Product details</h2>
 </div>
 
-@Html.ActionLink("Delete", "Delete", new { SKU = Model.SKU }) |
-@Html.ActionLink("Edit", "Edit", new { SKU = Model.SKU }) |
-@Html.ActionLink("Back to List", "Index")
+<div class="row">
+    <div class="col-md-10 ">
+        <div class="row">
+            @Html.LabelFor(model => model.SKU, htmlAttributes: new { @class = "col-md-2" })
+            <div class="col-md-10">
+                @Html.DisplayFor(model => model.SKU)
+            </div>
+        </div>
+        <div class="row">
+            @Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "col-md-2" })
+            <div class="col-md-6">
+                @Html.DisplayFor(model => model.Price)
+            </div>
+            <div class="col-md-4">
+                <!-- To hold the layout -->
+            </div>
+        </div>
+        <div class="row">
+            @Html.LabelFor(model => model.ProductName, htmlAttributes: new { @class = "col-md-2" })
+            <div class="col-md-10">
+                @Html.DisplayFor(model => model.ProductName)
+            </div>
+        </div>
+        <div class="row">
+            @Html.LabelFor(model => model.Brand.BrandName, htmlAttributes: new { @class = "col-md-2" })
+            <div class="col-md-10">
+                @Html.DisplayFor(model => model.Brand.BrandName)
+            </div>
+        </div>
+        <div class="row">
+            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "col-md-2" })
+            <div class="col-md-10">
+                @Html.DisplayFor(model => model.Description)
+            </div>
+        </div>
+
+        <div class="row">
+            @Html.Label("Pictures:", htmlAttributes: new { @class = "col-md-2" })
+            <br/>
+            <div class="col-md-10">
+                <img src=@Html.DisplayFor(model => model.CoverPath) alt="@Model.ProductName" style="max-height:100px; max-width:100px; border: 0px solid;" />
+                @foreach (var p in Model.ProductPictures) {
+                    <img src="@p.PicturePath" alt="@Model.ProductName" style="max-height: 100px; max-width:100px; border: 0px solid;" />
+                }
+            </div>
+        </div>
+    <br/>
+        <div class="btn-group">
+            @Html.ActionLink("Back to Index", "Index", null, htmlAttributes: new { @class = "btn btn-default" })
+            @Html.ActionLink("Delete", "Delete", new { SKU = Model.SKU }, htmlAttributes: new { @class = "btn btn-default" })
+            @Html.ActionLink("Edit", "Edit", new { SKU = Model.SKU }, htmlAttributes: new { @class = "btn btn-default" })
+        </div>
+
+    </div> <!-- left column -->
+    <div class="col-md-2">
+
+    </div> <!-- right column -->
+</div> <!-- row -->

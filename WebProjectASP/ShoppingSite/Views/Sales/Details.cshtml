@@ -3,39 +3,82 @@
     ViewBag.Title = "Sale details";
     Layout = (ViewBag.LayoutFile != null) ? ViewBag.LayoutFile : Layout;
 }
-<h2>Sale details</h2>
-<div>
-    <h4>SaleModel</h4>
-    <hr />
 
-    @Html.DisplayNameFor(model => model.SaleID) :
-    @Html.DisplayFor(model => model.SaleID)
-    <br />
-    @Html.DisplayNameFor(model => model.SaleName) :
-    @Html.DisplayFor(model => model.SaleName)
-    <br />
-    @Html.DisplayNameFor(model => model.Discount) :
-    @Html.DisplayFor(model => model.Discount)
-    <br />
-    @Html.DisplayNameFor(model => model.StartDate) :
-    @Html.DisplayFor(model => model.StartDate)
-    <br />
-    @Html.DisplayNameFor(model => model.EndDate) :
-    @Html.DisplayFor(model => model.EndDate)
-    <br />
-    @Html.DisplayNameFor(model => model.Emblem) :
-    <br />
-    <img src="@Model.Emblem" alt="@Model.SaleName" width="300" />
-    <br />
-    Brands on sale:
-    <ul>
-        @foreach (var brand in Model.BrandsOnSale) {
-            <li>
-                <label>@brand.BrandName</label>
-            </li>
-        }
-    </ul>
+
+<div class="page-header">
+    <h2>Sale details</h2>
 </div>
-@Html.ActionLink("Delete", "Delete", new { SaleID = Model.SaleID }) |
-@Html.ActionLink("Edit", "Edit", new { SaleID = Model.SaleID }) |
-@Html.ActionLink("Back to List", "Index")
+
+<div class="row">
+    <div class="col-md-10 ">
+        <div class="row">
+            @Html.LabelFor(model => model.SaleID, htmlAttributes: new { @class = "col-md-2" })
+            <div class="col-md-10">
+                @Html.DisplayFor(model => model.SaleID)
+            </div>
+        </div>
+        <div class="row">
+            @Html.LabelFor(model => model.SaleName, htmlAttributes: new { @class = "col-md-2" })
+            <div class="col-md-6">
+                @Html.DisplayFor(model => model.SaleName)
+            </div>
+            <div class="col-md-4">
+                <!-- To hold the layout -->
+            </div>
+        </div>
+        <div class="row">
+            @Html.LabelFor(model => model.Discount, htmlAttributes: new { @class = "col-md-2" })
+            <div class="col-md-10">
+                @Model.Discount.ToString("0")
+            </div>
+        </div>
+        <div class="row">
+            @Html.LabelFor(model => model.StartDate, htmlAttributes: new { @class = "col-md-2" })
+            <div class="col-md-10">
+                @Html.DisplayFor(model => model.StartDate, "{0:dd-MM-yyyy}")
+            </div>
+        </div>
+        <div class="row">
+            @Html.LabelFor(model => model.EndDate, htmlAttributes: new { @class = "col-md-2" })
+            <div class="col-md-10">
+                @Html.DisplayFor(model => model.EndDate, "{0:dd-MM-yyyy}")
+            </div>
+        </div>
+
+
+        <div class="row">
+            @Html.Label("Emblem", htmlAttributes: new { @class = "col-md-2" })
+            <br />
+            <div class="col-md-10">
+                <img src=@Html.DisplayFor(model => model.Emblem) alt="@Model.SaleName" style="max-height:100px; max-width:100px; border: 0px solid;" />
+               
+            </div>
+        </div>
+        <br />
+
+        <div class="row">
+         
+           
+            @Html.Label("Brands on Sale:", htmlAttributes: new { @class = "col-md-2" })
+            <div class="col-md-4">
+              
+                <ul>
+                    @foreach (var brand in Model.BrandsOnSale) {
+                        <li>@brand.BrandName</li>
+                    }
+                </ul>
+
+            </div>
+
+        </div> <!-- row -->
+        <div class="btn-group">
+            @Html.ActionLink("Back to Index", "Index", null, htmlAttributes: new { @class = "btn btn-default" })
+            @Html.ActionLink("Delete", "Delete", new { SaleID = Model.SaleID }, htmlAttributes: new { @class = "btn btn-default" })
+            @Html.ActionLink("Edit", "Edit", new { SaleID = Model.SaleID }, htmlAttributes: new { @class = "btn btn-default" })
+        </div>
+
+    </div> <!-- left column -->
+    <div class="col-md-2">
+
+    </div> <!-- right column -->
+</div> <!-- row -->

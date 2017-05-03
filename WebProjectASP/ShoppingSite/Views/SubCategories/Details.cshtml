@@ -1,35 +1,54 @@
 ﻿@model ShoppingSite.Models.SubCategoryModel
-
 @{
-	ViewBag.Title = "SubCategory details";
-	Layout = (ViewBag.LayoutFile != null) ? ViewBag.LayoutFile : Layout;
+    ViewBag.Title = "SubCategory details";
+    Layout = (ViewBag.LayoutFile != null) ? ViewBag.LayoutFile : Layout;
 }
-
-<h2>SubCategory details</h2>
-
-<div>
-	<h4>CategoryModel</h4>
-	<hr />
-	@Html.DisplayNameFor(model => model.SubCategoryID) :
-	@Html.DisplayFor(model => model.SubCategoryID)
-	<br />
-	@Html.DisplayNameFor(model => model.SubCategoryName) :
-	@Html.DisplayFor(model => model.SubCategoryName)
-	<br />
-	@Html.DisplayNameFor(model => model.SubCategoryLogo) :
-	@Html.DisplayFor(model => model.SubCategoryLogo)
-	<img src="@Model.SubCategoryLogo" alt="@Model.SubCategoryName" />
-	<br />
-
-	<ul>
-		@foreach(var pc in Model.ParentCategories) {
-			<li>
-				<label>@pc.CategoryName</label>
-			</li>
-		}
-	</ul>
+<div class="page-header">
+    <h2>SubCategory details</h2>
 </div>
 
-@Html.ActionLink("Delete", "Delete", new { SubCategoryID = Model.SubCategoryID }) |
-@Html.ActionLink("Edit", "Edit", new { SubCategoryID = Model.SubCategoryID }) |
-@Html.ActionLink("Back to List", "Index")
+<div class="row">
+    <div class="col-md-7 ">
+        <div class="row">
+            @Html.LabelFor(model => model.SubCategoryID, htmlAttributes: new { @class = "col-md-4" })
+            <div class="col-md-3">
+                @Html.DisplayFor(Model => Model.SubCategoryID)
+            </div>
+
+        </div>
+
+        <div class="row">
+            @Html.LabelFor(model => model.SubCategoryName, htmlAttributes: new { @class = "col-md-4" })
+            <div class="col-md-3">
+                @Html.DisplayFor(Model => Model.SubCategoryName)
+            </div>
+        </div>
+        <div class="row">
+
+            @Html.Label("Subcategories", "Subcategories", htmlAttributes: new { @class = "col-md-4" })
+
+            <div class="col-md-4">
+                <ul>
+                    @foreach (var pc in Model.ParentCategories) {
+                        <li>@pc.CategoryName</li>
+                    }
+                </ul>
+            </div>
+
+        </div> <!-- row -->
+
+        <div class="btn-group">
+            @Html.ActionLink("Back to Index", "Index", null, htmlAttributes: new { @class = "btn btn-default" })
+            @Html.ActionLink("Delete", "Delete", new { SubCategoryID = Model.SubCategoryID }, htmlAttributes: new { @class = "btn btn-default" })
+            @Html.ActionLink("Edit", "Edit", new { SubCategoryID = Model.SubCategoryID }, htmlAttributes: new { @class = "btn btn-default" })
+        </div>
+
+    </div> <!-- left column -->
+    <div class="col-md-5">
+        @Html.Label("Logo:", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-3">
+            <img src="@Html.DisplayFor(Model => Model.SubCategoryLogo)" alt="@Model.SubCategoryName" style="max-height: 200px; max-width:200px; border: 0px solid;" />
+        </div>
+    </div> <!-- right column -->
+
+</div> <!-- row -->

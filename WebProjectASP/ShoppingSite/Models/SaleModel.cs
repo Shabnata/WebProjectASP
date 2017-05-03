@@ -27,14 +27,14 @@ namespace ShoppingSite.Models {
 		[Display(Name = "Start date")]
 		[Column("StartDate", TypeName = "date")]
 		[DataType(DataType.Date)]
-		[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:u}")]
+		[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd-MM-yyyy}")]
 		public DateTime StartDate { get; set; }
 
 		[Required]
 		[Display(Name = "End date")]
 		[Column("EndDate", TypeName = "date")]
 		[DataType(DataType.Date)]
-		[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:u}")]
+		[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd-MM-yyyy}")]
 		public DateTime EndDate { get; set; }
 
 		[Required]
@@ -67,19 +67,20 @@ namespace ShoppingSite.Models {
 		[Required]
 		[Display(Name = "Start date")]
 		[DataType(DataType.Date)]
-		[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:u}")]
+		[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd-MM-yyyy}")]
 		public DateTime StartDate { get; set; }
 
 		[Required]
 		[Display(Name = "End date")]
 		[DataType(DataType.Date)]
-		[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:u}")]
+		[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd-MM-yyyy}")]
 		public DateTime EndDate { get; set; }
 
 		[Required]
 		[Display(Name = "Discount %")]
 		[DataType(DataType.Text)]
-		public decimal Discount { get; set; }
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:#}")]
+        public decimal Discount { get; set; }
 
 		[Required]
 		[Display(Name = "Emblem")]
@@ -106,13 +107,13 @@ namespace ShoppingSite.Models {
 		[Required]
 		[Display(Name = "Start date")]
 		[DataType(DataType.Date)]
-		[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:u}")]
+		[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd-MM-yyyy}")]
 		public DateTime StartDate { get; set; }
 
 		[Required]
 		[Display(Name = "End date")]
 		[DataType(DataType.Date)]
-		[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:u}")]
+		[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd-MM-yyyy}")]
 		public DateTime EndDate { get; set; }
 
 		[Required]
