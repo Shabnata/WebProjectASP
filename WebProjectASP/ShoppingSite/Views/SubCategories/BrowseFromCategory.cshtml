@@ -37,7 +37,11 @@
 									<img src=@productPage.Current.CoverPath alt=@productPage.Current.ProductName style="max-height: 100px;  max-width: 100px;" />
 									<h2>@productPage.Current.Price</h2>
 									<p>@productPage.Current.ProductName</p>
-									<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
+									using(Html.BeginForm("Add", "Cart", FormMethod.Post)) {
+										@Html.Hidden("SKU", productPage.Current.SKU)
+										@Html.Hidden("Quantity", 1)
+										<button type="submit" class="btn btn-default">Add to cart</button>
+									}
 								}
 							</div>
 						}
