@@ -21,6 +21,12 @@ namespace ShoppingSite.Controllers {
 			return true;
 		}
 
+		[Authorize(Roles = "Administrator, Manager")]
+		public async Task<ActionResult> Index() {
+			await this.FillViewBag();
+			return View(await db.Orders.ToListAsync());
+		}
+
 		public async Task<ActionResult> Checkout() {
 
 			ApplicationUser user = this.db.Users.Find(User.Identity.GetUserId());
@@ -43,6 +49,28 @@ namespace ShoppingSite.Controllers {
 
 			await db.SaveChangesAsync();
 			CheckoutViewModel model = new CheckoutViewModel() { UserName = user.UserName, OrderID = order.OrderID };
+
+			await this.FillViewBag();
+			return View(model);
+		}
+
+		[Authorize(Roles = "Administrator, Manager")]
+		public async Task<ActionResult> Search(int OrderID) {
+
+			IList<OrderModel> model = await (from o in db.Orders where o.OrderID == OrderID select o).ToListAsync();
+			 
+			if(model.Count == 0) {
+				ViewBag.NotFoundError = "Order not found";
+			}
+
+			await this.FillViewBag();
+			return View("Index", model);
+		}
+
+		[Authorize(Roles = "Administrator, Manager")]
+		public async Task<ActionResult> Details(int OrderID) {
+
+			OrderModel model = await db.Orders.FindAsync(OrderID);
 
 			await this.FillViewBag();
 			return View(model);

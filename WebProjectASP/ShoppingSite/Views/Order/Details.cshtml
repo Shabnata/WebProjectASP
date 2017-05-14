@@ -1,0 +1,81 @@
+﻿@model ShoppingSite.Models.OrderModel
+
+@{
+	ViewBag.Title = "Details";
+	Layout = ViewBag.LayoutFile ?? Layout;
+}
+<div class="page-header">
+	<h2>Order details</h2>
+</div>
+
+<div class="row">
+	<div class="col-md-6 ">
+		<div class="row">
+			@Html.LabelFor(model => model.OrderID, htmlAttributes: new { @class = "col-md-3" })
+			<div class="col-md-3">
+				@Html.DisplayFor(Model => Model.OrderID)
+			</div>
+
+		</div>
+
+		<div class="row">
+			@Html.LabelFor(model => model.User.UserName, htmlAttributes: new { @class = "col-md-3" })
+			<div class="col-md-3">
+				@Html.DisplayFor(Model => Model.User.UserName)
+			</div>
+
+		</div>
+
+		<div class="row">
+			@Html.LabelFor(model => model.User.PhoneNumber, htmlAttributes: new { @class = "col-md-3" })
+			<div class="col-md-3">
+				@Html.DisplayFor(Model => Model.User.PhoneNumber)
+			</div>
+
+		</div>
+
+		<div class="row">
+			@Html.LabelFor(model => model.OrderDate, htmlAttributes: new { @class = "col-md-3" })
+			<div class="col-md-3">
+				@Html.DisplayFor(Model => Model.OrderDate)
+			</div>
+
+		</div>
+
+		<div class="row">
+			@Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "col-md-3" })
+			<div class="col-md-3">
+				@Html.DisplayFor(Model => Model.Status)
+			</div>
+
+		</div>
+
+		<div class="row">
+			@{ShoppingSite.Models.OrderItemModel[] orderItems = Model.OrderItems.ToArray();
+			}
+			@Html.Label("OrderItems", "Order items", htmlAttributes: new { @class = "col-md-3" })
+
+			<div class="col-md-4">
+				<ul>
+					@for(int item = 0; item < orderItems.Count(); item++) {
+						<li>@orderItems[item].Product.ProductName - @orderItems[item].Quantity</li>
+					}
+				</ul>
+
+			</div>
+
+		</div> <!-- row -->
+
+		<div class="btn-group">
+			@Html.ActionLink("Back to Index", "Index", null, htmlAttributes: new { @class = "btn btn-default" })
+		</div>
+
+	</div> <!-- left column -->
+	<div class="col-md-6">
+		@Html.Label("", htmlAttributes: new { @class = "control-label col-md-3" })
+		<div class="col-md-3">
+
+		</div>
+	</div> <!-- right column -->
+
+</div> <!-- row -->
