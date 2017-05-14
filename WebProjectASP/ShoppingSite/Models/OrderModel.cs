@@ -21,7 +21,7 @@ namespace ShoppingSite.Models {
 		[Display(Name = "Order date")]
 		[Column("OrderDate", TypeName = "date")]
 		[DataType(DataType.Date)]
-		[DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}")]
+		[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd-MM-yyyy}")]
 		public DateTime OrderDate { get; set; }
 
 		[Required]
@@ -33,7 +33,7 @@ namespace ShoppingSite.Models {
 		[Display(Name = "Paid date")]
 		[Column("PaidDate", TypeName = "date")]
 		[DataType(DataType.Date)]
-		[DisplayFormat(DataFormatString = "{0:dd-MM-yyyy hh:mm}")]
+		[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd-MM-yyyy}")]
 		public DateTime PaidDate { get; set; }
 
 		[Required]
@@ -46,5 +46,10 @@ namespace ShoppingSite.Models {
 		public virtual ApplicationUser User { get; set; }
 
 		public virtual ICollection<OrderItemModel> OrderItems { get; set; }
+	}
+
+	public class CheckoutViewModel {
+		public string UserName { get; set; }
+		public int OrderID { get; set; }
 	}
 }

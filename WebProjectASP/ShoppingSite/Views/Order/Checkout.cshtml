@@ -1,0 +1,12 @@
+﻿@model ShoppingSite.Models.CheckoutViewModel
+@{
+    ViewBag.Title = "Checkout";
+    Layout = ViewBag.LayoutFile ?? Layout;
+}
+
+Thank you, @Model.UserName .
+<br/>
+You will be contacted shortly.
+<br/>
+Your order# is @Model.OrderID
+<br/>
