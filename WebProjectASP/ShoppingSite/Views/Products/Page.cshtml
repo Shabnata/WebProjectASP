@@ -1,0 +1,69 @@
+﻿@model ShoppingSite.Models.ProductModel
+@{
+    ViewBag.Title = "Product page";
+    Layout = (ViewBag.LayoutFile != null) ? ViewBag.LayoutFile : Layout;
+}
+
+
+<div class="page-header">
+    <h2>Product page</h2>
+</div>
+
+<div class="row">
+    <div class="col-md-10 ">
+        <div class="row">
+            @Html.LabelFor(model => model.SKU, htmlAttributes: new { @class = "col-md-2" })
+            <div class="col-md-10">
+                @Html.DisplayFor(model => model.SKU)
+            </div>
+        </div>
+        <div class="row">
+            @Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "col-md-2" })
+            <div class="col-md-6">
+                @Html.DisplayFor(model => model.Price)
+            </div>
+            <div class="col-md-4">
+                <!-- To hold the layout -->
+            </div>
+        </div>
+        <div class="row">
+            @Html.LabelFor(model => model.ProductName, htmlAttributes: new { @class = "col-md-2" })
+            <div class="col-md-10">
+                @Html.DisplayFor(model => model.ProductName)
+            </div>
+        </div>
+        <div class="row">
+            @Html.LabelFor(model => model.Brand.BrandName, htmlAttributes: new { @class = "col-md-2" })
+            <div class="col-md-10">
+                @Html.DisplayFor(model => model.Brand.BrandName)
+            </div>
+        </div>
+        <div class="row">
+            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "col-md-2" })
+            <div class="col-md-10">
+                @Html.DisplayFor(model => model.Description)
+            </div>
+        </div>
+
+        <div class="row">
+            @Html.Label("Pictures:", htmlAttributes: new { @class = "col-md-2" })
+            <br />
+            <div class="col-md-10">
+                <img src=@Html.DisplayFor(model => model.CoverPath) alt="@Model.ProductName" style="max-height:100px; max-width:100px; border: 0px solid;" />
+                @foreach (var p in Model.ProductPictures) {
+                    <img src="@p.PicturePath" alt="@Model.ProductName" style="max-height: 100px; max-width:100px; border: 0px solid;" />
+                }
+            </div>
+        </div>
+        <br />
+        <div class="btn-group">
+            @using (Html.BeginForm("Add", "Cart", FormMethod.Post)) {
+                @Html.Hidden("SKU", Model.SKU)
+                @Html.Hidden("Quantity", 1)
+                <button type="submit" class="btn btn-primary">Add to cart</button>
+            }
+        </div>
+    </div> <!-- left column -->
+    <div class="col-md-2">
+    </div> <!-- right column -->
+</div> <!-- row -->

@@ -364,6 +364,7 @@
     <Content Include="Views\Products\BrowseFromNav.cshtml" />
     <Content Include="Views\Products\Error.cshtml" />
     <Content Include="Views\Cart\ViewCart.cshtml" />
+    <Content Include="Views\Products\Page.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
