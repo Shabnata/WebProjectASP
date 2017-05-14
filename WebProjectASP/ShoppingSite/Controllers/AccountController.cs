@@ -11,6 +11,7 @@ using Microsoft.Owin.Security;
 using ShoppingSite.Models;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.Data.Entity;
+using System.Collections.Generic;
 
 namespace ShoppingSite.Controllers {
 	[Authorize]
@@ -78,7 +79,7 @@ namespace ShoppingSite.Controllers {
             await this.FillViewBag();
             switch (result) {
 				case SignInStatus.Success:
-                   
+					await MergeCarts(model.Email);
                     return RedirectToLocal(returnUrl);
 				case SignInStatus.LockedOut:
 					return View("Lockout");
@@ -89,6 +90,29 @@ namespace ShoppingSite.Controllers {
 					ModelState.AddModelError("", "Invalid login attempt.");
 					return View(model);
 			}
+		}
+
+		private async Task<Boolean> MergeCarts(string email) {
+			IList<CartItemModel> guestCartItems = Session["GuestCartItems"] as IList<CartItemModel> ?? new List<CartItemModel>();
+			ApplicationUser user = await (from u in db.Users where u.Email.Equals(email) select u).SingleAsync();
+
+			foreach(CartItemModel cim in guestCartItems) {
+				CartItemModel updateModel = null;
+				
+				if((from c in user.CartItems where c.SKU == cim.SKU select c).Any()) {
+					updateModel = (from c in user.CartItems where c.SKU == cim.SKU select c).Single();
+					updateModel.Quantity += cim.Quantity;
+					user.CartItems.Add(updateModel);
+				} else {
+					updateModel = new CartItemModel() { SKU = cim.SKU, Quantity = cim.Quantity, ApplicationUserID = user.Id };
+					user.CartItems.Add(updateModel);
+				}
+				updateModel = null;
+			}
+
+			Session["GuestCartItems"] = null;
+			await db.SaveChangesAsync();
+			return true;
 		}
 
 		//
