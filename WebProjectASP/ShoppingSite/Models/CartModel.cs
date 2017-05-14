@@ -12,6 +12,7 @@ namespace ShoppingSite.Models {
 		public ApplicationUser User { get; set; }
 		public ICollection<CartItemModel> CartItems { get; set; }
 		public decimal TotalPrice { get; set; }
+		public IDictionary<CartItemModel,SaleModel> CartItemsSales { get; set; }
 	}
 
 	[Table("CartItems")]

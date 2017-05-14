@@ -69,7 +69,6 @@ namespace ShoppingSite.Models {
 		public virtual DbSet<ProductModel> Products { get; set; }
 		public virtual DbSet<ProductPictureModel> ProductPictures { get; set; }
 		public virtual DbSet<SaleModel> Sales { get; set; }
-//		public virtual DbSet<CartModel> Carts { get; set; }
 		public virtual DbSet<CartItemModel> CartItems { get; set; }
 
 		public static ApplicationDbContext Create() {
@@ -87,7 +86,6 @@ namespace ShoppingSite.Models {
 			DateTime today = DateTime.Now;
 			ProductModel product = await this.Products.FindAsync(SKU);
 			if(product.Brand.Sales != null && product.Brand.Sales.Count != 0) {
-					//SaleModel bestSale = (await (from sale in this.Sales where sale.StartDate <= today && sale.EndDate >= today && sale.BrandsOnSale.Contains(product.Brand) select sale).ToListAsync()).OrderByDescending((SaleModel a) => { return a.Discount; }).First();
 					SaleModel bestSale = (from s in product.Brand.Sales where s.StartDate <= today && s.EndDate >= today select s).OrderByDescending((SaleModel a) => { return a.Discount; }).First();
 					return bestSale;
 			}

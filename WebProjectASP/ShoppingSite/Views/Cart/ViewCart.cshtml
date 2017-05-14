@@ -5,3 +5,86 @@
 	ViewBag.Title = "View Cart";
 	Layout = ViewBag.LayoutFile ?? Layout;
 }
+
+Hello @Model.User.FirstName
+<br/>
+
+<table>
+	<thead>
+		<tr>
+			<th>Cover</th>
+			<th>SKU</th>
+			<th>Product name</th>
+			<th>Price</th>
+			<th>Discount</th> @* (100 - Discount) / 100  *@
+			<th>Quantity</th>			
+			<th>Total price</th>			
+			<th>Remove</th>
+		</tr>
+	</thead>
+	@foreach(ShoppingSite.Models.CartItemModel cim in Model.CartItems) {
+		<tr>
+			<td> @* Cover *@
+				<img src=@Html.Display(cim.Product.CoverPath) alt="@cim.Product.ProductName" style="max-height: 50px;  max-width: 150px;" />
+			</td>
+			<td> @* SKU *@
+				@Html.DisplayFor(item => cim.Product.SKU)
+			</td>
+			<td> @* Name *@
+				@Html.DisplayFor(item => cim.Product.ProductName)
+			</td>
+			<td> @* Price *@
+				@Html.DisplayFor(item => cim.Product.Price)
+			</td>
+			<td> @* Discount *@
+				@Html.DisplayFor(item => Model.CartItemsSales[cim].Discount)
+			</td>
+			<td> @* Quantity *@
+			@using(Html.BeginForm("Update", "Cart", FormMethod.Post)) {
+				@Html.Hidden("SKU", cim.Product.SKU)
+				<select id="Quantity" name="Quantity">
+					@for(int i = 1; i <= 100; i++) {
+						if(cim.Quantity == i) {
+							<option value="@i" selected>@i</option>
+						} else {
+							<option value="@i">@i</option>
+						}
+					}
+				</select>
+			}
+				
+			</td>
+			<td> @* Total *@
+				@(cim.Product.Price * ((100 - Model.CartItemsSales[cim].Discount) / 100) * cim.Quantity)
+			</td>
+			<td> @* Remove*@
+				@using(Html.BeginForm("Update", "Cart", FormMethod.Post)) {
+					@Html.Hidden("SKU", cim.Product.SKU)
+					@Html.Hidden("Quantity", "0")
+					<span class="glyphicon glyphicon-remove" name="remover" style="color: red;"></span>
+				}
+			</td>
+		</tr>
+	}
+</table>
+
+Total price : @Model.TotalPrice
+<br />
+@using(Html.BeginForm("Clear", "Cart", FormMethod.Post)) {
+	<button type="submit" class="btn btn-primary">Clearrasdasdasd</button>
+}
+@using(Html.BeginForm("Checkout", "Cart", FormMethod.Post)) {
+	<button type="submit" class="btn btn-primary">Checkoutttttttttt</button>
+}
+
+@section scripts{
+
+<script type="text/javascript">
+	$("span[name='remover']").on("click", function() {
+		$(this).closest("form").submit();
+	});
+	$("select[name='Quantity']").on("change", function() {
+		$(this).closest("form").submit();
+	})
+ </script>
+}

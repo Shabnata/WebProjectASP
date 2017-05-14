@@ -20,34 +20,38 @@ namespace ShoppingSite.Controllers {
 			return true;
 		}
 
+		[HttpGet]
 		public async Task<ActionResult> ViewCart() {
 
 			CartViewModel model = new CartViewModel();
+			model.CartItemsSales = new Dictionary<CartItemModel, SaleModel>();
 
 			if(User.Identity.IsAuthenticated) { // User logged in
 				model.User = db.Users.Find(User.Identity.GetUserId());
 				model.CartItems = model.User.CartItems;
-				
+
 			} else { // Guest
-				model.User = null; // Display name with model.User.Name ?? "Guest"
+				model.User = new ApplicationUser() { FirstName = "Guest" };
 				model.CartItems = Session["GuestCartItems"] as IList<CartItemModel> ?? new List<CartItemModel>();
 			}
 
 			model.TotalPrice = 0;
 			foreach(CartItemModel cim in model.CartItems) {
 				decimal tmpItemPrice = cim.Product.Price * cim.Quantity;
-				SaleModel tmpItemSale = await db.GetProductBestActiveSale(cim.Product.SKU);
+				SaleModel tmpItemSale = await db.GetProductBestActiveSale(cim.Product.SKU) ?? new SaleModel() { Discount = 0};
+				model.CartItemsSales.Add(cim, tmpItemSale);
 				tmpItemPrice *= ((100 - tmpItemSale.Discount) / 100);
 				model.TotalPrice += tmpItemPrice;
 			}
 
 
-            await this.FillViewBag();
+			await this.FillViewBag();
 			return View(model);
 		}
 
+		[HttpPost]
 		public async Task<ActionResult> Update(int SKU, int Quantity = 1) {
-
+			
 			CartViewModel model = new CartViewModel();
 
 			if(User.Identity.IsAuthenticated) { // User logged in
@@ -55,13 +59,15 @@ namespace ShoppingSite.Controllers {
 				model.CartItems = model.User.CartItems;
 
 			} else { // Guest
-				model.User = null; // Display name with model.User.Name ?? "Guest"
+				model.User = null; 
 				model.CartItems = Session["GuestCartItems"] as IList<CartItemModel> ?? new List<CartItemModel>();
+				Session["GuestCartItems"] = model.CartItems;
 			}
 
 			CartItemModel updateModel = model.CartItems.SingleOrDefault((CartItemModel a) => { return a.SKU == SKU; });
 
-			if(updateModel.SKU != SKU) { // New item
+			if(updateModel == null) { // New item
+				updateModel = new CartItemModel();
 				updateModel.Product = await db.Products.FindAsync(SKU);
 				updateModel.SKU = SKU;
 				updateModel.Quantity = Quantity;
@@ -71,22 +77,48 @@ namespace ShoppingSite.Controllers {
 					model.User.CartItems.Add(updateModel);
 
 				} else {
+					// model.CartItems
 					(Session["GuestCartItems"] as IList<CartItemModel>).Add(updateModel);
 				}
 
 			} else { // Existing item
 				updateModel.Quantity = Quantity;
 				if(updateModel.Quantity <= 0) {
-					model.User.CartItems.Remove(updateModel);
+					if(model.User != null) {
+						model.User.CartItems.Remove(updateModel);
+					} else {
+						// model.CartItems
+						(Session["GuestCartItems"] as IList<CartItemModel>).Remove(updateModel);
+					}
 				}
 			}
+
+
 			if(model.User != null) {
 				await db.SaveChangesAsync();
 			}
 
-			return View("ViewCart", model);
+			return RedirectToAction("ViewCart");
 		}
 
+		[HttpPost]
+		public async Task<ActionResult> Add(int SKU) {
+
+			IList<CartItemModel> model = null;
+			if(User.Identity.IsAuthenticated) { // User logged in
+				model = db.Users.Find(User.Identity.GetUserId()).CartItems.ToList();
+			} else { // Guest
+				model = Session["GuestCartItems"] as IList<CartItemModel> ?? new List<CartItemModel>();
+			}
+
+			CartItemModel updateModel = model.SingleOrDefault((CartItemModel a) => { return a.SKU == SKU; }) ?? new CartItemModel() { SKU=SKU, Quantity = 0};
+
+			// Note: RedirectToAction doesn't work here because Update is accessible via POST only. This is like "Forward" except probably a poor implementation.
+			//return RedirectToAction("Update", new { SKU = updateModel.SKU, Quantity = (updateModel.Quantity + 1)});
+			return await this.Update(updateModel.SKU,(updateModel.Quantity + 1));
+		}
+
+		[HttpPost]
 		public async Task<ActionResult> Clear() {
 
 			if(User.Identity.IsAuthenticated) { // User logged in
@@ -101,10 +133,12 @@ namespace ShoppingSite.Controllers {
 			}
 
 			
-			return View("ViewCart");
+			return RedirectToAction("ViewCart");
 		}
 
+		[HttpPost]
 		public async Task<ActionResult> Checkout() {
+			// TODO
 			await this.FillViewBag();
 			return View();
 		}
