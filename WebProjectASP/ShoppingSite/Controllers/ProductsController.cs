@@ -194,7 +194,20 @@ namespace ShoppingSite.Controllers {
 		}
 
 
-		[HttpGet]
+        [HttpGet]
+        public async Task<ActionResult> Page(int? SKU) {
+            if (SKU == null) {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            ProductModel productModel = await db.Products.FindAsync(SKU);
+            if (productModel == null) {
+                return HttpNotFound();
+            }
+            await this.FillViewBag();
+            return View(productModel);
+        }
+
+        [HttpGet]
 		public async Task<ActionResult> Delete(int? SKU) {
 			if(SKU == null) {
 				return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
