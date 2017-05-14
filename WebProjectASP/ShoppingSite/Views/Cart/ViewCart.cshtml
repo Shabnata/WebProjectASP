@@ -37,7 +37,7 @@ Hello @Model.User.FirstName
 				@Html.DisplayFor(item => cim.Product.Price)
 			</td>
 			<td> @* Discount *@
-				TODO Discount
+				@Html.DisplayFor(item => Model.CartItemsSales[cim].Discount)
 			</td>
 			<td> @* Quantity *@
 			@using(Html.BeginForm("Update", "Cart", FormMethod.Post)) {
@@ -51,12 +51,11 @@ Hello @Model.User.FirstName
 						}
 					}
 				</select>
-				<button type="submit">TempBtn-Update</button>
 			}
 				
 			</td>
 			<td> @* Total *@
-				TODO Total price
+				@(cim.Product.Price * ((100 - Model.CartItemsSales[cim].Discount) / 100) * cim.Quantity)
 			</td>
 			<td> @* Remove*@
 				@using(Html.BeginForm("Update", "Cart", FormMethod.Post)) {
@@ -84,5 +83,8 @@ Total price : @Model.TotalPrice
 	$("span[name='remover']").on("click", function() {
 		$(this).closest("form").submit();
 	});
+	$("select[name='Quantity']").on("change", function() {
+		$(this).closest("form").submit();
+	})
  </script>
 }

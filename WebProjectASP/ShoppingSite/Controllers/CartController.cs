@@ -24,6 +24,7 @@ namespace ShoppingSite.Controllers {
 		public async Task<ActionResult> ViewCart() {
 
 			CartViewModel model = new CartViewModel();
+			model.CartItemsSales = new Dictionary<CartItemModel, SaleModel>();
 
 			if(User.Identity.IsAuthenticated) { // User logged in
 				model.User = db.Users.Find(User.Identity.GetUserId());
@@ -38,6 +39,7 @@ namespace ShoppingSite.Controllers {
 			foreach(CartItemModel cim in model.CartItems) {
 				decimal tmpItemPrice = cim.Product.Price * cim.Quantity;
 				SaleModel tmpItemSale = await db.GetProductBestActiveSale(cim.Product.SKU) ?? new SaleModel() { Discount = 0};
+				model.CartItemsSales.Add(cim, tmpItemSale);
 				tmpItemPrice *= ((100 - tmpItemSale.Discount) / 100);
 				model.TotalPrice += tmpItemPrice;
 			}
@@ -90,6 +92,8 @@ namespace ShoppingSite.Controllers {
 					}
 				}
 			}
+
+
 			if(model.User != null) {
 				await db.SaveChangesAsync();
 			}
