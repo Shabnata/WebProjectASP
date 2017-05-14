@@ -11,10 +11,11 @@
 @using (Html.BeginForm("Search", "Sales", FormMethod.Post)) {
     <div class="form-inline">
         <div class="form-group">
-            <input type="search" id="SaleName" name="SaleName" class="form-control" value="@ViewBag.SearchString" placeholder="Sale name" path="@Url.Action("TypeSearch", "Sales")" autocomplete="on" required />
+            <input type="search" id="SaleName" name="SaleName" class="form-control" value="@ViewBag.SearchString" placeholder="Sale name" path="@Url.Action("TypeSearch", "Sales")" autocomplete="on"  />
         </div>
         <div class="form-group">
             <button type="submit" class="btn btn-primary">Search</button>
+			<button type="submit" formaction="@Url.Action("ActiveSalesSearch", "Sales")" class="btn btn-primary">Search active</button>
         </div>
         <div class="form-group">
             <span class="text-danger">@ViewBag.NotFoundError</span>

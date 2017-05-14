@@ -161,7 +161,7 @@ namespace ShoppingSite.Controllers {
 		[HttpPost, ActionName("Search")]
 		public async Task<ActionResult> Search(string SaleName) {
 
-			IList<SaleModel> sales = await (from s in db.Sales where s.SaleName.ToLower().Contains(SaleName.ToLower()) select s).ToListAsync();
+			IList<SaleModel> sales = (SaleName.Equals("")) ? await db.Sales.ToListAsync() : await (from s in db.Sales where s.SaleName.ToLower().Contains(SaleName.ToLower()) select s).ToListAsync();
 
 			await this.FillViewBag();
 			ViewBag.SearchString = SaleName;
@@ -195,6 +195,23 @@ namespace ShoppingSite.Controllers {
 			model.ThisSale = sale;
 			await this.FillViewBag();
 			return View("Browse", model);
+		}
+
+		[HttpPost]
+		public async Task<ActionResult> ActiveSalesSearch(string SaleName) {
+
+			IList<SaleModel> allActiveSales = await db.GetActiveSalesAsync();
+			IList<SaleModel> searchResults = (from s in allActiveSales where s.SaleName.ToLower().Contains(SaleName.ToLower()) select s).ToList();
+
+			await this.FillViewBag();
+			ViewBag.SearchString = SaleName;
+			if(searchResults.Count == 0) {
+				ViewBag.NotFoundError = "Sale not found";
+			} else if(searchResults.Count == 1 && searchResults.First().SaleName.ToLower().Equals(SaleName.ToLower())) {
+				return RedirectToAction("Details", new { SaleID = searchResults.First().SaleID });
+			}
+
+			return View("Index", searchResults);
 		}
 	}
 }
