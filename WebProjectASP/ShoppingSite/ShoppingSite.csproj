@@ -364,6 +364,7 @@
     <Content Include="Scripts\TypeScript\CheckAvail.js.map" />
     <Content Include="Views\Products\BrowseFromNav.cshtml" />
     <Content Include="Views\Products\Error.cshtml" />
+    <Content Include="Views\Products\Page.cshtml" />
     <Content Include="Views\Cart\ViewCart.cshtml" />
     <Content Include="Views\Order\Checkout.cshtml" />
     <Content Include="Views\Order\EmptyCartError.cshtml" />
