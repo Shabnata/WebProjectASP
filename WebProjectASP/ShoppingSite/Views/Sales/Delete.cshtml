@@ -3,32 +3,66 @@
     ViewBag.Title = "Delete sale";
     Layout = (ViewBag.LayoutFile != null) ? ViewBag.LayoutFile : Layout;
 }
-<h2>Delete sale</h2>
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>SaleModel</h4>
-    <hr />
-    @Html.DisplayNameFor(model => model.SaleName)
-    @Html.DisplayFor(model => model.SaleName)
-    <br />
-    @Html.DisplayNameFor(model => model.Emblem)
-    @Html.DisplayFor(model => model.Emblem)
-    <br />
-    @Html.DisplayNameFor(model => model.StartDate)
-    @Html.DisplayFor(model => model.StartDate)
-    <br />
-    @Html.DisplayNameFor(model => model.EndDate)
-    @Html.DisplayFor(model => model.EndDate)
-    <br />
-    <br />
-    @Html.DisplayNameFor(model => model.Discount)
-    @Html.DisplayFor(model => model.Discount)
-    <br />
-    @using (Html.BeginForm()) {
-        @Html.AntiForgeryToken()
-        @Html.HiddenFor(model => model.SaleID)
-        <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
-        </div>    }
+
+<div class="page-header">
+    <h2>Delete sale</h2>
 </div>
+<h3>Are you sure you want to delete this?</h3>
+
+
+<div class="row">
+    <div class="col-md-10 ">
+        <div class="row">
+            @Html.LabelFor(model => model.SaleName, htmlAttributes: new { @class = "col-md-2" })
+            <div class="col-md-10">
+                @Html.DisplayFor(model => model.SaleName)
+            </div>
+        </div>
+        <div class="row">
+            @Html.LabelFor(model => model.StartDate, htmlAttributes: new { @class = "col-md-2" })
+            <div class="col-md-6">
+                @Html.DisplayFor(model => model.StartDate)
+            </div>
+            <div class="col-md-4">
+                <!-- To hold the layout -->
+            </div>
+        </div>
+        <div class="row">
+            @Html.LabelFor(model => model.EndDate, htmlAttributes: new { @class = "col-md-2" })
+            <div class="col-md-10">
+                @Html.DisplayFor(model => model.EndDate)
+            </div>
+        </div>
+        <div class="row">
+            @Html.LabelFor(model => model.Discount, htmlAttributes: new { @class = "col-md-2" })
+            <div class="col-md-10">
+                @Html.DisplayFor(model => model.Discount)
+            </div>
+        </div>
+
+
+        <div class="row">
+            @Html.Label("Emblem:", htmlAttributes: new { @class = "col-md-2" })
+            <br />
+            <div class="col-md-10">
+                <img src=@Html.DisplayFor(model => model.Emblem) alt="@Model.Emblem" style="max-height:100px; max-width:100px; border: 0px solid;" />
+            </div>
+        </div>
+    </div> <!-- left column -->
+    <div class="col-md-2">
+
+    </div> <!-- right column -->
+</div> <!-- row -->
+@using (Html.BeginForm("Delete", "Sales", FormMethod.Post, htmlAttributes: new { @class = "form-horizontal" })) {
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.SaleID)
+
+
+
+    <div class="btn-group">
+        @Html.ActionLink("Back to Index", "Index", null, htmlAttributes: new { @class = "btn btn-default" })
+        <button type="submit" class="btn btn-primary">Delete</button>
+    </div>}
+
+
+
