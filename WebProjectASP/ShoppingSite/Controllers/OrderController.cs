@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using ShoppingSite.Models;
 using System;
 using System.Collections.Generic;
@@ -21,10 +22,24 @@ namespace ShoppingSite.Controllers {
 			return true;
 		}
 
-		[Authorize(Roles = "Administrator, Manager")]
+		[Authorize]
 		public async Task<ActionResult> Index() {
+
+			ApplicationUser user = db.Users.Find(User.Identity.GetUserId());
+			IdentityRole customerRole = (from r in db.Roles where r.Name == "Customer" select r).Single();
+			bool customer = false;
+
+			foreach(IdentityUserRole iur in user.Roles) {
+				if(iur.RoleId.Equals(customerRole.Id)) {
+					customer = true;
+					break;
+				}
+			}
+
+			IList<OrderModel> orders = customer ? user.Orders.ToList() : await db.Orders.ToListAsync();
+
 			await this.FillViewBag();
-			return View(await db.Orders.ToListAsync());
+			return View(orders);
 		}
 
 		public async Task<ActionResult> Checkout() {
@@ -54,10 +69,21 @@ namespace ShoppingSite.Controllers {
 			return View(model);
 		}
 
-		[Authorize(Roles = "Administrator, Manager")]
+		[Authorize]
 		public async Task<ActionResult> Search(int OrderID) {
 
-			IList<OrderModel> model = await (from o in db.Orders where o.OrderID == OrderID select o).ToListAsync();
+			ApplicationUser user = db.Users.Find(User.Identity.GetUserId());
+			IdentityRole customerRole = (from r in db.Roles where r.Name == "Customer" select r).Single();
+			bool customer = false;
+
+			foreach(IdentityUserRole iur in user.Roles) {
+				if(iur.RoleId.Equals(customerRole.Id)) {
+					customer = true;
+					break;
+				}
+			}
+
+			IList<OrderModel> model = customer? (from o in user.Orders where o.OrderID == OrderID select o).ToList() : await (from o in db.Orders where o.OrderID == OrderID select o).ToListAsync();
 			 
 			if(model.Count == 0) {
 				ViewBag.NotFoundError = "Order not found";
@@ -67,7 +93,7 @@ namespace ShoppingSite.Controllers {
 			return View("Index", model);
 		}
 
-		[Authorize(Roles = "Administrator, Manager")]
+		[Authorize]
 		public async Task<ActionResult> Details(int OrderID) {
 
 			OrderModel model = await db.Orders.FindAsync(OrderID);
