@@ -70,7 +70,7 @@ namespace ShoppingSite.Controllers {
 		}
 
 		[Authorize]
-		public async Task<ActionResult> Search(int OrderID) {
+		public async Task<ActionResult> Search(int? OrderID) {
 
 			ApplicationUser user = db.Users.Find(User.Identity.GetUserId());
 			IdentityRole customerRole = (from r in db.Roles where r.Name == "Customer" select r).Single();
@@ -83,8 +83,43 @@ namespace ShoppingSite.Controllers {
 				}
 			}
 
-			IList<OrderModel> model = customer? (from o in user.Orders where o.OrderID == OrderID select o).ToList() : await (from o in db.Orders where o.OrderID == OrderID select o).ToListAsync();
-			 
+			IList<OrderModel> model;
+
+			if(customer) {
+				model = (OrderID != null) ? (from o in user.Orders where o.OrderID == OrderID select o).ToList() : user.Orders.ToList();
+			} else {
+				model = (OrderID != null) ? await (from o in db.Orders where o.OrderID == OrderID select o).ToListAsync() : await db.Orders.ToListAsync();
+			}
+
+			if(model.Count == 0) {
+				ViewBag.NotFoundError = "Order not found";
+			}
+
+			await this.FillViewBag();
+			return View("Index", model);
+		}
+
+		[Authorize]
+		public async Task<ActionResult> SearchByUser(string OrderID) {
+			ApplicationUser user = db.Users.Find(User.Identity.GetUserId());
+			IdentityRole customerRole = (from r in db.Roles where r.Name == "Customer" select r).Single();
+			bool customer = false;
+
+			foreach(IdentityUserRole iur in user.Roles) {
+				if(iur.RoleId.Equals(customerRole.Id)) {
+					customer = true;
+					break;
+				}
+			}
+
+			IList<OrderModel> model;
+
+			if(customer) {
+				model = user.Orders.ToList();
+			} else {
+				model = (!OrderID.Equals("") ) ? await (from o in db.Orders where o.User.UserName.ToLower().Contains(OrderID.ToLower()) select o).ToListAsync() : await db.Orders.ToListAsync();
+			}
+			
 			if(model.Count == 0) {
 				ViewBag.NotFoundError = "Order not found";
 			}
