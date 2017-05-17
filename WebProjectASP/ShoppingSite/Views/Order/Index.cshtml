@@ -1,0 +1,50 @@
+﻿@model IEnumerable<ShoppingSite.Models.OrderModel>
+
+@{
+	ViewBag.Title = "Index";
+	Layout = ViewBag.LayoutFile ?? Layout;
+}
+
+<div class="page-header">
+	<h2>Orders Index</h2>
+</div>
+
+@using(Html.BeginForm("Search", "Order", FormMethod.Post, htmlAttributes: new { @class = "form-inline" })) {
+	<div class="form-group">
+		<input type="number" id="OrderID" name="OrderID" class="form-control" value="@ViewBag.SearchString" placeholder="Order#" required />
+	</div>
+	<div class="form-group">
+		<button type="submit" class="btn btn-primary">Search</button>
+	</div>
+		<div class="form-group">
+			<span class="text-danger">@ViewBag.NotFoundError</span>
+		</div>
+}
+<br /><br />
+
+<table class="table table-striped">
+
+		<tr>
+			<th>Order#</th>
+			<th>Order Date</th>
+			<th>User</th>
+			<th>Status</th>
+			<th>Actions</th>
+		</tr>
+
+
+	@foreach(var item in Model) {
+		<tr>
+			<td>@item.OrderID</td>
+			<td>@Html.DisplayFor(model => item.OrderDate)</td>
+			<td>@item.User.UserName</td>
+			<td>@item.Status</td>
+			<td>
+				<div class="btn-group">
+					@Html.ActionLink("Details", "Details", new { OrderID = item.OrderID }, htmlAttributes: new { @class = "btn btn-default" })
+				</div>
+			</td>
+		</tr>
+	}
+
+</table>
