@@ -84,7 +84,7 @@
 
     @using (Html.BeginForm("Clear", "Cart", FormMethod.Post, htmlAttributes: new { @class = "form-horizontal" })) {
         <button type="submit" class="btn btn-primary">Clear Cart</button>
-        <button type="submit" formaction="@Url.Action("Checkout", "Cart")" class="btn btn-primary">Checkout</button>
+        <button type="submit" formaction="@Url.Action("Checkout", "Order")" class="btn btn-primary">Checkout</button>
     }
 </div>
 

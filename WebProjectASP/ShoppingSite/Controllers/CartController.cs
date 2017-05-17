@@ -136,11 +136,5 @@ namespace ShoppingSite.Controllers {
 			return RedirectToAction("ViewCart");
 		}
 
-		[HttpPost]
-		public async Task<ActionResult> Checkout() {
-			// TODO
-			await this.FillViewBag();
-			return View();
-		}
 	}
 }
