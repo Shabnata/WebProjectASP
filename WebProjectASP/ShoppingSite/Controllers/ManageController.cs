@@ -101,6 +101,18 @@ namespace ShoppingSite.Controllers {
             return View();
 		}
 
+		[HttpPost]
+		public async Task<ActionResult> UpdatePhoneNumber(string Number) {
+
+			ApplicationUser user = db.Users.Find(User.Identity.GetUserId());
+			user.PhoneNumber = Number;
+
+			await db.SaveChangesAsync();
+
+			await this.FillViewBag();
+			return RedirectToAction("Index");
+		}
+
 		//
 		// GET: /Manage/ChangePassword
 		public async Task<ActionResult> ChangePassword() {

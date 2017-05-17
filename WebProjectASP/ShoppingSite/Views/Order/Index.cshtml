@@ -11,10 +11,11 @@
 
 @using(Html.BeginForm("Search", "Order", FormMethod.Post, htmlAttributes: new { @class = "form-inline" })) {
 	<div class="form-group">
-		<input type="number" id="OrderID" name="OrderID" class="form-control" value="@ViewBag.SearchString" placeholder="Order#" required />
+		<input type="text" id="OrderID" name="OrderID" class="form-control" value="@ViewBag.SearchString" placeholder="" />
 	</div>
 	<div class="form-group">
-		<button type="submit" class="btn btn-primary">Search</button>
+		<button type="submit" class="btn btn-primary">Search by Order#</button>
+		<button type="submit" formaction="@Url.Action("SearchByUser", "Order")" class="btn btn-primary">Search by user</button>
 	</div>
 		<div class="form-group">
 			<span class="text-danger">@ViewBag.NotFoundError</span>

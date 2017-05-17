@@ -5,7 +5,7 @@
 
 <h2>@ViewBag.Title.</h2>
 
-@using (Html.BeginForm("AddPhoneNumber", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+@using (Html.BeginForm("UpdatePhoneNumber", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
     @Html.AntiForgeryToken()
     <h4>Add a phone number</h4>
@@ -14,7 +14,8 @@
     <div class="form-group">
         @Html.LabelFor(m => m.Number, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
-            @Html.TextBoxFor(m => m.Number, new { @class = "form-control" })
+           @*@Html.TextBoxFor(m => m.Number, new { @class = "form-control" }) *@
+			<input type="tel" class="form-control" name="Number" id="Number" pattern="0([2-9]|5[0247])[0-9]{7}" title="0([2-9]|5[0247])[0-9]{7}" required/>
         </div>
     </div>
     <div class="form-group">
