@@ -142,4 +142,10 @@ namespace ShoppingSite.Models {
 			return categoryProducts;
 		}
 	}
+
+	public class EditUserNameViewModel {
+		public string UserID { get; set; }
+		public string FirstName { get; set; }
+		public string LastName { get; set; }
+	}
 }

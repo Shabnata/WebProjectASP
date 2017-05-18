@@ -71,6 +71,9 @@ namespace ShoppingSite.Controllers {
 				Logins = await UserManager.GetLoginsAsync(userId),
 				BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId)
 			};
+			ApplicationUser user = db.Users.Find(User.Identity.GetUserId());
+			model.FirstName = user.FirstName ?? "Error";
+			model.LastName = user.LastName ?? "Error";
             await this.FillViewBag();
             return View(model);
 		}
@@ -109,7 +112,7 @@ namespace ShoppingSite.Controllers {
 
 			await db.SaveChangesAsync();
 
-			await this.FillViewBag();
+//			await this.FillViewBag();
 			return RedirectToAction("Index");
 		}
 
@@ -200,6 +203,28 @@ namespace ShoppingSite.Controllers {
 			base.Dispose(disposing);
 		}
 
+		[Authorize]
+		public async Task<ActionResult> UpdateName() {
+			ApplicationUser user = db.Users.Find(User.Identity.GetUserId());
+
+			EditUserNameViewModel model = new EditUserNameViewModel() { UserID = user.Id, FirstName = user.FirstName ?? "Error", LastName = user.LastName ?? "Error"};
+			await this.FillViewBag();
+            return View(model);
+		}
+
+		[Authorize]
+		[HttpPost]
+		public async Task<ActionResult> UpdateName(string UserID, string FirstName, string LastName) {
+			ApplicationUser user = db.Users.Find(User.Identity.GetUserId());
+			user.FirstName = FirstName;
+			user.LastName = LastName;
+
+			
+			await db.SaveChangesAsync();
+
+//			await this.FillViewBag();
+			return RedirectToAction("Index");
+		}
 		#region Helpers
 		// Used for XSRF protection when adding external logins
 		private const string XsrfKey = "XsrfId";

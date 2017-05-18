@@ -10,6 +10,11 @@
     <h4>Change your account settings</h4>
     <hr />
     <dl class="dl-horizontal">
+		<dt>User name:</dt>
+		<dd>
+			@Model.FirstName @Model.LastName
+			[ @Html.ActionLink("Update", "UpdateName") ]
+		</dd>
         <dt>Password:</dt>
         <dd>
             [
@@ -82,7 +87,7 @@
 			Past orders:
 		</dt>
 		<dd>
-			@Html.ActionLink("View", "Index", "Order")
+			[ @Html.ActionLink("View", "Index", "Order") ]
 		</dd>
     </dl>
 </div>
