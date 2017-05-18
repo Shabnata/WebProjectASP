@@ -141,6 +141,24 @@ namespace ShoppingSite.Models {
 			categoryProducts.Sort((ProductModel x, ProductModel y) => { return x.ProductName.CompareTo(y.ProductName); });
 			return categoryProducts;
 		}
+
+		public async Task<IList<ProductModel>> GetAllProductsInSale(int SaleID) {
+			List<ProductModel> products = new List<ProductModel>();
+			SaleModel sale = await this.Sales.FindAsync(SaleID);
+
+			if(sale == null) {
+				goto EndLabel;
+			}
+
+			foreach(BrandModel b in sale.BrandsOnSale) {
+				products.AddRange(b.Products.ToList());
+			}
+
+			EndLabel:
+
+			return products;
+
+		}
 	}
 
 	public class EditUserNameViewModel {
