@@ -24,6 +24,35 @@ namespace ShoppingSite.Controllers {
             ViewBag.AllCategories = await db.Categories.ToListAsync();
             ViewBag.AllBrands = await db.Brands.ToListAsync();
             ViewBag.AllActiveSales = await db.GetActiveSalesAsync();
+            //----
+            bool hasPermission = false;
+            if (User.Identity.IsAuthenticated) { // User logged in
+                ApplicationUser user = db.Users.Find(User.Identity.GetUserId());
+
+                bool Administrator = false; //1
+                bool Manager = false; //2
+                bool Employee = false; //3
+
+                foreach (IdentityUserRole iur in user.Roles) {
+                    if (iur.RoleId.Equals("1")) {
+                        Administrator = true;
+                        break;
+                    }
+                    if (iur.RoleId.Equals("2")) {
+                        Manager = true;
+                        break;
+                    }
+                    if (iur.RoleId.Equals("3")) {
+                        Employee = true;
+                        break;
+                    }
+                }
+                if (Administrator || Manager || Employee) {
+                    hasPermission = true;
+                }
+            }
+            ViewBag.hasPermission = hasPermission;
+            //----
             return true;
         }
 

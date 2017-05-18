@@ -10,132 +10,161 @@ using System.Web;
 using System.Web.Mvc;
 
 namespace ShoppingSite.Controllers {
-	[Authorize]
-	public class OrderController : Controller {
+    [Authorize]
+    public class OrderController : Controller {
 
-		private ApplicationDbContext db = new ApplicationDbContext();
+        private ApplicationDbContext db = new ApplicationDbContext();
 
-		private async Task<Boolean> FillViewBag() {
-			ViewBag.AllCategories = await db.Categories.ToListAsync();
-			ViewBag.AllBrands = await db.Brands.ToListAsync();
-			ViewBag.AllActiveSales = await db.GetActiveSalesAsync();
-			return true;
-		}
+        private async Task<Boolean> FillViewBag() {
+            ViewBag.AllCategories = await db.Categories.ToListAsync();
+            ViewBag.AllBrands = await db.Brands.ToListAsync();
+            ViewBag.AllActiveSales = await db.GetActiveSalesAsync();
+            //----
+            bool hasPermission = false;
+            if (User.Identity.IsAuthenticated) { // User logged in
+                ApplicationUser user = db.Users.Find(User.Identity.GetUserId());
+                
+                bool Administrator = false; //1
+                bool Manager = false; //2
+                bool Employee = false; //3
 
-		[Authorize]
-		public async Task<ActionResult> Index() {
+                foreach (IdentityUserRole iur in user.Roles) {
+                    if (iur.RoleId.Equals("1")) {
+                        Administrator = true;
+                        break;
+                    }
+                    if (iur.RoleId.Equals("2")) {
+                        Manager = true;
+                        break;
+                    }
+                    if (iur.RoleId.Equals("3")) {
+                        Employee = true;
+                        break;
+                    }
+                }
+                if (Administrator || Manager || Employee) {
+                    hasPermission = true;
+                }
+            }
+            ViewBag.hasPermission = hasPermission;
+            //----
+            return true;
+        }
 
-			ApplicationUser user = db.Users.Find(User.Identity.GetUserId());
-			IdentityRole customerRole = (from r in db.Roles where r.Name == "Customer" select r).Single();
-			bool customer = false;
+        [Authorize]
+        public async Task<ActionResult> Index() {
 
-			foreach(IdentityUserRole iur in user.Roles) {
-				if(iur.RoleId.Equals(customerRole.Id)) {
-					customer = true;
-					break;
-				}
-			}
+            ApplicationUser user = db.Users.Find(User.Identity.GetUserId());
+            IdentityRole customerRole = (from r in db.Roles where r.Name == "Customer" select r).Single();
+            bool customer = false;
 
-			IList<OrderModel> orders = customer ? user.Orders.ToList() : await db.Orders.ToListAsync();
+            foreach (IdentityUserRole iur in user.Roles) {
+                if (iur.RoleId.Equals(customerRole.Id)) {
+                    customer = true;
+                    break;
+                }
+            }
 
-			await this.FillViewBag();
-			return View(orders);
-		}
+            IList<OrderModel> orders = customer ? user.Orders.ToList() : await db.Orders.ToListAsync();
 
-		public async Task<ActionResult> Checkout() {
+            await this.FillViewBag();
+            return View(orders);
+        }
 
-			ApplicationUser user = this.db.Users.Find(User.Identity.GetUserId());
+        public async Task<ActionResult> Checkout() {
 
-			if(user.CartItems.Count < 1) {
-				await this.FillViewBag();
-				return View("EmptyCartError");
-			}
+            ApplicationUser user = this.db.Users.Find(User.Identity.GetUserId());
 
-			OrderModel order = new OrderModel() { ApplicationUserID = user.Id, OrderDate = DateTime.Now, Status = "New", OrderItems = new List<OrderItemModel>()};
-			user.Orders.Add(order);
+            if (user.CartItems.Count < 1) {
+                await this.FillViewBag();
+                return View("EmptyCartError");
+            }
 
-			foreach(CartItemModel cim in user.CartItems) {
-				SaleModel bestSale = await db.GetProductBestActiveSale(cim.Product.SKU) ?? new SaleModel() { Discount = 0 };
-				OrderItemModel oim = new OrderItemModel() { Price = cim.Product.Price * cim.Quantity * ((100 - bestSale.Discount) / 100), Quantity = cim.Quantity, SKU = cim.Product.SKU };
-				order.OrderItems.Add(oim);
-			}
+            OrderModel order = new OrderModel() { ApplicationUserID = user.Id, OrderDate = DateTime.Now, Status = "New", OrderItems = new List<OrderItemModel>() };
+            user.Orders.Add(order);
 
-			user.CartItems.Clear();
+            foreach (CartItemModel cim in user.CartItems) {
+                SaleModel bestSale = await db.GetProductBestActiveSale(cim.Product.SKU) ?? new SaleModel() { Discount = 0 };
+                OrderItemModel oim = new OrderItemModel() { Price = cim.Product.Price * cim.Quantity * ((100 - bestSale.Discount) / 100), Quantity = cim.Quantity, SKU = cim.Product.SKU };
+                order.OrderItems.Add(oim);
+            }
 
-			await db.SaveChangesAsync();
-			CheckoutViewModel model = new CheckoutViewModel() { UserName = user.UserName, OrderID = order.OrderID };
+            user.CartItems.Clear();
 
-			await this.FillViewBag();
-			return View(model);
-		}
+            await db.SaveChangesAsync();
+            CheckoutViewModel model = new CheckoutViewModel() { UserName = user.UserName, OrderID = order.OrderID };
 
-		[Authorize]
-		public async Task<ActionResult> Search(int? OrderID) {
+            await this.FillViewBag();
+            return View(model);
+        }
 
-			ApplicationUser user = db.Users.Find(User.Identity.GetUserId());
-			IdentityRole customerRole = (from r in db.Roles where r.Name == "Customer" select r).Single();
-			bool customer = false;
+        [Authorize]
+        public async Task<ActionResult> Search(int? OrderID) {
 
-			foreach(IdentityUserRole iur in user.Roles) {
-				if(iur.RoleId.Equals(customerRole.Id)) {
-					customer = true;
-					break;
-				}
-			}
+            ApplicationUser user = db.Users.Find(User.Identity.GetUserId());
+            IdentityRole customerRole = (from r in db.Roles where r.Name == "Customer" select r).Single();
+            bool customer = false;
 
-			IList<OrderModel> model;
+            foreach (IdentityUserRole iur in user.Roles) {
+                if (iur.RoleId.Equals(customerRole.Id)) {
+                    customer = true;
+                    break;
+                }
+            }
 
-			if(customer) {
-				model = (OrderID != null) ? (from o in user.Orders where o.OrderID == OrderID select o).ToList() : user.Orders.ToList();
-			} else {
-				model = (OrderID != null) ? await (from o in db.Orders where o.OrderID == OrderID select o).ToListAsync() : await db.Orders.ToListAsync();
-			}
+            IList<OrderModel> model;
 
-			if(model.Count == 0) {
-				ViewBag.NotFoundError = "Order not found";
-			}
+            if (customer) {
+                model = (OrderID != null) ? (from o in user.Orders where o.OrderID == OrderID select o).ToList() : user.Orders.ToList();
+            } else {
+                model = (OrderID != null) ? await (from o in db.Orders where o.OrderID == OrderID select o).ToListAsync() : await db.Orders.ToListAsync();
+            }
 
-			await this.FillViewBag();
-			return View("Index", model);
-		}
+            if (model.Count == 0) {
+                ViewBag.NotFoundError = "Order not found";
+            }
 
-		[Authorize]
-		public async Task<ActionResult> SearchByUser(string OrderID) {
-			ApplicationUser user = db.Users.Find(User.Identity.GetUserId());
-			IdentityRole customerRole = (from r in db.Roles where r.Name == "Customer" select r).Single();
-			bool customer = false;
+            await this.FillViewBag();
+            return View("Index", model);
+        }
 
-			foreach(IdentityUserRole iur in user.Roles) {
-				if(iur.RoleId.Equals(customerRole.Id)) {
-					customer = true;
-					break;
-				}
-			}
+        [Authorize]
+        public async Task<ActionResult> SearchByUser(string OrderID) {
+            ApplicationUser user = db.Users.Find(User.Identity.GetUserId());
+            IdentityRole customerRole = (from r in db.Roles where r.Name == "Customer" select r).Single();
+            bool customer = false;
 
-			IList<OrderModel> model;
+            foreach (IdentityUserRole iur in user.Roles) {
+                if (iur.RoleId.Equals(customerRole.Id)) {
+                    customer = true;
+                    break;
+                }
+            }
 
-			if(customer) {
-				model = user.Orders.ToList();
-			} else {
-				model = (!OrderID.Equals("") ) ? await (from o in db.Orders where o.User.UserName.ToLower().Contains(OrderID.ToLower()) select o).ToListAsync() : await db.Orders.ToListAsync();
-			}
-			
-			if(model.Count == 0) {
-				ViewBag.NotFoundError = "Order not found";
-			}
+            IList<OrderModel> model;
 
-			await this.FillViewBag();
-			return View("Index", model);
-		}
+            if (customer) {
+                model = user.Orders.ToList();
+            } else {
+                model = (!OrderID.Equals("")) ? await (from o in db.Orders where o.User.UserName.ToLower().Contains(OrderID.ToLower()) select o).ToListAsync() : await db.Orders.ToListAsync();
+            }
 
-		[Authorize]
-		public async Task<ActionResult> Details(int OrderID) {
+            if (model.Count == 0) {
+                ViewBag.NotFoundError = "Order not found";
+            }
 
-			OrderModel model = await db.Orders.FindAsync(OrderID);
+            await this.FillViewBag();
+            return View("Index", model);
+        }
 
-			await this.FillViewBag();
-			return View(model);
-		}
+        [Authorize]
+        public async Task<ActionResult> Details(int OrderID) {
 
-	}
+            OrderModel model = await db.Orders.FindAsync(OrderID);
+
+            await this.FillViewBag();
+            return View(model);
+        }
+
+    }
 }
