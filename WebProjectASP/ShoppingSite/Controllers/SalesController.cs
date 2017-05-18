@@ -218,13 +218,26 @@ namespace ShoppingSite.Controllers {
 
 		[AllowAnonymous]
 		[HttpGet]
-		public async Task<ActionResult> BrowseByID(int SaleID) {
+		public async Task<ActionResult> BrowseByID(int SaleID, int? Page) {
 
 			SaleModel sale = await db.Sales.FindAsync(SaleID);
 			SaleBrowseViewModel model = new SaleBrowseViewModel();
 			model.AllActiveSales = await db.GetActiveSalesAsync();
 			model.ThisSale = sale;
-            model.ProductsInSale = await db.GetAllProductsInSaleAsync(SaleID);
+
+			IList<ProductModel> productsInSale = await db.GetAllProductsInSaleAsync(SaleID);
+			int maxRows = 4;
+			int maxCols = 4;
+			int maxPages = decimal.ToInt32(decimal.Ceiling((decimal)productsInSale.Count / (decimal)(maxRows * maxCols)));
+			IList<ProductModel> productPage = (from p in productsInSale select p).Skip((maxRows * maxCols) * ((Page ?? 1) - 1)).Take(maxRows * maxCols).ToList();
+
+			model.ProductsPage = productPage;
+
+			ViewBag.MaxRows = maxRows;
+			ViewBag.MaxCols = maxCols;
+			ViewBag.Page = Page ?? 1;
+			ViewBag.MaxPages = maxPages;
+
             await this.FillViewBag();
 			return View("Browse", model);
 		}

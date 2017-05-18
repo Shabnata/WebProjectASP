@@ -136,7 +136,7 @@ namespace ShoppingSite.Models {
 
 		public IList<SaleModel> AllActiveSales { get; set; }
 		public SaleModel ThisSale { get; set; }
-        public IList<ProductModel> ProductsInSale { get; set; }
+        public IList<ProductModel> ProductsPage { get; set; }
 
     }
 }
