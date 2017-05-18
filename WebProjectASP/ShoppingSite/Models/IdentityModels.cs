@@ -142,7 +142,7 @@ namespace ShoppingSite.Models {
 			return categoryProducts;
 		}
 
-		public async Task<IList<ProductModel>> GetAllProductsInSale(int SaleID) {
+		public async Task<IList<ProductModel>> GetAllProductsInSaleAsync(int SaleID) {
 			List<ProductModel> products = new List<ProductModel>();
 			SaleModel sale = await this.Sales.FindAsync(SaleID);
 
