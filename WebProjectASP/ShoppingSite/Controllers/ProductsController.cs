@@ -226,6 +226,7 @@ namespace ShoppingSite.Controllers {
 
 
         [HttpGet]
+		[AllowAnonymous]
         public async Task<ActionResult> Page(int? SKU) {
             if (SKU == null) {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
