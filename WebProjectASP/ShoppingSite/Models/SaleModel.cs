@@ -90,6 +90,7 @@ namespace ShoppingSite.Models {
 
 		public IList<BrandModel> BrandsOnSale { get; set; }
 		public IList<BrandModel> AllBrands { get; set; }
+
 	}
 
 	public class SaleViewModel {
@@ -135,5 +136,7 @@ namespace ShoppingSite.Models {
 
 		public IList<SaleModel> AllActiveSales { get; set; }
 		public SaleModel ThisSale { get; set; }
-	}
+        public IList<ProductModel> ProductsInSale { get; set; }
+
+    }
 }

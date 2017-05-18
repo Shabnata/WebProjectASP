@@ -224,7 +224,8 @@ namespace ShoppingSite.Controllers {
 			SaleBrowseViewModel model = new SaleBrowseViewModel();
 			model.AllActiveSales = await db.GetActiveSalesAsync();
 			model.ThisSale = sale;
-			await this.FillViewBag();
+            model.ProductsInSale = await db.GetAllProductsInSaleAsync(SaleID);
+            await this.FillViewBag();
 			return View("Browse", model);
 		}
 
@@ -244,5 +245,6 @@ namespace ShoppingSite.Controllers {
 
 			return View("Index", searchResults);
 		}
+
 	}
 }
