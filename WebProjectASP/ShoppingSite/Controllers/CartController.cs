@@ -1,4 +1,6 @@
-﻿using ShoppingSite.Models;
+﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+using ShoppingSite.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -6,7 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using Microsoft.AspNet.Identity;
+
 
 namespace ShoppingSite.Controllers {
 	public class CartController : Controller {
@@ -17,7 +19,36 @@ namespace ShoppingSite.Controllers {
 			ViewBag.AllCategories = await db.Categories.ToListAsync();
 			ViewBag.AllBrands = await db.Brands.ToListAsync();
 			ViewBag.AllActiveSales = await db.GetActiveSalesAsync();
-			return true;
+            //----
+            bool hasPermission = false;
+            if (User.Identity.IsAuthenticated) { // User logged in
+                ApplicationUser user = db.Users.Find(User.Identity.GetUserId());
+
+                bool Administrator = false; //1
+                bool Manager = false; //2
+                bool Employee = false; //3
+
+                foreach (IdentityUserRole iur in user.Roles) {
+                    if (iur.RoleId.Equals("1")) {
+                        Administrator = true;
+                        break;
+                    }
+                    if (iur.RoleId.Equals("2")) {
+                        Manager = true;
+                        break;
+                    }
+                    if (iur.RoleId.Equals("3")) {
+                        Employee = true;
+                        break;
+                    }
+                }
+                if (Administrator || Manager || Employee) {
+                    hasPermission = true;
+                }
+            }
+            ViewBag.hasPermission = hasPermission;
+            //----
+            return true;
 		}
 
 		[HttpGet]
