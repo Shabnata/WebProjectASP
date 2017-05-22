@@ -235,6 +235,9 @@ namespace ShoppingSite.Controllers {
             if (productModel == null) {
                 return HttpNotFound();
             }
+			SaleModel sale = await db.GetProductBestActiveSale(productModel.SKU);
+			ViewBag.OnSale = sale != null;
+			ViewBag.ProductSale = sale;
             await this.FillViewBag();
             return View(productModel);
         }
