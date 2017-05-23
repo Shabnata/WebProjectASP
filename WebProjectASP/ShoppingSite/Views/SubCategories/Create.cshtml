@@ -4,9 +4,6 @@
 	Layout = (ViewBag.LayoutFile != null) ? ViewBag.LayoutFile : Layout;
 }
 <h2>Create subcategory</h2>
-<div>
-	@Html.ActionLink("Back to List", "Index")
-</div>
 @using(Html.BeginForm("Create", "SubCategories", FormMethod.Post)) {
 	@Html.AntiForgeryToken()
 	<div class="form-horizontal">
