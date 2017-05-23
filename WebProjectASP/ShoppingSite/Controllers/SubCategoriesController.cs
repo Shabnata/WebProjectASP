@@ -64,6 +64,7 @@ namespace ShoppingSite.Controllers {
 			SubCategoryCreateEditViewModel model = new SubCategoryCreateEditViewModel();
 			model.AllCategories = await db.Categories.ToListAsync();
 			await this.FillViewBag();
+			ViewBag.DefaultIMG = Url.Content("/Content/icons/DefaultSubCategory.png");	
 			return View(model);
 		}
 
@@ -114,6 +115,7 @@ namespace ShoppingSite.Controllers {
 				model.AllCategories.Remove(tcm);
 			}
 			await this.FillViewBag();
+			ViewBag.DefaultIMG = Url.Content("/Content/icons/DefaultSubCategory.png");
 			return View(model);
 		}
 

@@ -113,6 +113,19 @@
 				$("#StartDateValMsg").hide();
 				$("#EndDateValMsg").hide();
 			}
+
+			defaultIMG.call($("#Emblem").get());
 		});
 	</script>
+
+<script type="text/javascript">
+	$("#Emblem").on("change", defaultIMG);
+
+	function defaultIMG() {
+		var defaultImg = "@ViewBag.DefaultIMG";
+		if($(this).val().length == 0) {
+			$(this).val(defaultImg);
+		}
+	}
+</script>
 }

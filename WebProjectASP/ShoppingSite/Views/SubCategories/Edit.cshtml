@@ -65,4 +65,21 @@
 	@Scripts.Render("~/bundles/jqueryval")
 	@Scripts.Render("~/Scripts/TypeScript/CheckAvail.js")
 
+<script type="text/javascript">
+		$("form").on("submit", function(e) {
+
+			defaultIMG.call($("#SubCategoryLogo").get());
+		});
+</script>
+<script type="text/javascript">
+	$("#SubCategoryLogo").on("change", defaultIMG);
+
+	function defaultIMG() {
+		var defaultImg = "@ViewBag.DefaultIMG";
+		if($(this).val().length == 0) {
+			$(this).val(defaultImg);
+		}
+	}
+</script>
+
 }

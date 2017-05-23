@@ -167,18 +167,18 @@
             } else {
                 $("#url4Msg").show();
             }
-            defaultCover.call($("#CoverPath").get());
+          	defaultIMG.call($("#CoverPath").get());
         });
     </script>
 
-    <script type="text/javascript">
-        $("#CoverPath").on("change", defaultCover);
+<script type="text/javascript">
+	$("#CoverPath").on("change", defaultIMG);
 
-        function defaultCover() {
-            var defaultPicturePath = "@ViewBag.DefaultPicturePath";
-            if ($(this).val() === "") {
-                $(this).val(defaultPicturePath);
-            }
-        }
-    </script>
+	function defaultIMG() {
+		var defaultImg = "@ViewBag.DefaultIMG";
+		if($(this).val().length == 0) {
+			$(this).val(defaultImg);
+		}
+	}
+</script>
 }

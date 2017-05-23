@@ -65,6 +65,7 @@ namespace ShoppingSite.Controllers {
 			SaleViewModel model = new SaleViewModel();
 			model.AllBrands = await db.Brands.ToListAsync();
 			await this.FillViewBag();
+			ViewBag.DefaultIMG = Url.Content("/Content/icons/DefaultSale.png");	
 			return View(model);
 		}
 
@@ -112,6 +113,7 @@ namespace ShoppingSite.Controllers {
 			viewModel.AllBrands = (await db.Brands.ToListAsync()).Except(viewModel.BrandsOnSale).ToList();
 
 			await this.FillViewBag();
+			ViewBag.DefaultIMG = Url.Content("/Content/icons/DefaultSale.png");	
 			return View(viewModel);
 		}
 
