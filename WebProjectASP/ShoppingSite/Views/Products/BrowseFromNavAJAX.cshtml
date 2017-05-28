@@ -21,7 +21,7 @@
             </div>		
 		</div>
 
-		<div class="col-md-9 padding-right">
+		<div id="ProductPage" class="col-md-9 padding-right">
 			<div class="row">
 				<h2 class="title text-center">@(ViewBag.NotFoundError ?? "Search Results")</h2>
 			</div>
@@ -29,55 +29,134 @@
 				int maxRows = ViewBag.MaxRows ?? 4;
 				int maxCols = ViewBag.MaxCols ?? 4;
 				IEnumerator<ShoppingSite.Models.ProductModel> productPage = Model.ProductsPage.GetEnumerator();
+
+				int itemsInRow = 0;
 			}
 			@for(int i = 0; i < maxRows; i++) {
+				itemsInRow = 0;
 				<div class="row">
 					@for(int j = 0; j < maxCols; j++) {
-						<div class="col-sm-3 product-image-wrapper single-products productinfo text-center">
-							@if(productPage.MoveNext()) {
+
+						if(productPage.MoveNext()) {
+							itemsInRow++;
+							<div class="col-sm-3 product-image-wrapper single-products productinfo text-center">
+								
 								<a class="" href="@Url.Action("Page","Products",new {SKU=productPage.Current.SKU})">
 									<img src=@productPage.Current.CoverPath alt=@productPage.Current.ProductName style="max-height: 100px;  max-width: 100px;" />
 								</a>
 								<h2>@productPage.Current.Price</h2>
-									<p>@productPage.Current.ProductName</p>
-									using(Html.BeginForm("Add","Cart", FormMethod.Post)) {
-										@Html.Hidden("SKU", productPage.Current.SKU)
-										@Html.Hidden("Quantity", 1)
-										<button type="submit" class="btn btn-default">Add to cart</button>
-									}
-							}
-						</div>
+								<p>@productPage.Current.ProductName</p>
+								@using(Html.BeginForm("Add","Cart", FormMethod.Post)) {
+									@Html.Hidden("SKU", productPage.Current.SKU)
+									@Html.Hidden("Quantity", 1)
+									<button type="submit" class="btn btn-default">Add to cart</button>
+								}
+							</div>
+						}
+
 					}
+					<input type="hidden" name="ItemsInRow" value="@itemsInRow" />
 				</div>
 			}
-			<nav>
-				@{
-					int maxPages = ViewBag.MaxPages ?? 1;
-					int currentPage = ViewBag.Page ?? 1;
-					int prev = currentPage - 1 > 0 ? currentPage - 1 : 1;
-					int next = currentPage + 1 <= maxPages ? currentPage + 1 : maxPages;
-					string prevClass = currentPage - 1 > 0 ? "" : "disabled";
-					string nextClass = currentPage + 1 <= maxPages ? "" : "disabled";
-				}
-
-				<ul class="pagination">
-					<li class="@prevClass">
-						<a href="@Url.Action("BrowseFromNav", "Products",new { SearchString = Model.SearchString, Page = prev })">&laquo;</a>
-					</li>
-					@for(int i = 1; i <= maxPages; i++) {
-						string currentClass = i == currentPage ? "active" : "";
-
-						<li class="@currentClass">
-							<a href="@Url.Action("BrowseFromNav", "Products",new {SearchString = Model.SearchString, Page = i })">@i</a>
-						</li>
-					}
-
-					<li class="@nextClass">
-						<a href="@Url.Action("BrowseFromNav", "Products",new { SearchString = Model.SearchString, Page = next })">&raquo;</a>
-					</li>
-				</ul>
-			</nav>
+			
 		</div>
+			<div class="btn-group">
+				<button id="LoadMoreButton" name="LoadMoreButton" type="button" class="btn-default" >Load more - change me to something nice.</button>
+				<input type="hidden" id="PageNumber" name="PageNumber" value="1" />
+				<input type="hidden" id="SearchString" name="SearchString" value="@ViewBag.SearchString" />
+			</div>
 	</div>
 </section>
 
+@section Scripts {
+<script type="text/javascript">
+	$(document).ready(function(event){
+		$("#LoadMoreButton").on("click", function(event) {
+			var pagenum = $("#PageNumber").val();
+			var searchstr = $("#SearchString").val();
+
+			$.ajax(
+				{
+					type: "POST",
+					url: "@Url.Action("BrowseFromNavAJAX", "Products")",
+					data: {
+						NavSearch: searchstr,
+						Page: (pagenum + 1)
+					}
+				}).done(function(data, status) {
+					var DEBUG = false;
+					if(DEBUG){ // Debug
+						console.log(data);
+					}
+					
+					var resultArr = JSON.parse(data);
+					if(DEBUG){ // Debug
+						console.log(resultArr);
+					}
+					
+					if(resultArr.length == 0){
+						var btn = $("#LoadMoreButton");
+						btn.html("No more items!");
+						btn.prop("disabled",true);
+					}
+
+					var maxCols = @maxCols;
+
+					for(var i in resultArr) {
+
+						if(DEBUG){ // Debug
+							console.log("SKU: " + resultArr[i].SKU);
+							console.log("Name: " + resultArr[i].ProductName);
+							console.log("Price: " + resultArr[i].Price);
+							console.log("Cover: " + resultArr[i].CoverPath);
+						}
+
+						var lastRow = $("#ProductPage div.row:last");
+						var itemsInRow = $("#ProductPage div.row:last input[name='ItemsInRow']:last");
+						if(DEBUG){ // Debug
+							console.log("items: " + itemsInRow.val());
+						}
+						
+						if(itemsInRow.val() >= maxCols){							
+							if(DEBUG){ // Debug
+								console.log("if: items: " + itemsInRow);
+							}
+							$("#ProductPage").append('<div class="row"><input type="hidden" name="ItemsInRow" value="0" /> </div>');
+							var lastRow = $("#ProductPage div.row:last");
+							itemsInRow = $("#ProductPage div.row:last input[name='ItemsInRow']:last");
+						} 
+						var prod =
+									'<div class="col-sm-3 product-image-wrapper single-products productinfo text-center">'
+									+ '<a class="" href="/Products/Page?SKU=' + resultArr[i].SKU + '" >'
+									+ '<img src="' + resultArr[i].CoverPath + '" alt="' + resultArr[i].ProductName + '" style="max-height: 100px;  max-width: 100px;" />'
+									+ '</a>'
+									+ '<h2>' + resultArr[i].Price + '</h2>'
+									+ '<p>' + resultArr[i].ProductName + '</p>'
+									+ '<form method="POST" action="/Cart/Add">'
+									+ '<input type="hidden" id="SKU" value="' + resultArr[i].SKU + '" />'
+									+ '<input type="hidden" id="Quantity" value="1" />'
+									+ '<button type="submit" class="btn btn-default">Add to cart</button>'
+									+ '</form>'
+									+ '</div>';
+						$(lastRow).append(prod);
+
+						itemsInRow.val(parseInt(itemsInRow.val()) + 1);
+					}
+
+					var pagenum = $("#PageNumber");
+					pagenum.val(parseInt(pagenum.val()) + 1);
+					if(true){ // Debug
+						console.log("PageNum: " + pagenum.val());
+					}
+				}).fail(function(xmlHttpRequest, statusText, errorThrown) {
+					alert(
+						'Your form submission failed.\n\n'
+						+ 'XML Http Request: ' + JSON.stringify(xmlHttpRequest)
+						+ ',\nStatus Text: ' + statusText
+						+ ',\nError Thrown: ' + errorThrown);
+				});
+		});
+	});
+</script>
+
+}
