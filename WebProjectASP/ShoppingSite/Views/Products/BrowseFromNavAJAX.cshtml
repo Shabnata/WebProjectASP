@@ -44,7 +44,7 @@
 								<a class="" href="@Url.Action("Page","Products",new {SKU=productPage.Current.SKU})">
 									<img src=@productPage.Current.CoverPath alt=@productPage.Current.ProductName style="max-height: 100px;  max-width: 100px;" />
 								</a>
-								<h2>@productPage.Current.Price</h2>
+								<h2>@productPage.Current.Price.ToString("C")</h2>
 								<p>@productPage.Current.ProductName</p>
 								@using(Html.BeginForm("Add","Cart", FormMethod.Post)) {
 									@Html.Hidden("SKU", productPage.Current.SKU)
@@ -58,13 +58,16 @@
 					<input type="hidden" name="ItemsInRow" value="@itemsInRow" />
 				</div>
 			}
-			
+            <br/><br />
+            <div class="col-md-12">
+                <button id="LoadMoreButton" name="LoadMoreButton" type="button" class="btn btn-block btn-lg btn-primary">Load more items</button>
+                <input type="hidden" id="PageNumber" name="PageNumber" value="1" />
+                <input type="hidden" id="SearchString" name="SearchString" value="@ViewBag.SearchString" />
+
+
+            </div>
 		</div>
-			<div class="btn-group">
-				<button id="LoadMoreButton" name="LoadMoreButton" type="button" class="btn-default" >Load more - change me to something nice.</button>
-				<input type="hidden" id="PageNumber" name="PageNumber" value="1" />
-				<input type="hidden" id="SearchString" name="SearchString" value="@ViewBag.SearchString" />
-			</div>
+			
 	</div>
 </section>
 
