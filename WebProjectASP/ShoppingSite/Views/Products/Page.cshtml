@@ -20,8 +20,18 @@
         <div class="row">
             @Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "col-md-2" })
             <div class="col-md-6">
-                @Html.DisplayFor(model => model.Price)
-            </div>
+				@if(ViewBag.OnSale == true) {
+					<strike style="color: red; ">
+						@Html.DisplayFor(model => model.Price)
+					</strike>
+					decimal newPrice = Model.Price * ((100 - ViewBag.ProductSale.Discount) / 100);
+					@:&nbsp - &nbsp
+					@newPrice.ToString("C")
+				} else {
+						@Html.DisplayFor(model => model.Price)
+				}
+
+			</div>
             <div class="col-md-4">
                 <!-- To hold the layout -->
             </div>
