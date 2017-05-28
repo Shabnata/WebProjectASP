@@ -32,8 +32,8 @@
 
 				int itemsInRow = 0;
 			}
-			@for(int i = 0; i < maxRows; i++) {
-				itemsInRow = 0;
+			@for (int i = 0; i < maxRows; i++) {
+                itemsInRow = 0;               
 				<div class="row">
 					@for(int j = 0; j < maxCols; j++) {
 
@@ -57,17 +57,18 @@
 					}
 					<input type="hidden" name="ItemsInRow" value="@itemsInRow" />
 				</div>
-			}
-            <br/><br />
-            <div class="col-md-12">
-                <button id="LoadMoreButton" name="LoadMoreButton" type="button" class="btn btn-block btn-lg btn-primary">Load more items</button>
-                <input type="hidden" id="PageNumber" name="PageNumber" value="1" />
-                <input type="hidden" id="SearchString" name="SearchString" value="@ViewBag.SearchString" />
-
-
-            </div>
+                <br />
+            }
+            
 		</div>
-			
+        <br /><br />
+        <div class="col-md-9 col-lg-offset-3">
+            <button id="LoadMoreButton" name="LoadMoreButton" type="button" class="btn btn-block btn-lg btn-primary">Load more items</button>
+            <input type="hidden" id="PageNumber" name="PageNumber" value="1" />
+            <input type="hidden" id="SearchString" name="SearchString" value="@ViewBag.SearchString" />
+
+
+        </div>
 	</div>
 </section>
 
@@ -132,7 +133,7 @@
 							if(DEBUG){ // Debug
 								console.log("if: items: " + itemsInRow);
 							}
-							$("#ProductPage").append('<div class="row"><input type="hidden" name="ItemsInRow" value="0" /> </div>');
+							$("#ProductPage").append('<div class="row"><input type="hidden" name="ItemsInRow" value="0" /> </div><br />');
 							var lastRow = $("#ProductPage div.row:last");
 							itemsInRow = $("#ProductPage div.row:last input[name='ItemsInRow']:last");
 						} 
