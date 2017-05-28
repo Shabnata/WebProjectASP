@@ -39,7 +39,7 @@
                                     <a class="" href="@Url.Action("Page","Products",new {SKU=productPage.Current.SKU})">
                                         <img src=@productPage.Current.CoverPath alt=@productPage.Current.ProductName width="100" />
                                     </a>
-                                        <h2>@productPage.Current.Price</h2>
+                                        <h2>@productPage.Current.Price.ToString("C")</h2>
                                         <p>@productPage.Current.ProductName</p>
                                         using(Html.BeginForm("Add", "Cart", FormMethod.Post)) {
                                         @Html.Hidden("SKU", productPage.Current.SKU)

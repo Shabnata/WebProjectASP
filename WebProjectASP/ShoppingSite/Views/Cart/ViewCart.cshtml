@@ -61,7 +61,8 @@
             </td>
             <td>
                 @* Total *@
-                @((cim.Product.Price * ((100 - Model.CartItemsSales[cim].Discount) / 100) * cim.Quantity).ToString("0.00"))
+                @((cim.Product.Price * ((100 - Model.CartItemsSales[cim].Discount) / 100) * cim.Quantity).ToString("C"))
+            
             </td>
             <td>
                 @* Remove*@
@@ -75,7 +76,7 @@
 </table>
 
 
-    <div class="col-md-12 text-right"><h4>Total price : @Model.TotalPrice.ToString("0.00")</h4></div>
+    <div class="col-md-12 text-right"><h4>Total price : @Model.TotalPrice.ToString("C")</h4></div>
 
 
 <div class="btn-group">
