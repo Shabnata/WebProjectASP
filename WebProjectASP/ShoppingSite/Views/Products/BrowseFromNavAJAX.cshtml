@@ -4,23 +4,22 @@
 <section>
 	<div class="row">
 		<div class="col-sm-3">
-			<div class="left-sidebar">
-				<h2>SubCategories</h2>
-				<div class="panel-group category-products" id="accordian">
-					<!--Sub category-list-->
+		<div class="left-sidebar">
+                <h2>Categories</h2>
+                <div class="panel-group category-products" id="accordian">
+                    <!-- Categories list -->
 
-					@foreach(var SubCat in Model.Category.SubCategories) {
-						<div class="panel panel-default">
-							<div class="panel-heading">
-								<h4 class="panel-title"><a href="@Url.Action("BrowseByIDFromCategory", "SubCategories",new { SubCategoryID = SubCat.SubCategoryID, CategoryID = Model.Category.CategoryID })">@SubCat.SubCategoryName</a></h4>
-							</div>
-						</div>
-					}
+                   @foreach(var item in Model.AllCategories) {
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title"><a href="@Url.Action("BrowseByID", "Categories",new {CategoryID=item.CategoryID})">@item.CategoryName</a></h4>
+                            </div>
+                        </div>
+                    }
 
-				</div><!--/Sub category-list-->
-			</div>
+                </div><!-- Categories list -->
+            </div>		
 		</div>
-
 
 		<div class="col-md-9 padding-right">
 			<div class="row">
@@ -81,3 +80,4 @@
 		</div>
 	</div>
 </section>
+
