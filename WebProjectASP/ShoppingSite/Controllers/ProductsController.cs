@@ -10,6 +10,7 @@ using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using System.Web.Script.Serialization;
 
 namespace ShoppingSite.Controllers {
 	[Authorize(Roles = "Administrator, Manager")]
@@ -321,12 +322,32 @@ namespace ShoppingSite.Controllers {
 			ViewBag.MaxCols = maxCols;
 			ViewBag.Page = Page ?? 1;
 			ViewBag.MaxPages = maxPages;
+			ViewBag.SearchString = NavSearch;
 
 			await this.FillViewBag();
 			
 			ViewBag.NotFoundError = (products.Count == 0) ? "Product not found" : null;
 
-			return View("BrowseFromNav", viewModel);
+			return View("BrowseFromNavAJAX", viewModel);
+		}
+
+		[AllowAnonymous]
+		[HttpPost, ActionName("BrowseFromNavAJAX")]
+		public async Task<ActionResult> BrowseFromNavAJAX(string NavSearch, int? Page) {
+			IList<ProductModel> products = await (from p in db.Products where p.ProductName.ToLower().Contains(NavSearch.ToLower()) select p).ToListAsync();
+
+			int maxRows = 4;
+			int maxCols = 4;
+			int maxPages = decimal.ToInt32(decimal.Ceiling((decimal)products.Count / (decimal)(maxRows * maxCols)));
+
+			
+			IList<ProductModel> productPage = (from p in products select p).Skip((maxRows * maxCols) * ((Page ?? 1) - 1)).Take(maxRows * maxCols).ToList();
+
+			var resultArr = from product in productPage select new { SKU = product.SKU.ToString(), Price = product.Price.ToString(), ProductName = product.ProductName, CoverPath = product.CoverPath };
+
+			JavaScriptSerializer myJSS = new JavaScriptSerializer();
+
+			return Json(myJSS.Serialize(resultArr));
 		}
 
 	}
