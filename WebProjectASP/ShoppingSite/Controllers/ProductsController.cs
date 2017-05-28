@@ -65,7 +65,7 @@ namespace ShoppingSite.Controllers {
 			model.AllBrand = await db.Brands.ToListAsync();
 			model.AllSubCategories = await db.SubCategories.ToListAsync();
 			await this.FillViewBag();
-			ViewBag.DefaultPicturePath = Url.Content("/Content/icons/DefaultCover.png");
+			ViewBag.DefaultIMG = Url.Content("/Content/icons/DefaultCover.png");
 			return View(model);
 		}
 
@@ -144,7 +144,7 @@ namespace ShoppingSite.Controllers {
 			}
 			model.ProductPictures = (from pp in productModel.ProductPictures select pp.PicturePath).ToList();
 			await this.FillViewBag();
-			ViewBag.DefaultPicturePath = Url.Content("/Content/icons/DefaultCover.png");
+			ViewBag.DefaultIMG = Url.Content("/Content/icons/DefaultCover.png");
 			return View(model);
 		}
 

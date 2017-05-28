@@ -63,6 +63,7 @@ namespace ShoppingSite.Controllers {
 		[HttpGet]
 		public async Task<ActionResult> Create() {
 			await this.FillViewBag();
+			ViewBag.DefaultIMG = Url.Content("/Content/icons/DefaultBrand.png");
 			return View();
 		}
 
@@ -84,6 +85,7 @@ namespace ShoppingSite.Controllers {
 		[HttpGet]
 		public async Task<ActionResult> Edit(int? BrandID) {
 			await this.FillViewBag();
+			ViewBag.DefaultIMG = Url.Content("/Content/icons/DefaultBrand.png");
 			if(BrandID == null) {
 				return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 			}

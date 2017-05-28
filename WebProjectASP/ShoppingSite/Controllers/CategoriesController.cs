@@ -64,6 +64,7 @@ namespace ShoppingSite.Controllers {
 		[HttpGet]
 		public async Task<ActionResult> Create() {
 			await this.FillViewBag();
+			ViewBag.DefaultIMG = Url.Content("/Content/icons/DefaultCategory.png");	
 			return View();
 		}
 
@@ -84,6 +85,7 @@ namespace ShoppingSite.Controllers {
 
 		[HttpGet]
 		public async Task<ActionResult> Edit(int? CategoryID) {
+			ViewBag.DefaultIMG = Url.Content("/Content/icons/DefaultCategory.png");	
 			if(CategoryID == null) {
 				return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 			}
