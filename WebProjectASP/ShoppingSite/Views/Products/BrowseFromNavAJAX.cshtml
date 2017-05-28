@@ -78,13 +78,18 @@
 			var pagenum = $("#PageNumber").val();
 			var searchstr = $("#SearchString").val();
 
+			if(false){ // Debug
+				console.log("page#: " + pagenum);
+				console.log("searchstr: " + searchstr);
+			}			
+
 			$.ajax(
 				{
 					type: "POST",
 					url: "@Url.Action("BrowseFromNavAJAX", "Products")",
 					data: {
 						NavSearch: searchstr,
-						Page: (pagenum + 1)
+						Page: (parseInt(pagenum) + 1)
 					}
 				}).done(function(data, status) {
 					var DEBUG = false;
@@ -95,12 +100,15 @@
 					var resultArr = JSON.parse(data);
 					if(DEBUG){ // Debug
 						console.log(resultArr);
+						console.log("resArr: " + resultArr);
+						console.log("len: " + resultArr.length);
 					}
-					
+								
 					if(resultArr.length == 0){
 						var btn = $("#LoadMoreButton");
 						btn.html("No more items!");
 						btn.prop("disabled",true);
+						return;
 					}
 
 					var maxCols = @maxCols;
@@ -133,7 +141,7 @@
 									+ '<a class="" href="/Products/Page?SKU=' + resultArr[i].SKU + '" >'
 									+ '<img src="' + resultArr[i].CoverPath + '" alt="' + resultArr[i].ProductName + '" style="max-height: 100px;  max-width: 100px;" />'
 									+ '</a>'
-									+ '<h2>' + resultArr[i].Price + '</h2>'
+									+ '<h2>₪ ' + resultArr[i].Price + '</h2>'
 									+ '<p>' + resultArr[i].ProductName + '</p>'
 									+ '<form method="POST" action="/Cart/Add">'
 									+ '<input type="hidden" id="SKU" value="' + resultArr[i].SKU + '" />'
@@ -148,7 +156,7 @@
 
 					var pagenum = $("#PageNumber");
 					pagenum.val(parseInt(pagenum.val()) + 1);
-					if(true){ // Debug
+					if(DEBUG){ // Debug
 						console.log("PageNum: " + pagenum.val());
 					}
 				}).fail(function(xmlHttpRequest, statusText, errorThrown) {
